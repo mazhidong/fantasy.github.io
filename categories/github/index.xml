@@ -20,5 +20,23 @@
       <description>摘要 在前面的博文中介绍了如何在github.io上搭建自己的博客站，基于的是Jekyll，这也是github中比较常用的方式，好处是gith</description>
     </item>
     
+    <item>
+      <title>如何给自己的博客网站加入评论系统</title>
+      <link>https://mazhidong.github.io/post/blog/2017-08-16-how-to-add-comments/</link>
+      <pubDate>Wed, 16 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/blog/2017-08-16-how-to-add-comments/</guid>
+      <description>前言 在这一篇博文中，咱们介绍了如何快速的搭建个人的博客网站，但是这个博客网站是基于Github Pages的纯静态网站，自身是不带任何的可交互</description>
+    </item>
+    
+    <item>
+      <title>如何快速搭建自己的github.io博客</title>
+      <link>https://mazhidong.github.io/post/blog/2017-08-15-how-to-setup-your-github-io-blog/</link>
+      <pubDate>Tue, 15 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/blog/2017-08-15-how-to-setup-your-github-io-blog/</guid>
+      <description>闲聊一下 在这知识剧烈膨胀的时代，如何记录、整理、分享自己的所学所感无疑显得十分重要，而博客便是最好的方式之一。现在已经有了各式各样的博客平台</description>
+    </item>
+    
   </channel>
 </rss>

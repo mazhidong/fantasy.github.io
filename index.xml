@@ -24,6 +24,142 @@
     </item>
     
     <item>
+      <title>Android USB 冲突问题</title>
+      <link>https://mazhidong.github.io/post/aosp/2018-04-26-android-usb-bug/</link>
+      <pubDate>Sun, 22 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/aosp/2018-04-26-android-usb-bug/</guid>
+      
+        <description>
+
+&lt;h2 id=&#34;出现平台&#34;&gt;出现平台&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;RK3288&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;系统版本&#34;&gt;系统版本&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Android 5.1&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;两个USB不能同时工作.一个USB设备在工作的时候,再载入另外一个USB设备,前一个USB设备不能正常工作.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;修改UsbHostManager ​&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt; ```diff --git a/services/usb/java/com/android/server/usb/UsbHostManager.java b/services/usb/java/com/android/server/usb/UsbHostManager.java
+index e769bda..c1c5774 100644
+--- a/services/usb/java/com/android/server/usb/UsbHostManager.java
++++ b/services/usb/java/com/android/server/usb/UsbHostManager.java
+@@ -230,6 +230,8 @@ public class UsbHostManager {
+         mNewConfigurations = null;
+         mNewInterfaces = null;
+         mNewEndpoints = null;
+
++           mNewConfiguration = null;
++           mNewInterface = null; 
+     }
+     }
+```&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>ESH45 Android：无法访问 sdcard 目录</title>
+      <link>https://mazhidong.github.io/post/aosp/2018-04-26-android-4.4-esh45-bug/</link>
+      <pubDate>Sun, 22 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/aosp/2018-04-26-android-4.4-esh45-bug/</guid>
+      
+        <description>
+
+&lt;ul&gt;
+&lt;li&gt;现象:
+
+&lt;ul&gt;
+&lt;li&gt;内部存储没有见到sdcard目录,shell进入sdcard目录发现没有文件,正常情况下应该存在
+Download,Music,Movies等文件夹&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;检查:
+
+&lt;ul&gt;
+&lt;li&gt;sdcard对应mmc为/dev/block/mmcblk0p1&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;解决方案&#34;&gt;解决方案:&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;格式化mmcblk0p1&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;修改fsck_msdos&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;```diff --git a/fsck_msdos/boot.c b/fsck_msdos/boot.c
+index 5326a45..0d56697 100644
+--- a/fsck_msdos/boot.c
++++ b/fsck_msdos/boot.c
+@@ -269,7 +269,7 @@ readboot(dosfs, boot)
+    if (boot-&amp;gt;NumFatEntries &amp;lt; boot-&amp;gt;NumClusters) {
+        pfatal(&amp;#34;FAT size too small, %u entries won&amp;#39;t fit into %u sectors\n&amp;#34;,
+               boot-&amp;gt;NumClusters, boot-&amp;gt;FATsecs);
+-               return FSFATAL;
++               //return FSFATAL;//new MMC HW VERSION WILL FAIL DON&amp;#39;T KNOW WHY
+    }
+    boot-&amp;gt;ClusterSize = boot-&amp;gt;BytesPerSec * boot-&amp;gt;SecPerClust;
+```&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>如何在github.io搭建Hugo博客站</title>
       <link>https://mazhidong.github.io/post/blog/deploy-hugo-blog-in-github.io/</link>
       <pubDate>Thu, 22 Mar 2018 00:00:00 +0000</pubDate>

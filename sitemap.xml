@@ -10,6 +10,20 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/post/aosp/2018-04-26-android-usb-bug/</loc>
+    <lastmod>2018-04-22T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://mazhidong.github.io/post/aosp/2018-04-26-android-4.4-esh45-bug/</loc>
+    <lastmod>2018-04-22T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/post/blog/deploy-hugo-blog-in-github.io/</loc>
     <lastmod>2018-03-22T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -87,6 +101,20 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/tags/android/</loc>
+    <lastmod>2018-04-22T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://mazhidong.github.io/tags/aosp/</loc>
+    <lastmod>2018-04-22T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/tags/blog/</loc>
     <lastmod>2017-08-16T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -136,7 +164,7 @@
   
   <url>
     <loc>https://mazhidong.github.io/post/</loc>
-    <lastmod>2018-03-22T00:00:00+00:00</lastmod>
+    <lastmod>2018-04-22T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -157,7 +185,7 @@
   
   <url>
     <loc>https://mazhidong.github.io/tags/</loc>
-    <lastmod>2017-08-16T00:00:00+00:00</lastmod>
+    <lastmod>2018-04-22T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>

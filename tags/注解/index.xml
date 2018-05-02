@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>注解 on Fantasy Blogs</title>
+    <link>https://mazhidong.github.io/tags/%E6%B3%A8%E8%A7%A3/</link>
+    <description>Recent content in 注解 on Fantasy Blogs</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 02 May 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://mazhidong.github.io/tags/%E6%B3%A8%E8%A7%A3/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Android 如何编写基于编译时注解的项目</title>
+      <link>https://mazhidong.github.io/post/android/2018-05-02-android-android-%E5%A6%82%E4%BD%95%E7%BC%96%E5%86%99%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%AF%91%E6%97%B6%E6%B3%A8%E8%A7%A3%E7%9A%84%E9%A1%B9%E7%9B%AE/</link>
+      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/android/2018-05-02-android-android-%E5%A6%82%E4%BD%95%E7%BC%96%E5%86%99%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%AF%91%E6%97%B6%E6%B3%A8%E8%A7%A3%E7%9A%84%E9%A1%B9%E7%9B%AE/</guid>
+      <description>一、概述 在Android应用开发中，我们常常为了提升开发效率会选择使用一些基于注解的框架，但是由于反射造成一定运行效率的损耗，所以我们会更青</description>
+    </item>
+    
+  </channel>
+</rss>

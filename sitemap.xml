@@ -10,6 +10,13 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/post/android/2018-05-02-android-android-%E5%A6%82%E4%BD%95%E7%BC%96%E5%86%99%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%AF%91%E6%97%B6%E6%B3%A8%E8%A7%A3%E7%9A%84%E9%A1%B9%E7%9B%AE/</loc>
+    <lastmod>2018-05-02T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/post/aosp/2018-04-26-android-usb-bug/</loc>
     <lastmod>2018-04-22T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -102,14 +109,14 @@
   
   <url>
     <loc>https://mazhidong.github.io/tags/android/</loc>
-    <lastmod>2018-04-22T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-02T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://mazhidong.github.io/categories/android/</loc>
-    <lastmod>2018-04-22T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-02T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -130,7 +137,7 @@
   
   <url>
     <loc>https://mazhidong.github.io/categories/</loc>
-    <lastmod>2018-04-22T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-02T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -186,7 +193,7 @@
   
   <url>
     <loc>https://mazhidong.github.io/post/</loc>
-    <lastmod>2018-04-22T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-02T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -207,7 +214,7 @@
   
   <url>
     <loc>https://mazhidong.github.io/tags/</loc>
-    <lastmod>2018-04-22T00:00:00+00:00</lastmod>
+    <lastmod>2018-05-02T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -250,6 +257,13 @@
   <url>
     <loc>https://mazhidong.github.io/tags/%E6%95%99%E7%A8%8B/</loc>
     <lastmod>2018-03-22T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://mazhidong.github.io/tags/%E6%B3%A8%E8%A7%A3/</loc>
+    <lastmod>2018-05-02T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>

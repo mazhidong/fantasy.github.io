@@ -6,15 +6,24 @@
     <description>Recent content in Tags on Fantasy Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 02 May 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 13 Jun 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mazhidong.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>Adb</title>
+      <link>https://mazhidong.github.io/tags/adb/</link>
+      <pubDate>Wed, 13 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/tags/adb/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Android</title>
       <link>https://mazhidong.github.io/tags/android/</link>
-      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 13 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>https://mazhidong.github.io/tags/android/</guid>
       <description></description>

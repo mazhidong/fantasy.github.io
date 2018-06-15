@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Fantasy Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 13 Jun 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 15 Jun 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mazhidong.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>adb shell 调试 Android 串口</title>
+      <link>https://mazhidong.github.io/post/aosp/2018-06-15-adb_shell%E8%B0%83%E8%AF%95android%E4%B8%B2%E5%8F%A3/</link>
+      <pubDate>Fri, 15 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/aosp/2018-06-15-adb_shell%E8%B0%83%E8%AF%95android%E4%B8%B2%E5%8F%A3/</guid>
+      <description>adb shell 调试 Android 串口 Android手机上很多外设是串口连接到AP的，如modem，gps。为了调试这些串口，通常需要将它们飞线接出来，用pc的串口</description>
+    </item>
     
     <item>
       <title>android adb网络连接方法</title>

@@ -24,6 +24,60 @@
     </item>
     
     <item>
+      <title>adb shell 调试 Android 串口</title>
+      <link>https://mazhidong.github.io/post/aosp/2018-06-15-adb_shell%E8%B0%83%E8%AF%95android%E4%B8%B2%E5%8F%A3/</link>
+      <pubDate>Fri, 15 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/aosp/2018-06-15-adb_shell%E8%B0%83%E8%AF%95android%E4%B8%B2%E5%8F%A3/</guid>
+      
+        <description>
+
+&lt;h1 id=&#34;adb-shell-调试-android-串口&#34;&gt;adb shell 调试 Android 串口&lt;/h1&gt;
+
+&lt;p&gt;Android手机上很多外设是串口连接到AP的，如modem，gps。为了调试这些串口，通常需要将它们飞线接出来，用pc的串口连接调试。这样比较麻烦。&lt;/p&gt;
+
+&lt;p&gt;在adb shell里是可以直接调试串口的，就不用飞线了，还可以验证Android串口配置是否正确。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;用usb连接Android设备调试后，在pc端输入 adb shell，连接成功后，先停止一些可能占用端口的服务，如：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;stop ril-daemon&lt;/code&gt;停掉ril后台&lt;/p&gt;
+
+&lt;p&gt;然后：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;busybox microcom -t 15000 -s 115200 /dev/ttyS0&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;-t 单位毫秒，无操作自动退出时间。&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;-s 单位bps，串口波特率。&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;ttyS0 要操作的串口。&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;然后打开另一个命令行窗口，输入：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;adb shell cat /dev/ttyS0&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;然后可以在第一个窗口输入命令，在第二个窗口可以看到命令和响应。&lt;/p&gt;
+
+&lt;p&gt;如果没有响应，请检查Android串口配置是否正确，串口号是否对，波特率是否正确。&lt;/p&gt;
+
+&lt;p&gt;microcom的-t设置要合理，太短，输入命令可能输入不完就退出了，太长要等很久才退出。&lt;/p&gt;
+
+&lt;p&gt;必须先执行第一个窗口，再执行第二个窗口，因为不设置波特率，第二个窗口显示会有问题。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;第一个窗口microcom退出后，也可以用以下方法发送命令到串口：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;echo -e &amp;quot;AT\r\n&amp;quot;&amp;gt;/dev/ttyS0&lt;/code&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>android adb网络连接方法</title>
       <link>https://mazhidong.github.io/post/android/2018-06-13-android-android_adb%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E6%96%B9%E6%B3%95/</link>
       <pubDate>Wed, 13 Jun 2018 00:00:00 +0000</pubDate>

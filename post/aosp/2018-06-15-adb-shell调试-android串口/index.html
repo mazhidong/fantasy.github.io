@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>android adb网络连接方法 - Fantasy Blogs</title>
+  <title>adb shell 调试 Android 串口 - Fantasy Blogs</title>
   <link rel="alternate" hreflang="zh-cn" href="https://mazhidong.github.io/" />
 
 <meta name="renderer" content="webkit" />
@@ -25,7 +25,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="Fantasy" />
-  <meta name="description" content="一、概述 在android里，adb一般使用USB连接，但是很多时候，可能只有一个设备终端，但是需要多于一个用户连接设备调试，因此使用网络连接" />
+  <meta name="description" content="adb shell 调试 Android 串口 Android手机上很多外设是串口连接到AP的，如modem，gps。为了调试这些串口，通常需要将它们飞线接出来，用pc的串口" />
 
   <meta name="keywords" content="mzd, fantasy, blogs" />
 
@@ -37,7 +37,7 @@
 <meta name="generator" content="Hugo 0.40" />
 
 
-<link rel="canonical" href="https://mazhidong.github.io/post/android/2018-06-13-android-android_adb%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E6%96%B9%E6%B3%95/" />
+<link rel="canonical" href="https://mazhidong.github.io/post/aosp/2018-06-15-adb-shell%E8%B0%83%E8%AF%95-android%E4%B8%B2%E5%8F%A3/" />
 
 
 
@@ -57,20 +57,16 @@
 
 
 
-<meta property="og:title" content="android adb网络连接方法" />
-<meta property="og:description" content="一、概述 在android里，adb一般使用USB连接，但是很多时候，可能只有一个设备终端，但是需要多于一个用户连接设备调试，因此使用网络连接" />
+<meta property="og:title" content="adb shell 调试 Android 串口" />
+<meta property="og:description" content="adb shell 调试 Android 串口 Android手机上很多外设是串口连接到AP的，如modem，gps。为了调试这些串口，通常需要将它们飞线接出来，用pc的串口" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://mazhidong.github.io/post/android/2018-06-13-android-android_adb%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E6%96%B9%E6%B3%95/" />
+<meta property="og:url" content="https://mazhidong.github.io/post/aosp/2018-06-15-adb-shell%E8%B0%83%E8%AF%95-android%E4%B8%B2%E5%8F%A3/" />
 
 
 
-<meta property="article:published_time" content="2018-06-13T00:00:00&#43;00:00"/>
+<meta property="article:published_time" content="2018-06-15T00:00:00&#43;00:00"/>
 
-<meta property="article:modified_time" content="2018-06-13T00:00:00&#43;00:00"/>
-
-
-
-
+<meta property="article:modified_time" content="2018-06-15T00:00:00&#43;00:00"/>
 
 
 
@@ -78,20 +74,24 @@
 
 
 
-<meta itemprop="name" content="android adb网络连接方法">
-<meta itemprop="description" content="一、概述 在android里，adb一般使用USB连接，但是很多时候，可能只有一个设备终端，但是需要多于一个用户连接设备调试，因此使用网络连接">
-
-
-<meta itemprop="datePublished" content="2018-06-13T00:00:00&#43;00:00" />
-<meta itemprop="dateModified" content="2018-06-13T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="344">
 
 
 
-<meta itemprop="keywords" content="android,adb," />
+
+<meta itemprop="name" content="adb shell 调试 Android 串口">
+<meta itemprop="description" content="adb shell 调试 Android 串口 Android手机上很多外设是串口连接到AP的，如modem，gps。为了调试这些串口，通常需要将它们飞线接出来，用pc的串口">
+
+
+<meta itemprop="datePublished" content="2018-06-15T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-06-15T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="453">
+
+
+
+<meta itemprop="keywords" content="android,UART," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="android adb网络连接方法"/>
-<meta name="twitter:description" content="一、概述 在android里，adb一般使用USB连接，但是很多时候，可能只有一个设备终端，但是需要多于一个用户连接设备调试，因此使用网络连接"/>
+<meta name="twitter:title" content="adb shell 调试 Android 串口"/>
+<meta name="twitter:description" content="adb shell 调试 Android 串口 Android手机上很多外设是串口连接到AP的，如modem，gps。为了调试这些串口，通常需要将它们飞线接出来，用pc的串口"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -211,16 +211,16 @@
           <article class="post bg-white">
     
     <header class="post-header">
-      <h1 class="post-title">android adb网络连接方法</h1>
+      <h1 class="post-title">adb shell 调试 Android 串口</h1>
       
       <div class="post-meta">
-        <span class="post-time"> 2018-06-13 </span>
+        <span class="post-time"> 2018-06-15 </span>
         <div class="post-category">
             
               <a href="/categories/android/"> android </a>
             
           </div>
-        <span class="more-meta"> 约 344 字 </span>
+        <span class="more-meta"> 约 453 字 </span>
         <span class="more-meta"> 预计阅读 1 分钟 </span>
       </div>
     </header>
@@ -232,11 +232,7 @@
   <div class="post-toc-content">
     <nav id="TableOfContents">
 <ul>
-<li>
-<ul>
-<li><a href="#一-概述">一、概述</a></li>
-<li><a href="#二-正文">二、正文</a></li>
-</ul></li>
+<li><a href="#adb-shell-调试-android-串口">adb shell 调试 Android 串口</a></li>
 </ul>
 </nav>
   </div>
@@ -246,109 +242,47 @@
     <div class="post-content">
       
 
-<h2 id="一-概述">一、概述</h2>
+<h1 id="adb-shell-调试-android-串口">adb shell 调试 Android 串口</h1>
 
-<p>在android里，adb一般使用USB连接，但是很多时候，可能只有一个设备终端，但是需要多于一个用户连接设备调试，因此使用网络连接将是必要的，下面介绍网络连接的方法：</p>
+<p>Android手机上很多外设是串口连接到AP的，如modem，gps。为了调试这些串口，通常需要将它们飞线接出来，用pc的串口连接调试。这样比较麻烦。</p>
 
-<h2 id="二-正文">二、正文</h2>
+<p>在adb shell里是可以直接调试串口的，就不用飞线了，还可以验证Android串口配置是否正确。</p>
 
-<ol>
-<li>设备端</li>
-</ol>
+<ul>
+<li>用usb连接Android设备调试后，在pc端输入 adb shell，连接成功后，先停止一些可能占用端口的服务，如：</li>
+</ul>
 
-<p>首先查看设备上的进程列表，是不是adbd进程在运行：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">981 0            0 SW&lt; [rpciod/0]
-1762 0         1996 S    /system/busybox/bin/ash
-1763 1000       796 S    /system/bin/servicemanager
-1764 0          824 S    /system/bin/vold
-1765 0          656 S    /system/bin/debuggerd
-1766 1001      4396 S    /system/bin/rild
-1768 1013     18084 S    /system/bin/mediaserver
-1769 1002      1092 S    /system/bin/dbus-daemon --system --nofork
-1770 0          784 S    /system/bin/installd
-1771 1017      1616 S    /system/bin/keystore /data/misc/keystore
-3798 0         3368 S    /sbin/adbd</pre></td></tr></table>
-</div>
-</div>
-<p>可以看出adbd已经在运行了，停掉adbd：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">stop adbd</pre></td></tr></table>
-</div>
-</div>
-<p>然后设置adbd使用的tcp端口：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span><span class="lnt">2
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">/ # setprop service.adb.tcp.port 5555
-/ # start adbd</pre></td></tr></table>
-</div>
-</div>
-<p>使用netstat -l 查看：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">/ # netstat -l
-Active Internet connections (only servers)
-Proto Recv-Q Send-Q Local Address           Foreign Address         State      
-tcp        0      0 127.0.0.1:5037          0.0.0.0:*               LISTEN     
-tcp        0      0 0.0.0.0:5555            0.0.0.0:*               LISTEN</pre></td></tr></table>
-</div>
-</div>
-<p>可见adbd在5555端口已经实现监听；</p>
+<p><code>stop ril-daemon</code>停掉ril后台</p>
 
-<ol>
-<li>host端：</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">./adb connect 192.168.1.12:5555
+<p>然后：</p>
 
-connected to 192.168.1.12:5555</pre></td></tr></table>
-</div>
-</div>
-<p>说明已经连接上设备；然后执行：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">./adb shell</pre></td></tr></table>
-</div>
-</div>
-<p>就可以使用shell调试设备端的程序了</p>
+<p><code>busybox microcom -t 15000 -s 115200 /dev/ttyS0</code></p>
+
+<p><em>-t 单位毫秒，无操作自动退出时间。</em></p>
+
+<p><em>-s 单位bps，串口波特率。</em></p>
+
+<p><em>ttyS0 要操作的串口。</em></p>
+
+<ul>
+<li>然后打开另一个命令行窗口，输入：</li>
+</ul>
+
+<p><code>adb shell cat /dev/ttyS0</code></p>
+
+<p>然后可以在第一个窗口输入命令，在第二个窗口可以看到命令和响应。</p>
+
+<p>如果没有响应，请检查Android串口配置是否正确，串口号是否对，波特率是否正确。</p>
+
+<p>microcom的-t设置要合理，太短，输入命令可能输入不完就退出了，太长要等很久才退出。</p>
+
+<p>必须先执行第一个窗口，再执行第二个窗口，因为不设置波特率，第二个窗口显示会有问题。</p>
+
+<ul>
+<li>第一个窗口microcom退出后，也可以用以下方法发送命令到串口：</li>
+</ul>
+
+<p><code>echo -e &quot;AT\r\n&quot;&gt;/dev/ttyS0</code></p>
 
     </div>
 
@@ -361,7 +295,7 @@ connected to 192.168.1.12:5555</pre></td></tr></table>
   </p>
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
-    <span class="item-content">2018-06-13</span>
+    <span class="item-content">2018-06-15</span>
   </p>
   
   <p class="copyright-item">
@@ -378,21 +312,16 @@ connected to 192.168.1.12:5555</pre></td></tr></table>
           
           <a href="/tags/android/">android</a>
           
-          <a href="/tags/adb/">adb</a>
+          <a href="/tags/uart/">UART</a>
           
         </div>
 
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/aosp/2018-06-15-adb_shell%E8%B0%83%E8%AF%95android%E4%B8%B2%E5%8F%A3/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">adb shell 调试 Android 串口</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
         
-          <a class="next" href="/post/aosp/2018-06-13-%E8%B6%85%E7%BA%A7%E8%AF%A6%E7%BB%86%E7%9A%84android%E7%9B%AE%E5%BD%95%E8%AF%B4%E6%98%8E/">
-            <span class="next-text nav-default">超级详细的android目录说明</span>
+          <a class="next" href="/post/android/2018-06-13-android-android_adb%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E6%96%B9%E6%B3%95/">
+            <span class="next-text nav-default">android adb网络连接方法</span>
             <span class="prev-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
@@ -409,10 +338,10 @@ connected to 192.168.1.12:5555</pre></td></tr></table>
     <script src="/lib/gitment/gitment-0.0.3.min.js"></script>
   <script type="text/javascript">
   const gitment = new Gitment({
-    id: '2018-06-13-android-Android_adb网络连接方法.md',
-    title: 'android adb网络连接方法',
+    id: '2018-06-15-adb shell调试 Android串口.md',
+    title: 'adb shell 调试 Android 串口',
     link: decodeURI(location.href),
-    desc: '一、概述 在android里，adb一般使用USB连接，但是很多时候，可能只有一个设备终端，但是需要多于一个用户连接设备调试，因此使用网络连接',
+    desc: 'adb shell 调试 Android 串口 Android手机上很多外设是串口连接到AP的，如modem，gps。为了调试这些串口，通常需要将它们飞线接出来，用pc的串口',
     owner: 'mazhidong',
     repo: 'comments',
     oauth: {

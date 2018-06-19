@@ -10,6 +10,13 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/post/linux/2018-06-19-ffmpeg%E4%BD%BF%E7%94%A8%E5%8F%82%E6%95%B0%E7%9A%84%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E/</loc>
+    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/post/aosp/2018-06-15-adb_shell%E8%B0%83%E8%AF%95android%E4%B8%B2%E5%8F%A3/</loc>
     <lastmod>2018-06-15T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -185,6 +192,13 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/tags/ffmpeg/</loc>
+    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/tags/git/</loc>
     <lastmod>2017-09-04T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -214,21 +228,21 @@
   
   <url>
     <loc>https://mazhidong.github.io/tags/linux/</loc>
-    <lastmod>2017-11-17T00:00:00+00:00</lastmod>
+    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://mazhidong.github.io/categories/linux/</loc>
-    <lastmod>2017-11-17T00:00:00+00:00</lastmod>
+    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://mazhidong.github.io/post/</loc>
-    <lastmod>2018-06-15T00:00:00+00:00</lastmod>
+    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>

@@ -24,6 +24,630 @@
     </item>
     
     <item>
+      <title>Ffmpeg选项详解</title>
+      <link>https://mazhidong.github.io/post/linux/2018-06-19-ffmpeg%E9%80%89%E9%A1%B9%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/linux/2018-06-19-ffmpeg%E9%80%89%E9%A1%B9%E8%AF%A6%E8%A7%A3/</guid>
+      
+        <description>
+
+&lt;h1 id=&#34;ffmpeg快速命令使用&#34;&gt;Ffmpeg快速命令使用&lt;/h1&gt;
+
+&lt;h2 id=&#34;ffmpeg使用语法&#34;&gt;Ffmpeg使用语法&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg [[options][`-i&amp;#39; input_file]]... {[options] output_file}... &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;如果没有输入文件，那么视音频捕捉（只在Linux下有效，因为Linux下把音视频设备当作文件句柄来处理）就会起作用。作为通用的规则，选项一般用于下一个特定的文件。如果你给 –b 64选项，改选会设置下一个视频速率。对于原始输入文件，格式选项可能是需要的。缺省情况下，ffmpeg试图尽可能的无损转换，采用与输入同样的音频视频参数来输出。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ffmpeg转换所涉及到的选项较多，可参考ffmpeg选项详解。&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;ffmpeg支持多种文件格式和多种音频、视频编码器，可参考ffmepg格式详解，（附：常见视频文件格式详解）&lt;/p&gt;
+
+&lt;h2 id=&#34;视频文件截图&#34;&gt;视频文件截图&lt;/h2&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;截取一张352x240尺寸大小的-格式为jpg的图片&#34;&gt;截取一张352x240尺寸大小的，格式为jpg的图片&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -i test.asf -y -f image2 -t 0.001 -s 352x240 a.jpg&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;把视频的前３０帧转换成一个animated-gif&#34;&gt;把视频的前３０帧转换成一个Animated Gif&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -i test.asf -vframes 30 -y -f gif a.gif&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;截取指定时间的缩微图&#34;&gt;截取指定时间的缩微图&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -i test.avi -y -f image2 -ss 8 -t 0.001 -s 350x240 test.jpg&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;-ss后跟的时间单位为秒&lt;/p&gt;
+
+&lt;h3 id=&#34;转换文件为3gp格式&#34;&gt;转换文件为3GP格式&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -y -i test.mpeg -bitexact -vcodec h263 -b 128 -r 15 -s 176x144 
+ -acodec aac -ac 2 -ar 22500 -ab 24 -f 3gp test.3gp&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;或&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -y -i test.wmv -ac 1 -acodec libamr_nb -ar 8000 -ab 12200 -s 176x144 -b 128 -r 15 test.3gp&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;视频格式转换&#34;&gt;视频格式转换&lt;/h2&gt;
+
+&lt;h3 id=&#34;如何使用-ffmpeg-编码得到高质量的视频&#34;&gt;如何使用 ffmpeg 编码得到高质量的视频&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg.exe -i &amp;#34;D:/Video/Fearless/Fearless.avi&amp;#34; -target film-dvd -s 720x352
+ -padtop 64 -padbottom 64 -maxrate 7350000 -b 3700000 -sc_threshold 1000000000 
+ -trellis -cgop -g 12 -bf 2 -qblur 0.3 -qcomp 0.7 -me full -dc 10 -mbd 2
+ -aspect 16:9 -pass 2 -passlogfile &amp;#34;D:/Video/ffmpegencode&amp;#34; -an -f mpeg2video &amp;#34;D:/Fearless.m2v&amp;#34;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;转换指定格式文件到flv格式&#34;&gt;转换指定格式文件到FLV格式&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg.exe -i test.mp3 -ab 56 -ar 22050 -b 500 -r 15 -s 320x240 f:/test.flv
+ffmpeg.exe -i test.wmv -ab 56 -ar 22050 -b 500 -r 15 -s 320x240 f:/test.flv&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;转码解密的vob&#34;&gt;转码解密的VOB&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -i snatch_1.vob -f avi -vcodec mpeg4 -b 800 -g 300 -bf 2 -acodec mp3 -ab 128 snatch.avi&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;上面的命令行将vob的文件转化成avi文件，mpeg4的视频和mp3的音频。注意命令中使用了B帧，所以mpeg4流是divx5兼容的。GOP大小是300意味着29.97帧频下每10秒就有INTRA帧。该映射在音频语言的DVD转码时候尤其有用。&lt;/p&gt;
+
+&lt;h3 id=&#34;同时编码到几种格式并且在输入流和输出流之间建立映射&#34;&gt;同时编码到几种格式并且在输入流和输出流之间建立映射&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -i /tmp/a.wav -ab 64 /tmp/a.mp2 -ab 128 /tmp/b.mp2 -map 0:0 -map 0:0&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;上面的命令行转换一个64Kbits 的a.wav到128kbits的a.mp2 ‘-map file:index’在输出流的顺序上定义了哪一路输入流是用于每一个输出流的。&lt;/p&gt;
+
+&lt;h3 id=&#34;转换文件为3gp格式-1&#34;&gt;转换文件为3GP格式&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -i test.avi -y -b 20 -s sqcif -r 10 -acodec amr_wb -ab 23.85 -ac 1 -ar 16000 test.3gp&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;注：如果要转换为3GP格式，则ffmpeg在编译时必须加上–enable-amr_nb –enable-amr_wb，详细内容可参考：转换视频为3GPP格式&lt;/p&gt;
+
+&lt;h3 id=&#34;转换文件为mp4格式-支持iphone-itouch&#34;&gt;转换文件为MP4格式（支持iPhone/iTouch）&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg  -y  -i input.wmv  -f mp4 -async 1-s 480x320  -acodec libfaac -vcodec libxvid  -qscale 7 -dts_delta_threshold 1 output.mp4
+ffmpeg  -y  -i source_video.avi input -acodec libfaac -ab 128000 -vcodec mpeg4 -b 1200000 -mbd 2 -flags +4mv+trell -aic 2 -cmp 2 -subcmp 2 -s 320x180 -title X final_video.mp4&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;将一段音频与一段视频混合&#34;&gt;将一段音频与一段视频混合&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -i son.wav -i video_origine.avi video_finale.mpg&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;将一段视频转换为dvd格式&#34;&gt;将一段视频转换为DVD格式&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -i source_video.avi -target pal-dvd -ps 2000000000 -aspect 16:9 finale_video.mpeg&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;注：target pal-dvd : Output format ps 2000000000 maximum size for the output file, in bits (here, 2 Gb) aspect 16:9 : Widescreen&lt;/p&gt;
+
+&lt;h3 id=&#34;转换一段视频为divx格式&#34;&gt;转换一段视频为DivX格式&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -i video_origine.avi -s 320x240 -vcodec msmpeg4v2 video_finale.avi&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;turn-x-images-to-a-video-sequence&#34;&gt;Turn X images to a video sequence&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -f image2 -i image%d.jpg video.mpg&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;注：This command will transform all the images from the current directory (named image1.jpg, image2.jpg, etc&amp;hellip;) to a video file named video.mpg.&lt;/p&gt;
+
+&lt;h3 id=&#34;turn-a-video-to-x-images&#34;&gt;Turn a video to X images&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -i video.mpg image%d.jpg&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;注：This command will generate the files named image1.jpg, image2.jpg, &amp;hellip;
+The following image formats are also availables : PGM, PPM, PAM, PGMYUV, JPEG, GIF, PNG, TIFF, SGI.&lt;/p&gt;
+
+&lt;h2 id=&#34;屏幕录制&#34;&gt;屏幕录制&lt;/h2&gt;
+
+&lt;h3 id=&#34;使用ffmpeg录像屏幕&#34;&gt;使用ffmpeg录像屏幕&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -vcodec mpeg4 -b 1000 -r 10 -g 300 -vd x11:0,0 -s 1024x768 ~/test.avi&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;：其中，-vd x11:0,0 指录制所使用的偏移为 x=0 和 y=0，-s 1024×768 指录制视频的大小为 1024×768。录制的视频文件为 test.avi，将保存到用户主目录中&lt;/p&gt;
+
+&lt;p&gt;如果你只想录制一个应用程序窗口或者桌面上的一个固定区域，那么可以指定偏移位置和区域大小。使用xwininfo -frame命令可以完成查找上述参数。&lt;/p&gt;
+
+&lt;h3 id=&#34;重新调整视频尺寸大小&#34;&gt;重新调整视频尺寸大小&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -vcodec mpeg4 -b 1000 -r 10 -g 300 -i ~/test.avi -s 800×600 ~/test-800-600.avi&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;注：ffmpeg的屏幕录制功能只能在Linux环境下有效。&lt;/p&gt;
+
+&lt;h2 id=&#34;视频采集&#34;&gt;视频采集&lt;/h2&gt;
+
+&lt;h3 id=&#34;把摄像头的实时视频录制下来-存储为文件&#34;&gt;把摄像头的实时视频录制下来，存储为文件&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg  -f video4linux -s 320*240 -r 10 -i /dev/video0  test.asf&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;注：ffmpeg的视频采集功能只能在Linux环境下使用&lt;/p&gt;
+
+&lt;h2 id=&#34;使用ffmpeg压制h-264视频&#34;&gt;使用ffmpeg压制H.264视频&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -threads 4 -i INPUT -r 29.97 -vcodec libx264 -s 480x272 -flags +loop -cmp +chroma -deblockalpha 0 -deblockbeta 0 -crf 24 
+-bt 256k -refs 1 -coder 0 -me umh -me_range 16 -subq 5 -partitions +parti4x4+parti8x8+partp8x8 -g 250 -keyint_min 25 -level 30 
+-qmin 10 -qmax 51 -trellis 2 -sc_threshold 40 -i_qfactor 0.71 -acodec libfaac -ab 128k -ar 48000 -ac 2 OUTPUT&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;注：使用该指令可以压缩出比较清晰，而且文件转小的H.264视频文件&lt;/p&gt;
+
+&lt;h2 id=&#34;使用vhook为视频添加水印&#34;&gt;使用VHook为视频添加水印&lt;/h2&gt;
+
+&lt;p&gt;//////////////////////////////////////////////////&lt;/p&gt;
+
+&lt;h1 id=&#34;ffmpeg选项详解&#34;&gt;Ffmpeg选项详解&lt;/h1&gt;
+
+&lt;h2 id=&#34;通用选项&#34;&gt;通用选项&lt;/h2&gt;
+
+&lt;p&gt;-L license&lt;/p&gt;
+
+&lt;p&gt;-h 帮助&lt;/p&gt;
+
+&lt;p&gt;-fromats 显示可用的格式，编解码的，协议的&lt;/p&gt;
+
+&lt;p&gt;-f fmt 强迫采用格式fmt&lt;/p&gt;
+
+&lt;p&gt;-I filename 输入文件&lt;/p&gt;
+
+&lt;p&gt;-y 覆盖输出文件&lt;/p&gt;
+
+&lt;p&gt;-t duration 设置纪录时间 hh:mm:ss[.xxx]格式的记录时间也支持&lt;/p&gt;
+
+&lt;p&gt;-ss position 搜索到指定的时间 [-]hh:mm:ss[.xxx]的格式也支持&lt;/p&gt;
+
+&lt;p&gt;-title string 设置标题&lt;/p&gt;
+
+&lt;p&gt;-author string 设置作者&lt;/p&gt;
+
+&lt;p&gt;-copyright string 设置版权&lt;/p&gt;
+
+&lt;p&gt;-comment string 设置评论&lt;/p&gt;
+
+&lt;p&gt;-target type 设置目标文件类型(vcd,svcd,dvd) 所有的格式选项（比特率，编解码以及缓冲区大小）自动设置 ，只需要输入如下的就可以了：&lt;/p&gt;
+
+&lt;p&gt;ffmpeg -i myfile.avi -target vcd /tmp/vcd.mpg&lt;/p&gt;
+
+&lt;p&gt;-hq 激活高质量设置&lt;/p&gt;
+
+&lt;p&gt;-itsoffset offset 设置以秒为基准的时间偏移，该选项影响所有后面的输入文件。该偏移被加到输入文件的时戳，定义一个正偏移意味着相应的流被延迟了 offset秒。 [-]hh:mm:ss[.xxx]的格式也支持&lt;/p&gt;
+
+&lt;h2 id=&#34;视频选项&#34;&gt;视频选项&lt;/h2&gt;
+
+&lt;p&gt;-b bitrate 设置比特率，缺省200kb/s&lt;/p&gt;
+
+&lt;p&gt;-r fps 设置帧频 缺省25&lt;/p&gt;
+
+&lt;p&gt;-s size 设置帧大小 格式为WXH 缺省160X128.下面的简写也可以直接使用：&lt;/p&gt;
+
+&lt;p&gt;Sqcif  128X96 qcif 176X144 cif 252X288 4cif 704X576&lt;/p&gt;
+
+&lt;p&gt;-aspect aspect 设置横纵比 4:3 16:9 或 1.3333 1.7777&lt;/p&gt;
+
+&lt;p&gt;-croptop size 设置顶部切除带大小 像素单位&lt;/p&gt;
+
+&lt;p&gt;-cropbottom size –cropleft size –cropright size&lt;/p&gt;
+
+&lt;p&gt;-padtop size 设置顶部补齐的大小 像素单位&lt;/p&gt;
+
+&lt;p&gt;-padbottom size –padleft size –padright size –padcolor color 设置补齐条颜色(hex,6个16进制的数，红:绿:兰排列，比如 000000代表黑色)&lt;/p&gt;
+
+&lt;p&gt;-vn 不做视频记录&lt;/p&gt;
+
+&lt;p&gt;-bt tolerance 设置视频码率容忍度kbit/s&lt;/p&gt;
+
+&lt;p&gt;-maxrate bitrate设置最大视频码率容忍度&lt;/p&gt;
+
+&lt;p&gt;-minrate bitreate 设置最小视频码率容忍度&lt;/p&gt;
+
+&lt;p&gt;-bufsize size 设置码率控制缓冲区大小&lt;/p&gt;
+
+&lt;p&gt;-vcodec codec 强制使用codec编解码方式。 如果用copy表示原始编解码数据必须被拷贝&lt;/p&gt;
+
+&lt;p&gt;-sameq 使用同样视频质量作为源（VBR）&lt;/p&gt;
+
+&lt;p&gt;-pass n 选择处理遍数（1或者2）。两遍编码非常有用。第一遍生成统计信息，第二遍生成精确的请求的码率&lt;/p&gt;
+
+&lt;p&gt;-passlogfile file 选择两遍的纪录文件名为file&lt;/p&gt;
+
+&lt;h2 id=&#34;高级视频选项&#34;&gt;高级视频选项&lt;/h2&gt;
+
+&lt;p&gt;-g gop_size 设置图像组大小&lt;/p&gt;
+
+&lt;p&gt;-intra 仅适用帧内编码&lt;/p&gt;
+
+&lt;p&gt;-qscale q 使用固定的视频量化标度(VBR)&lt;/p&gt;
+
+&lt;p&gt;-qmin q 最小视频量化标度(VBR)&lt;/p&gt;
+
+&lt;p&gt;-qmax q 最大视频量化标度(VBR)&lt;/p&gt;
+
+&lt;p&gt;-qdiff q 量化标度间最大偏差 (VBR)&lt;/p&gt;
+
+&lt;p&gt;-qblur blur 视频量化标度柔化(VBR)&lt;/p&gt;
+
+&lt;p&gt;-qcomp compression 视频量化标度压缩(VBR)&lt;/p&gt;
+
+&lt;p&gt;-rc_init_cplx complexity 一遍编码的初始复杂度&lt;/p&gt;
+
+&lt;p&gt;-b_qfactor factor 在p和b帧间的qp因子&lt;/p&gt;
+
+&lt;p&gt;-i_qfactor factor 在p和i帧间的qp因子&lt;/p&gt;
+
+&lt;p&gt;-b_qoffset offset 在p和b帧间的qp偏差&lt;/p&gt;
+
+&lt;p&gt;-i_qoffset offset 在p和i帧间的qp偏差&lt;/p&gt;
+
+&lt;p&gt;-rc_eq equation 设置码率控制方程 默认tex^qComp&lt;/p&gt;
+
+&lt;p&gt;-rc_override override 特定间隔下的速率控制重载&lt;/p&gt;
+
+&lt;p&gt;-me method 设置运动估计的方法 可用方法有 zero phods log x1 epzs(缺省) full&lt;/p&gt;
+
+&lt;p&gt;-dct_algo algo 设置dct的算法 可用的有&lt;/p&gt;
+
+&lt;p&gt;0 FF_DCT_AUTO 缺省的DCT 1 FF_DCT_FASTINT 2 FF_DCT_INT 3 FF_DCT_MMX 4 FF_DCT_MLIB 5 FF_DCT_ALTIVEC&lt;/p&gt;
+
+&lt;p&gt;-idct_algo algo 设置idct算法。可用的有
+0 FF_IDCT_AUTO 缺省的IDCT 1 FF_IDCT_INT 2 FF_IDCT_SIMPLE 3 FF_IDCT_SIMPLEMMX 4 FF_IDCT_LIBMPEG2MMX 5 FF_IDCT_PS2 6 FF_IDCT_MLIB 7 FF_IDCT_ARM 8 FF_IDCT_ALTIVEC 9 FF_IDCT_SH4 10 FF_IDCT_SIMPLEARM&lt;/p&gt;
+
+&lt;p&gt;-er n 设置错误残留为n&lt;/p&gt;
+
+&lt;p&gt;1 FF_ER_CAREFULL 缺省 2 FF_ER_COMPLIANT 3 FF_ER_AGGRESSIVE 4 FF_ER_VERY_AGGRESSIVE&lt;/p&gt;
+
+&lt;p&gt;-ec bit_mask 设置错误掩蔽为bit_mask,该值为如下值的位掩码&lt;/p&gt;
+
+&lt;p&gt;1 FF_EC_GUESS_MVS (default=enabled) 2 FF_EC_DEBLOCK (default=enabled)&lt;/p&gt;
+
+&lt;p&gt;-bf frames 使用frames B 帧，支持mpeg1,mpeg2,mpeg4 -mbd mode 宏块决策&lt;/p&gt;
+
+&lt;p&gt;0 FF_MB_DECISION_SIMPLE 使用mb_cmp 1 FF_MB_DECISION_BITS 2 FF_MB_DECISION_RD&lt;/p&gt;
+
+&lt;p&gt;-4mv 使用4个运动矢量 仅用于mpeg4&lt;/p&gt;
+
+&lt;p&gt;-part 使用数据划分 仅用于mpeg4&lt;/p&gt;
+
+&lt;p&gt;-bug param 绕过没有被自动监测到编码器的问题&lt;/p&gt;
+
+&lt;p&gt;-strict strictness 跟标准的严格性&lt;/p&gt;
+
+&lt;p&gt;-aic 使能高级帧内编码 h263+&lt;/p&gt;
+
+&lt;p&gt;-umv 使能无限运动矢量 h263+&lt;/p&gt;
+
+&lt;p&gt;-deinterlace 不采用交织方法&lt;/p&gt;
+
+&lt;p&gt;-interlace 强迫交织法编码 仅对mpeg2和mpeg4有效。当你的输入是交织的并且你想要保持交织以最小图像损失的时候采用该选项。可选的方法是不交织，但是损失更大&lt;/p&gt;
+
+&lt;p&gt;-psnr 计算压缩帧的psnr&lt;/p&gt;
+
+&lt;p&gt;-vstats 输出视频编码统计到vstats_hhmmss.log&lt;/p&gt;
+
+&lt;p&gt;-vhook module 插入视频处理模块 module 包括了模块名和参数，用空格分开&lt;/p&gt;
+
+&lt;h2 id=&#34;音频选项&#34;&gt;音频选项&lt;/h2&gt;
+
+&lt;p&gt;-ab bitrate 设置音频码率&lt;/p&gt;
+
+&lt;p&gt;-ar freq 设置音频采样率&lt;/p&gt;
+
+&lt;p&gt;-ac channels 设置通道 缺省为1&lt;/p&gt;
+
+&lt;p&gt;-an 不使能音频纪录&lt;/p&gt;
+
+&lt;p&gt;-acodec codec 使用codec编解码&lt;/p&gt;
+
+&lt;h2 id=&#34;音频-视频捕获选项&#34;&gt;音频/视频捕获选项&lt;/h2&gt;
+
+&lt;p&gt;-vd device 设置视频捕获设备。比如/dev/video0&lt;/p&gt;
+
+&lt;p&gt;-vc channel 设置视频捕获通道 DV1394专用&lt;/p&gt;
+
+&lt;p&gt;-tvstd standard 设置电视标准 NTSC PAL(SECAM)&lt;/p&gt;
+
+&lt;p&gt;-dv1394 设置DV1394捕获&lt;/p&gt;
+
+&lt;p&gt;-av device 设置音频设备 比如/dev/dsp&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;注：仅在Linux下有效。&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;高级选项&#34;&gt;高级选项&lt;/h2&gt;
+
+&lt;p&gt;-map file:stream 设置输入流映射&lt;/p&gt;
+
+&lt;p&gt;-debug 打印特定调试信息&lt;/p&gt;
+
+&lt;p&gt;-benchmark 为基准测试加入时间&lt;/p&gt;
+
+&lt;p&gt;-hex 倾倒每一个输入包&lt;/p&gt;
+
+&lt;p&gt;-bitexact 仅使用位精确算法 用于编解码测试&lt;/p&gt;
+
+&lt;p&gt;-ps size 设置包大小，以bits为单位&lt;/p&gt;
+
+&lt;p&gt;-re 以本地帧频读数据，主要用于模拟捕获设备&lt;/p&gt;
+
+&lt;p&gt;-loop 循环输入流。只工作于图像流，用于ffserver测试&lt;/p&gt;
+
+&lt;h1 id=&#34;ffmepg格式详解&#34;&gt;Ffmepg格式详解&lt;/h1&gt;
+
+&lt;h2 id=&#34;文件格式&#34;&gt;文件格式&lt;/h2&gt;
+
+&lt;p&gt;FFmpeg supports the following file formats through the libavformat library:&lt;/p&gt;
+
+&lt;p&gt;Supported File Format Encoding Decoding&lt;/p&gt;
+
+&lt;p&gt;MPEG audio X X&lt;/p&gt;
+
+&lt;p&gt;MPEG1 systems X X&lt;/p&gt;
+
+&lt;p&gt;MPEG2 PS X X&lt;/p&gt;
+
+&lt;p&gt;MPEG2 TS X&lt;/p&gt;
+
+&lt;p&gt;ASF X X&lt;/p&gt;
+
+&lt;p&gt;AVI X X&lt;/p&gt;
+
+&lt;p&gt;WAV X X&lt;/p&gt;
+
+&lt;p&gt;Macromedia Flash X X&lt;/p&gt;
+
+&lt;p&gt;FLV X X&lt;/p&gt;
+
+&lt;p&gt;Real Audio and Video X X&lt;/p&gt;
+
+&lt;p&gt;Raw AC3 X X&lt;/p&gt;
+
+&lt;p&gt;Raw MJPEG X X&lt;/p&gt;
+
+&lt;p&gt;Raw MPEG video X X&lt;/p&gt;
+
+&lt;p&gt;Raw PCM8/16 bits, mulaw/Alaw X X&lt;/p&gt;
+
+&lt;p&gt;Raw CRI ADX audio X X&lt;/p&gt;
+
+&lt;p&gt;SUN AU format X X&lt;/p&gt;
+
+&lt;p&gt;NUT X X&lt;/p&gt;
+
+&lt;p&gt;Quicktime X X&lt;/p&gt;
+
+&lt;p&gt;MPEG4 X X&lt;/p&gt;
+
+&lt;p&gt;Raw MPEG4 video X X&lt;/p&gt;
+
+&lt;p&gt;DV X X&lt;/p&gt;
+
+&lt;p&gt;4xm X&lt;/p&gt;
+
+&lt;p&gt;Playstation STR X&lt;/p&gt;
+
+&lt;p&gt;Id RoQ X&lt;/p&gt;
+
+&lt;p&gt;Interplay MVE X&lt;/p&gt;
+
+&lt;p&gt;WC3 Movie X&lt;/p&gt;
+
+&lt;p&gt;Sega FILM/CPK X&lt;/p&gt;
+
+&lt;p&gt;Westwood Studios VQA/AUD X&lt;/p&gt;
+
+&lt;p&gt;Id Cinematic (.cin) X&lt;/p&gt;
+
+&lt;p&gt;FLIC format X&lt;/p&gt;
+
+&lt;p&gt;Sierra VMD X&lt;/p&gt;
+
+&lt;p&gt;Matroska X&lt;/p&gt;
+
+&lt;h2 id=&#34;图像格式&#34;&gt;图像格式&lt;/h2&gt;
+
+&lt;p&gt;Supported Image Format Encoding Decoding PGM, PPM X X PAM X X PGMYUV X X JPEG X X .Y.U.V X X Animated GIF X X PNG X X SGI X X&lt;/p&gt;
+
+&lt;h2 id=&#34;视频编解码器&#34;&gt;视频编解码器&lt;/h2&gt;
+
+&lt;p&gt;Supported Codec Encoding Decoding Comments MPEG1 video X X MPEG2 video X X MPEG4 X X Also known as DIVX4/5 MSMPEG4 V1 X X MSMPEG4 V2 X X MSMPEG4 V3 X X Also known as DIVX3 WMV7 X X WMV8 X X Not completely working H263(+) X X Also known as Real Video 1.0 MJPEG X X Lossless MJPEG X X Apple MJPEG-B X Sunplus MJPEG X fourcc: SP5X DV X X Huff YUV X X FFmpeg Video 1 X X Lossless codec (fourcc: FFV1) Asus v1 X X fourcc: ASV1 Asus v2 X X fourcc: ASV2 Creative YUV X fourcc: CYUV H.264 X Sorenson Video 1 X X fourcc: SVQ1 Sorenson Video 3 X fourcc: SVQ3 On2 VP3 X still experimental Theora X still experimental Intel Indeo 3 X only works on i386 right now FLV X X Flash H263 variant ATI VCR1 X fourcc: VCR1 ATI VCR2 X fourcc: VCR2 Cirrus Logic AccuPak X fourcc: CLJR 4X Video X used in certain computer games Sony Playstation MDEC X Id RoQ X used in Quake III, Jedi Knight 2, other computer games Xan/WC3 X used in Wing Commander III .MVE files Interplay Video X used in Interplay .MVE files Apple Animation X fourcc: &amp;lsquo;rle &amp;rsquo; Apple Graphics X fourcc: &amp;lsquo;smc &amp;rsquo; Apple Video X fourcc: rpza Cinepak X Microsoft RLE X Microsoft Video-1 X Westwood VQA X Id Cinematic Video X used in Quake II Planar RGB X fourcc: 8BPS FLIC video X Duck TrueMotion v1 X fourcc: DUCK VMD Video X used in Sierra VMD files MSZH X Part of LCL ZLIB X X Part of LCL, encoder experimental&lt;/p&gt;
+
+&lt;h2 id=&#34;音频编解码&#34;&gt;音频编解码&lt;/h2&gt;
+
+&lt;p&gt;Supported Codec Encoding Decoding Comments MPEG audio layer 2 IX IX MPEG audio layer &lt;sup&gt;1&lt;/sup&gt;&amp;frasl;&lt;sub&gt;3&lt;/sub&gt; IX IX MP3 encoding is supported through the external library LAME AC3 IX X liba52 is used internally for decoding Vorbis X X supported through the external library libvorbis WMA V1/V2 X AAC X X supported through the external library libfaac/libfaad Microsoft ADPCM X X MS IMA ADPCM X X QT IMA ADPCM X 4X IMA ADPCM X G.726 ADPCM X X Duck DK3 IMA ADPCM X used in some Sega Saturn console games Duck DK4 IMA ADPCM X used in some Sega Saturn console games Westwood Studios IMA ADPCM X used in Westwood Studios games like Command and Conquer SMJPEG IMA ADPCM X used in certain Loki game ports CD-ROM XA ADPCM X CRI ADX ADPCM X X used in Sega Dreamcast games Electronic Arts ADPCM X used in various EA titles RA144 X Real 14400 bit/s codec RA288 X Real 28800 bit/s codec AMR-NB X X supported through an external library AMR-WB X X supported through an external library DV audio X Id RoQ DPCM X used in Quake III, Jedi Knight 2, other computer games Interplay MVE DPCM X used in various Interplay computer games Xan DPCM X used in Origin&amp;rsquo;s Wing Commander IV AVI files Apple MACE 3 X Apple MACE 6 X FLAC X&lt;/p&gt;
+
+&lt;h1 id=&#34;常见视频文件格式详解&#34;&gt;常见视频文件格式详解&lt;/h1&gt;
+
+&lt;h2 id=&#34;avi-avi文件&#34;&gt;AVI&amp;mdash;AVI文件&lt;/h2&gt;
+
+&lt;p&gt;AVI是音频视频交错(Audio Video Interleaved)的英文缩写，它是Microsoft公司开发的一种符合RIFF文件规范的数字音频与视频文件格式，原先用于Microsoft Video for Windows (简称VFW)环境，现在已被Windows 95/98、OS/2等多数操作系统直接支持。AVI格式允许视频和音频交错在一起同步播放，支持256色和RLE压缩，但AVI文件并未限定压缩标准，因此，AVI文件格式只是作为控制界面上的标准，不具有兼容性，用不同压缩算法生成的AVI文件，必须使用相应的解压缩算法才能播放出来。常用的AVI播放驱动程序，主要是Microsoft Video for Windows或Windows 95/98中的Video 1，以及Intel公司的Indeo Video。AVI文件目前主要应用在多媒体光盘上，用来保存电影、电视等各种影像信息，有时也出现在Internet上，供用户下载、欣赏新影片的精彩片断。&lt;/p&gt;
+
+&lt;h2 id=&#34;mpeg-mpg-dat-mpeg文件&#34;&gt;.MPEG/.MPG/.DAT&amp;mdash;MPEG文件&lt;/h2&gt;
+
+&lt;p&gt;MPEG文件格式是运动图像压缩算法的国际标准，它采用有损压缩方法减少运动图像中的冗余信息，同时保证每秒30帧的图像动态刷新率，已被几乎所有的计算机平台共同支持。MPEG标准包括MPEG视频、MPEG音频和MPEG系统(视频、音频同步)三个部分，前文介绍的MP3音频文件就是MPEG音频的一个典型应用，而Video CD (VCD)、Super VCD (SVCD)、DVD (Digital Versatile Disk)则是全面采用MPEG技术所产生出来的新型消费类电子产品。MPEG压缩标准是针对运动图像而设计的，其基本方法是：在单位时间内采集并保存第一帧信息，然后只存储其余帧相对第一帧发生变化的部分，从而达到压缩的目的，它主要采用两个基本压缩技术：运动补偿技术(预测编码和插补码)实现时间上的压缩，变换域(离散余弦变换DCT)压缩技术实现空间上的压缩。MPEG的平均压缩比为50∶1，最高可达200∶1，压缩效率非常高，同时图像和音响的质量也非常好，并且在微机上有统一的标准格式，兼容性相当好。&lt;/p&gt;
+
+&lt;p&gt;这里值得注意的是DIVX。DIVX 视频编码技术可以说是一种对 DVD 造成威胁的新生视频压缩格式，也有人说它是 DVD 杀手，它由 Microsoft mpeg4 v3 修改而来，使用了MPEG4的压缩算法。同时它也可以说是为了打破 ASF 的种种协定而发展出来的。而使用这种据说是美国禁止出口的编码技术MPEG4 压缩一部 DVD 只需要 2 张 CDROM。这样就意味着读者不需要额外购买DVD光驱也可以得到和它差不多的视频质量。而且播放这种编码，对机器的要求也不高，CPU的最低额度只要求在300MHZ 以上，而且在CPU类型的选择方面，不论你的芯是PII、CELERON还是PIII、AMDK6/2、AMDK6III、ATHALON，就是CYRIXx86也可以统吃拿下。在配置上64 兆内存和一个 8兆显存的显卡上，DIVX便可以流畅的播放了。&lt;/p&gt;
+
+&lt;h2 id=&#34;ra-rm-rmvb-realvideo文件&#34;&gt;.RA/.RM/.RMVB&amp;mdash;RealVideo文件&lt;/h2&gt;
+
+&lt;p&gt;RealVideo文件是RealNetworks公司开发的一种新型流式视频文件格式，它包含在RealNetworks公司所制定的音频视频压缩规范RealMedia中，主要用来在低速率的广域网上实时传输活动视频影像，可以根据网络数据传输速率的不同而采用不同的压缩比率，从而实现影像数据的实时传送和实时播放。RealVideo除了可以以普通的视频文件形式播放之外，还可以与RealServer服务器相配合，在数据传输过程中边下载边播放视频影像，而不必像大多数视频文件那样，必须先下载然后才能播放。目前，Internet上已有不少网站利用RealVideo技术进行重大事件的实况转播。 RMVB影片格式比原先的RM多了VB两字，在这里VB是VBR（Variable Bit Rate&amp;ndash;可变比特率）的缩写。在保证了平均采样率的基础上，设定了一般为平均采样率两倍的最大采样率值，在处理较复杂的动态影像时也能得到比较良好的效果，处理一般静止画面时则灵活的转换至较低的采样率，有效的缩减了文件的大小！&lt;/p&gt;
+
+&lt;h2 id=&#34;mov-qt-quicktime文件&#34;&gt;.MOV/.QT&amp;mdash;QuickTime文件&lt;/h2&gt;
+
+&lt;p&gt;QuickTime是Apple计算机公司开发的一种音频、视频文件格式，用于保存音频和视频信息，具有先进的视频和音频功能，被包括Apple Mac OS、Microsoft Windows 95/98/NT在内的所有主流电脑平台支持。QuickTime文件格式支持25位彩色，支持RLE、JPEG等领先的集成压缩技术，提供150多种视频效果，并配有提供了200多种MIDI兼容音响和设备的声音装置。新版的QuickTime进一步扩展了原有功能，包含了基于Internet应用的关键特性，能够通过Internet提供实时的数字化信息流、工作流与文件回放功能，此外，QuickTime还采用了一种称为QuickTime VR (简作QTVR)技术的虚拟现实(Virtual Reality， VR)技术，用户通过鼠标或键盘的交互式控制，可以观察某一地点周围360度的景像，或者从空间任何角度观察某一物体。QuickTime以其领先的多媒体技术和跨平台特性、较小的存储空间要求、技术细节的独立性以及系统的高度开放性，得到业界的广泛认可，目前已成为数字媒体软件技术领域的事实上的工业标准。国际标准化组织(ISO)最近选择QuickTime文件格式作为开发MPEG4规范的统一数字媒体存储格式。&lt;/p&gt;
+
+&lt;h2 id=&#34;asf-wmv-microsoft流媒体文件&#34;&gt;.ASF/.WMV&amp;mdash;-MICROSOFT流媒体文件&lt;/h2&gt;
+
+&lt;p&gt;Microsoft公司推出的Advanced Streaming Format (ASF，高级流格式)，也是一个在Internet上实时传播多媒体的技术标准，Microsoft公司的野心很大，希图用ASF取代QuickTime之类的技术标准。ASF的主要优点包括：本地或网络回放、可扩充的媒体类型、部件下载、以及扩展性等。ASF应用的主要部件是NetShow服务器和NetShow播放器。有独立的编码器将媒体信息编译成ASF流，然后发送到NetShow服务器，再由NetShow服务器将ASF流发送给网络上的所有NetShow播放器，从而实现单路广播或多路广播。这和Real系统的实时转播则是大同小异。 WMV又是一种独立于编码方式的在Internet上实时传播多媒体的技术标准，Microsoft公司希望用其取代QuickTime之类的技术标准以及WAV、AVI之类的文件扩展名。wmv的主要优点包括：本地或网络回放、可扩充的媒体类型、部件下载、可伸缩的媒体类型、流的优先级化、多语言支持、环境独立性、丰富的流间关系以及扩展性等。&lt;/p&gt;
+
+&lt;h2 id=&#34;avi-n-avi&#34;&gt;.AVI(n AVI)&lt;/h2&gt;
+
+&lt;p&gt;如果你发现原来的播放器突然打不开这种格式的avi文件了，那你就要考虑是不是碰到了n AVI。n AVI是 newAVI 的缩写，是一个名为 ShadowRealm 的地下组织发展起来的一种新视频格式。它是由 Microsoft ASF 压缩算法的修改而来的（并不是想象中的 AVI），视频格式追求的无非是压缩率和图象质量，所以 NAVI 为了追求这个目标，改善了原始的 ASF 格式的一些不足，让 NAVI 可以拥有更高的帧率（frame rate）。当然，这是牺牲 ASF 的视频流特性作为代价的。概括来说， NAVI 就是一种去掉视频流特性的改良型 ASF 格式，也可以被视为是非网络版本的 ASF 。&lt;/p&gt;
+
+&lt;h2 id=&#34;iso-bin-img-tao-dao-cif-fcd-镜像文件格式&#34;&gt;ISO、BIN、IMG、TAO、DAO、CIF、FCD－镜像文件格式&lt;/h2&gt;
+
+&lt;p&gt;镜像文件其实就是一个独立的文件，和其他文件不同，它是由多个文件通过刻录软件或者镜像文件制作工具制作而成的。&lt;/p&gt;
+
+&lt;p&gt;　　镜像文件的应用范围比较广泛，最常见的应用就是数据备份(如软盘和光盘)。随着宽带网的普及，有些下载网站也有了ISO格式的文件下载，方便了软件光盘的制作与传递。常见的镜像文件格式有ISO、BIN、IMG、TAO、DAO、CIF、FCD。&lt;/p&gt;
+
+&lt;p&gt;打开镜像文件可以使用WinISO或者IsoBuster，下载这些软件的地方都有相关教程，这里就不多说了。&lt;/p&gt;
+
+&lt;h2 id=&#34;mpeg格式的补充&#34;&gt;MPEG格式的补充&lt;/h2&gt;
+
+&lt;p&gt;MPG格式的文件，是行业界开发早，使用时间长，并且早已认定为视频标准的视频文件，随着影碟机的大量普及，影碟也走进千家万户，VCD SVCD DVD，他们所采用的视频文件，自然是mpg格式的文件。下面就这些文件构造的基础知识，浅谈一下&lt;/p&gt;
+
+&lt;p&gt;MPG文件包括MPEG1 MPEG2 MPEG3和MPEG4，除了MPEG3文件由于体积过大比较少见之外，其余的三种都比较常见。比如，我们常见的VCD，其中的视频文件类型就属于MPEG1编码的 ，，SVCD和DVD，都属于MPEG2编码的。网络流行格式中，DIVX编码文件和XVID文件，是属于MPEG4编码的。&lt;/p&gt;
+
+&lt;p&gt;这里需要说明的是，概念要分清，之所以说VCD视频文件属于MPEG1类型，并不表示凡MPEG1文件都是VCD文件。只是说，VCD标准文件只是MPEG1文件中的一种。对于SVCD和DVD也一样，他们都属于MPEG2文件，都只是MPEG2文件中的一种标准，而并非所有的MPEG2编码文件都是SVCD或者DVD标准。&lt;/p&gt;
+
+&lt;p&gt;VCD标准的mpg文件，，是MPEG1文件中其中的一个标准，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;分辨率 352×288， 祯率 25FPS，（PAL），   比特率1150K/S，音频流MPEG2.0 224K/S
+      352×240， 祯率 29.97FPS，（NTSC），比特率1150K/S，音频流MPEG2.0 224K/S&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;满足以上参数标准的MPEG1文件，即为VCD标准的mpg文件，但 MPEG1文件还有其他很多个参数标准，分辨率，祯率，比特率这些都还有其他很多组合。&lt;/p&gt;
+
+&lt;p&gt;SVCD标准的mpg文件，，是MPEG2文件中其中的一个标准&lt;/p&gt;
+
+&lt;p&gt;分辨率 480×576， 祯率 25FPS，（PAL），   可调节 比特率1820-2500K/S，音频流 MPEG2.0 224K/S
+        480×480， 祯率 29.97FPS，（NTSC），可调节 比特率1820-2500K/S，音频流 MPEG2.0 224K/S&lt;/p&gt;
+
+&lt;p&gt;满足以上参数标准的MPEG2文件，即为SVCD标准的mpg文件，但 MPEG2文件还有其他很多个参数标准，分辨率，祯率，比特率这些都还有其他很多组合。&lt;/p&gt;
+
+&lt;p&gt;DVD标准的mpg文件，，是MPEG2文件中其中的一个标准&lt;/p&gt;
+
+&lt;p&gt;分辨率 720×576， 祯率 25FPS，（PAL），   可调节 比特率1691-9716K/S，音频流 MPEG2.0 224K/S，或者 AC-3 2.0 128-448K/S
+      720×480， 祯率 29.97FPS，（NTSC），可调节 比特率1691-9716K/S，音频流 MPEG2.0 224K/S，或者 AC-3 2.0 128-448K/S&lt;/p&gt;
+
+&lt;p&gt;满足以上参数标准的MPEG2文件，即为DVD标准的mpg文件，但 MPEG2文件还有其他很多个参数标准，分辨率，祯率，比特率这些都还有其他很多组合。&lt;/p&gt;
+
+&lt;p&gt;对于VCD标准的mpg文件，刻录成VCD光盘之后，在光盘中的后缀名是DAT，这是VCD光盘结构。但DAT和在硬盘里面保存的VCD标准的mpg文件是等效的，实质上文件类型并没有改变。&lt;/p&gt;
+
+&lt;p&gt;SVCS标准的mpg文件，刻录成SVCD光盘之后，文件的后缀名不变，仍然是MPG。&lt;/p&gt;
+
+&lt;p&gt;DVD标准的mpg文件，刻录成DVD光盘之后，文件的后缀名变为VOB，（同时含有BUP ,IFO文件），由于DVD的制作流程不同于前两者，所以即使是DVD标准的mpg文件，都必须通过制作软件再打包一次做成DVD视频文件形式。而不能像VCD和SVCD那样，满足了标准就能直接刻录而不用再进行转换
+取自&amp;rdquo;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>bootanimation支持播放MP4</title>
       <link>https://mazhidong.github.io/post/aosp/2018-06-19-bootanimation%E6%94%AF%E6%8C%81%E6%92%AD%E6%94%BEmp4/</link>
       <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
@@ -7647,48 +8271,6 @@ To 10.10.10.10:/home/git/mlc
 &lt;li&gt;&lt;a href=&#34;LPIC&#34;&gt;LPIC wikipedia&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://itsfoss.com/learn-linux-for-free/&#34;&gt;learn linux for free&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title>如何给自己的博客网站加入评论系统</title>
-      <link>https://mazhidong.github.io/post/blog/2017-08-16-how-to-add-comments/</link>
-      <pubDate>Wed, 16 Aug 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/blog/2017-08-16-how-to-add-comments/</guid>
-      
-        <description>
-
-&lt;h1 id=&#34;前言&#34;&gt;前言&lt;/h1&gt;
-
-&lt;p&gt;在&lt;a href=&#34;https://keysaim.github.io/2017/08/15/how-to-setup-your-github-io-blog/&#34;&gt;这一篇&lt;/a&gt;博文中，咱们介绍了如何快速的搭建个人的博客网站，但是这个博客网站是基于&lt;a href=&#34;https://pages.github.com/&#34;&gt;Github Pages&lt;/a&gt;的纯静态网站，自身是不带任何的可交互的元素的，自然也就没有评论系统。但是，对于一个好的博客网站，如果没有评论系统，那基本上就属于自娱自乐了，也违背了博客分享的精神。因此，本文将着重介绍如何快速的给自己的博客网站加入评论系统。&lt;/p&gt;
-
-&lt;h1 id=&#34;评论系统介绍&#34;&gt;评论系统介绍&lt;/h1&gt;
-
-&lt;p&gt;所谓评论系统，相信对于关注博客的你来说肯定不陌生。通常来讲有两大类，一类是网站自己提供评论系统，这个在很多较大的博客平台比较常见；一类是基于第三方的评论系统，这个在个人博客网站较为常见。对于个人博客，由于很多都是简单的托管在其他平台上面，比如博主网站托管于Github，因此很多都基本上是静态的网站，自身是没法提供评论系统。也正因为如此，也就催生了非常多的第三方的评论系统。这些系统国外比较有名的是&lt;a href=&#34;https://disqus.com/&#34;&gt;Disqus&lt;/a&gt;，国内更加五花八门了。国外的由于天朝特殊的网络环境，并不十分稳定，所以对于国内的博客网站来说，通常都会选择国内的第三方评论系统。至于国内的评论系统有哪些选择呢，建议参考&lt;a href=&#34;https://www.mokeyjay.com/archives/1732&#34;&gt;这篇博文&lt;/a&gt;。总的来说，由于评论系统这个东东，目前还没有明显的盈利的地方，倒闭关门是很有可能的，因此尽量选择大公司为后台的吧。&lt;/p&gt;
-
-&lt;p&gt;最近在研究评论系统的时候，偶然发现&lt;a href=&#34;http://hydroecology.net/using-github-to-host-blog-comments/&#34;&gt;有人&lt;/a&gt;居然直接使用Github的Issue系统来做评价系统，顿时眼前一亮啊。鉴于咱们的博客便是基于Github的，如果可行，那简直绝配了。于是博主就开始疯狂的搜索有关现状，Github都多少年了，博主深信应该已经有人造过轮子了。这类轮子肯定是属于前端方面的，于是在&lt;a href=&#34;https://www.npmjs.com/&#34;&gt;npm&lt;/a&gt;网站上面搜索，果然&lt;a href=&#34;https://www.npmjs.com/search?q=github%20issue%20comment&amp;amp;page=1&amp;amp;ranking=popularity&#34;&gt;发现不少&lt;/a&gt;。比较下来，发现一款国人开发的&lt;a href=&#34;https://www.npmjs.com/package/gitment&#34;&gt;gitment&lt;/a&gt;最为完整。这也就本文要介绍的评论系统了，本博客网站在可见的未来将采用该评论系统，这里对作者的分享表示感谢。&lt;/p&gt;
-
-&lt;h1 id=&#34;gitment使用&#34;&gt;gitment使用&lt;/h1&gt;
-
-&lt;p&gt;gitment的使用在&lt;a href=&#34;https://imsun.net/posts/gitment-introduction/&#34;&gt;官网&lt;/a&gt;有较为详细的介绍，步骤写的还是比较清楚的。这里只是对于讲述可能踩到的坑：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;请务必不要使用你的&lt;code&gt;&amp;lt;username&amp;gt;.github.io&lt;/code&gt;这个repo作为&lt;code&gt;gitment&lt;/code&gt;的repo&lt;/p&gt;
-
-&lt;p&gt;可能这个repo作为Github特殊的repo，使用它作为&lt;code&gt;gitment&lt;/code&gt;的repo时，总是不能够认证成功。建议再创建一个专门用来存放评论的repo。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/settings/applications/new&#34;&gt;生成oauth授权&lt;/a&gt;的时候，请务必确保&lt;code&gt;Authorization callback URL&lt;/code&gt;是你的博客网站，如博主的是&lt;code&gt;https://keysaim.github.io&lt;/code&gt;。否则会授权失败。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;每次提交博文的时候，请务必记得初始化改博文的评论，否则读者无法进行评论&lt;/p&gt;
-
-&lt;p&gt;所谓初始化其实就是在你的博文下面用自己的Github账号登陆之后，会出现一个&lt;code&gt;Initialize Comments&lt;/code&gt;字样的按钮，点击该按钮完成初始化。改初始化其实就是在你的Github repo里面针对这篇博文生成一个新的Issue。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;结语&#34;&gt;结语&lt;/h1&gt;
-
-&lt;p&gt;&lt;code&gt;gitment&lt;/code&gt;之类的评论系统是基于Github的Issue系统，每篇博文都对应于你的Github repo里面的一个Issue，博文里面的评论其实都是在改Issue里面的评论，因此，你是有绝对权限对所有评论进行管理的。另外，由于&lt;code&gt;gitment&lt;/code&gt;项目开始不久，并且貌似作者比较忙，因此功能性，质量方面还是存在不足，当你使用过程中如果遇到任何问题，可以直接去&lt;a href=&#34;https://github.com/imsun/gitment&#34;&gt;gitment repo&lt;/a&gt;里面查看一下是不是别人也碰到类似问题。可能的情况下，你也可以提交自己的解决方案。&lt;/p&gt;
 </description>
       
     </item>

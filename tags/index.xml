@@ -23,7 +23,7 @@
     <item>
       <title>Android</title>
       <link>https://mazhidong.github.io/tags/android/</link>
-      <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 22 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>https://mazhidong.github.io/tags/android/</guid>
       <description></description>
@@ -32,7 +32,7 @@
     <item>
       <title>Aosp</title>
       <link>https://mazhidong.github.io/tags/aosp/</link>
-      <pubDate>Wed, 13 Jun 2018 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 22 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>https://mazhidong.github.io/tags/aosp/</guid>
       <description></description>
@@ -53,6 +53,15 @@
       <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>https://mazhidong.github.io/tags/bootanimation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Docker</title>
+      <link>https://mazhidong.github.io/tags/docker/</link>
+      <pubDate>Fri, 22 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/tags/docker/</guid>
       <description></description>
     </item>
     
@@ -179,15 +188,6 @@
       <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
       
       <guid>https://mazhidong.github.io/tags/%E6%B3%A8%E8%A7%A3/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>生成代码</title>
-      <link>https://mazhidong.github.io/tags/%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81/</link>
-      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/tags/%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81/</guid>
       <description></description>
     </item>
     

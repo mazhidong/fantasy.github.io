@@ -6,10 +6,19 @@
     <description>Recent content in Android on Fantasy Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 19 Jun 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 22 Jun 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mazhidong.github.io/tags/android/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>使用Docker编译Android系统源码</title>
+      <link>https://mazhidong.github.io/post/docker/2018-06-22-%E4%BD%BF%E7%94%A8docker%E7%BC%96%E8%AF%91android%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81/</link>
+      <pubDate>Fri, 22 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/docker/2018-06-22-%E4%BD%BF%E7%94%A8docker%E7%BC%96%E8%AF%91android%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81/</guid>
+      <description>引言： 最近公司业务转型，开始倒腾起安卓系统，做了几个月的安卓APP开发，最近又需要做系统定制，所以撸起袖子搞起… 首先干嘛？部署开发环境，开发</description>
+    </item>
     
     <item>
       <title>bootanimation支持播放MP4</title>

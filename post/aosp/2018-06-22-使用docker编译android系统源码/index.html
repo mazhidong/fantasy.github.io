@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>使用Docker编译Android系统源码 - Fantasy Blogs</title>
+  <link rel="alternate" hreflang="zh-cn" href="https://mazhidong.github.io/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="author" content="Fantasy" />
+  <meta name="description" content="引言： 最近公司业务转型，开始倒腾起安卓系统，做了几个月的安卓APP开发，最近又需要做系统定制，所以撸起袖子搞起… 首先干嘛？部署开发环境，开发" />
+
+  <meta name="keywords" content="mzd, fantasy, blogs" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.40" />
+
+
+<link rel="canonical" href="https://mazhidong.github.io/post/aosp/2018-06-22-%E4%BD%BF%E7%94%A8docker%E7%BC%96%E8%AF%91android%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81/" />
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="使用Docker编译Android系统源码" />
+<meta property="og:description" content="引言： 最近公司业务转型，开始倒腾起安卓系统，做了几个月的安卓APP开发，最近又需要做系统定制，所以撸起袖子搞起… 首先干嘛？部署开发环境，开发" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mazhidong.github.io/post/aosp/2018-06-22-%E4%BD%BF%E7%94%A8docker%E7%BC%96%E8%AF%91android%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81/" />
+
+
+
+<meta property="article:published_time" content="2018-04-22T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2018-04-22T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="使用Docker编译Android系统源码">
+<meta itemprop="description" content="引言： 最近公司业务转型，开始倒腾起安卓系统，做了几个月的安卓APP开发，最近又需要做系统定制，所以撸起袖子搞起… 首先干嘛？部署开发环境，开发">
+
+
+<meta itemprop="datePublished" content="2018-04-22T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-04-22T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1868">
+
+
+
+<meta itemprop="keywords" content="docker,android,aosp," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="使用Docker编译Android系统源码"/>
+<meta name="twitter:description" content="引言： 最近公司业务转型，开始倒腾起安卓系统，做了几个月的安卓APP开发，最近又需要做系统定制，所以撸起袖子搞起… 首先干嘛？部署开发环境，开发"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Fantasy</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">
+    
+      Fantasy
+    
+  </a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/">Home</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/post/">Archives</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/tags/">Tags</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/categories/">Categories</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/about/">About</a>
+          
+
+        
+
+      </li>
+    
+  </ul>
+</nav>
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">使用Docker编译Android系统源码</h1>
+      
+      <div class="post-meta">
+        <span class="post-time"> 2018-04-22 </span>
+        <div class="post-category">
+            
+              <a href="/categories/android/"> android </a>
+            
+          </div>
+        <span class="more-meta"> 约 1868 字 </span>
+        <span class="more-meta"> 预计阅读 4 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#配置编译专用镜像">配置编译专用镜像</a></li>
+<li><a href="#添加64位系统对32位的支持">添加64位系统对32位的支持</a>
+<ul>
+<li><a href="#1-检查是否已经支持">1&gt; 检查是否已经支持</a></li>
+<li><a href="#2-手动开启支持">2&gt; 手动开启支持</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>引言：</p>
+
+<p>最近公司业务转型，开始倒腾起安卓系统，做了几个月的安卓APP开发，最近又需要做系统定制，所以撸起袖子搞起…
+首先干嘛？部署开发环境，开发环境一直是让人头疼的问题，何况我们不只需要一套环境，这样整来整去很容易就把系统玩废了，一旦出了问题就等着崩溃吧。所以借着这几年火起来的docker布置一个我们的开发环境。
+其实环境配置大同小异，我们只是需要把编译环境配置在docker中就可以了，在这里只做记录，过程仅供参考。</p>
+
+<p>我的系统环境： Ubuntu 16.04 LTS - x64
+需要编译的系统： Android 5.1 Lollipop
+安装Docker</p>
+
+<p>首先进入docker官网（<a href="https://www.docker.com/products/overview），按照里面的提示进行安装即可，我直接下载的.deb包进行安装的，下载地址（https://apt.dockerproject.org/repo/pool/main/d/docker-engine/）。">https://www.docker.com/products/overview），按照里面的提示进行安装即可，我直接下载的.deb包进行安装的，下载地址（https://apt.dockerproject.org/repo/pool/main/d/docker-engine/）。</a>
+安装完成后执行以下命令检查docker版本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ sudo docker --version </pre></td></tr></table>
+</div>
+</div>
+<p>配置Docker</p>
+
+<p>&lt; 此步骤可以跳过 &gt;
+使用Docker加速器</p>
+
+<p>由于官网在国外，速度不是很理想，因此国内有推出加速服务，使用加速器真的快很多。在这里我使用的是阿里云的加速，其他家的执行搜索。阿里云容器HUB地址（<a href="https://dev.aliyun.com/search.html），登录阿里平台之后进入“管理中心”，之后在左侧会有一个“加速器”选项，点击之后按照提示进行操作即可。">https://dev.aliyun.com/search.html），登录阿里平台之后进入“管理中心”，之后在左侧会有一个“加速器”选项，点击之后按照提示进行操作即可。</a>
+由于我的docker版本大于1.10，所以可以通过修改daemon配置文件/etc/docker/daemon.json来使用加速器，执行以下命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ sudo mkdir -p /etc/docker
+# 请根据阿里云中的提示，修改下面的 xxxxxx 部分。
+$ sudo tee /etc/docker/daemon.json &lt;&lt;-&#39;EOF&#39;
+{
+  &#34;registry-mirrors&#34;: [&#34;https://xxxxxx.mirror.aliyuncs.com&#34;]
+}
+EOF
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart docker</pre></td></tr></table>
+</div>
+</div>
+<p>避免输入sudo</p>
+
+<p>用过docker的人知道，我们再执行docker命令的时候需要使用sudo权限，命令输的多了还是挺麻烦的，因此避免输入sudo的方法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ sudo groupadd docker
+$ sudo gpasswd -a ${USER} docker
+$ sudo systemctl restart docker
+# 若提示 /var/run/docker.sock 无权限，执行以下命令：
+$ sudo chmod a+rw /var/run/docker.sock</pre></td></tr></table>
+</div>
+</div>
+<p>说明：为了统一，下面的命令都会带 sudo 执行。
+安装基础镜像</p>
+
+<p>由于我们编译的是Android 5.1系统，推荐使用Ubuntu 14.04 x64系统去编译，可以省去很多麻烦（比如：编译器版本、构建套件版本、依赖库版本等不兼容的问题），这也是我们使用docker的原因。
+执行以下命令获取镜像：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ sudo docker pull ubuntu:14.04    # docker默认都是64位系统</pre></td></tr></table>
+</div>
+</div>
+<p>镜像系统基础配置</p>
+
+<p>&lt; 此步骤可以跳过 &gt;
+在安装完基础镜像之后，我们可以对镜像系统做一些基础性的修改，可以方便我们进一步的使用。
+简单的docker操作</p>
+
+<p>在配置之前有必要说以下docker的简单命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 查询本地已有的镜像（注意 镜像编号-IMAGE ID）
+$ sudo docker images   
+# 输出如下：
+REPOSITORY  TAG       IMAGE ID       CREATED       SIZE
+ubuntu      14.04     b969ab9f929b   5 weeks ago   188 MB</pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 查看本地所有的容器（注意 容器编号-CONTAINER ID）
+$ sudo docker ps -a    
+# 输出如下：
+CONTAINER ID   IMAGE         COMMAND      CREATED       STATUS                  PORTS   NAMES
+820fe6f58817   ubuntu:14.04  &#34;/bin/bash&#34;  42 hours ago  Exited (0) 25 hours ago         epic_bell</pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 启动镜像，并获取一个伪终端
+# 注意：实际启动的是容器，启动镜像时会自动创建新容器并启动。
+$ sudo docker run -it &lt;REPOSITORY:TAG&gt; /bin/bash   # 使用  仓库名+标签 启动
+$ sudo docker run -it &lt;IMAGE ID&gt; /bin/bash     # 使用 IMAGE ID 启动
+# 退出镜像
+&gt;&gt; $ exit   # 或使用快捷键 Ctrl + D</pre></td></tr></table>
+</div>
+</div>
+<p>说明：
+1&gt; 这里使用 &gt;&gt; 符号，表示命令在docker的伪终端中执行。
+2&gt; 在docker的伪终端中使用 # 符号，我们使用 $ 替代。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># 启动容器
+$ sudo docker start &lt;CONTAINER ID&gt; # 使用 CONTAINER ID 启动
+# 链接到容器，并获取一个伪终端：
+$ sudo docker exec -it &lt;CONTAINER ID&gt; 
+# 退出容器
+$ sudo docker stop &lt;CONTAINER ID&gt;  # 停止
+$ sudo docker kill &lt;CONTAINER ID&gt;  # 杀死运行的容器</pre></td></tr></table>
+</div>
+</div>
+<p>其他有关docker的更多命令以及用法就需要大家自己去学习了。
+添加中文语言支持</p>
+
+<p>启动指定容器后执行操作：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">&gt;&gt; $ locale       #查询当前语言
+&gt;&gt; $ locale -a    #查询支持的语言
+# 若不支持UTF-8，则添加UTF-8语言支持
+&gt;&gt; $ apt-get install language-pack-zh-hant language-pack-zh-hans # 中文
+&gt;&gt; $ language-pack-en # 英文
+# 修改 /etc/profile 文件，添加：
+export LANG=zh_CN.UTF-8
+export LANGUAGE=zh_CN:zh
+# 重新加载资源
+&gt;&gt; $ source /etc/profile</pre></td></tr></table>
+</div>
+</div>
+<p>更正时区时间</p>
+
+<p>启动指定容器后执行操作：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">&gt;&gt; $ date  # 查看当前时间
+&gt;&gt; $ cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+&gt;&gt; $ echo &#39;Asia/Shanghai&#39; &gt;/etc/timezone</pre></td></tr></table>
+</div>
+</div>
+<p>更换系统源</p>
+
+<p>使用Ubuntu系统的童鞋就轻车熟路了，这里我使用的是阿里的源。
+启动指定容器后执行操作：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">&gt;&gt; # cp /etc/apt/sources.list /etc/apt/sources.list.bak
+&gt;&gt; # echo &#34;xxx&#34; &gt; /etc/apt/sources.list  // 使用源替换 xxx
+&gt;&gt; # apt-get update
+&gt;&gt; # exit</pre></td></tr></table>
+</div>
+</div>
+<p>Ubuntu 14.04 阿里云的源如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">deb http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse</pre></td></tr></table>
+</div>
+</div>
+<h2 id="配置编译专用镜像">配置编译专用镜像</h2>
+
+<p>准备容器</p>
+
+<p>使用以下命令创建一个容器，并挂载 ~/share 目录到容器中的 /home/share 目录：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">$ docker run -it -v ~/share:/home/share ubuntu:14.04 /bin/bash</pre></td></tr></table>
+</div>
+</div>
+<p>说明：此处挂载一个目录到容器中方便以后操作。</p>
+
+<h2 id="添加64位系统对32位的支持">添加64位系统对32位的支持</h2>
+
+<h3 id="1-检查是否已经支持">1&gt; 检查是否已经支持</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">&gt;&gt; $ dpkg --print-architecture     # 若支持，输出 amd64
+&gt;&gt; $ dpkg --print-foreign-architectures    # 若支持，输出 i386</pre></td></tr></table>
+</div>
+</div>
+<h3 id="2-手动开启支持">2&gt; 手动开启支持</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">&gt;&gt; $ sudo dpkg --add-architecture i386
+&gt;&gt; $ sudo apt-get update</pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Fantasy</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2018-04-22</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/docker/">docker</a>
+          
+          <a href="/tags/android/">android</a>
+          
+          <a href="/tags/aosp/">aosp</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/aosp/2018-04-26-android-4.4-esh45-bug/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">ESH45 Android：无法访问 sdcard 目录</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/blog/deploy-hugo-blog-in-github.io/">
+            <span class="next-text nav-default">如何在github.io搭建Hugo博客站</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+    
+
+  
+
+  
+
+  <div id="comments-gitment"></div>
+  <link rel="stylesheet" href="/lib/gitment/gitment-0.0.3.min.css">
+    <script src="/lib/gitment/gitment-0.0.3.min.js"></script>
+  <script type="text/javascript">
+  const gitment = new Gitment({
+    id: '2018-06-22-使用Docker编译Android系统源码.md',
+    title: '使用Docker编译Android系统源码',
+    link: decodeURI(location.href),
+    desc: '引言： 最近公司业务转型，开始倒腾起安卓系统，做了几个月的安卓APP开发，最近又需要做系统定制，所以撸起袖子搞起… 首先干嘛？部署开发环境，开发',
+    owner: 'mazhidong',
+    repo: 'comments',
+    oauth: {
+      client_id: 'a7ad9d79ce4e98eabdc8',
+      client_secret: '13ffc9363807f8929fe31ce5a7022fb8676dab45'
+    }
+  })
+  gitment.render('comments-gitment')
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://github.com/imsun/gitment">comments powered by gitment.</a></noscript>
+  </article>
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:591888356@qq.com" rel="me noopener" class="iconfont icon-email"
+        title="email" target="_blank">
+      </a>
+      <a href="https://github.com/mazhidong" rel="me noopener" class="iconfont icon-github"
+        title="github" target="_blank">
+      </a>
+  <a href="https://mazhidong.github.io/index.xml" rel="noopener" type="application/rss+xml" class="iconfont icon-rss"
+    title="rss" target="_blank">
+  </a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span><span class="author">Fantasy</span></span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
+
+
+
+
+
+
+</body>
+</html>

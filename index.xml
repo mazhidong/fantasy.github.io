@@ -24,6 +24,47 @@
     </item>
     
     <item>
+      <title>android_dhcp</title>
+      <link>https://mazhidong.github.io/post/aosp/2018-07-03-android_dhcp/</link>
+      <pubDate>Tue, 03 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/aosp/2018-07-03-android_dhcp/</guid>
+      
+        <description>
+
+&lt;h2 id=&#34;系统环境&#34;&gt;系统环境&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Android 4.0.3&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;dhcp的时候一直停留在获取ip地址&lt;/li&gt;
+&lt;li&gt;设置静态IP能正常使用&lt;/li&gt;
+&lt;li&gt;获取ip地址 一直返回超时&lt;/li&gt;
+&lt;li&gt;dhcp.wlan0.reason = &amp;ldquo;&amp;rdquo;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;问题解决&#34;&gt;问题解决&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;/system/etc/dhcpcd/dhcpcd-run-hooks 需要添加执行权限&lt;/li&gt;
+&lt;li&gt;chmod 755 /system/etc/dhcpcd/dhcpcd-run-hooks&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;命令相关&#34;&gt;命令相关&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;netcfg wlan0 up dhcp #返回提示dhcp获取ip成功&lt;/li&gt;
+&lt;li&gt;dhcpcd wlan0 #提示 /system/etc/dhcpcd/dhcpcd-run-hooks: Permission denied&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>使用Docker编译Android系统源码</title>
       <link>https://mazhidong.github.io/post/docker/2018-06-22-%E4%BD%BF%E7%94%A8docker%E7%BC%96%E8%AF%91android%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81/</link>
       <pubDate>Fri, 22 Jun 2018 00:00:00 +0000</pubDate>
@@ -8377,188 +8418,6 @@ _init&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;本系列博文将持续更新，并在此章节中进行统一整理。&lt;/p&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title>如何搭建本地的Git服务器</title>
-      <link>https://mazhidong.github.io/post/git/2017-09-04-how-to-setup-git-server/</link>
-      <pubDate>Mon, 04 Sep 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/git/2017-09-04-how-to-setup-git-server/</guid>
-      
-        <description>
-
-&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;
-
-&lt;p&gt;本文将介绍如何在本地搭建Git服务器。我们知道Git其实是个分布式的版本管理系统，与中心化的版本管理系统如SVN有根本的不同，每个使用者都可以在本地存储一份独立的备份，每个Git的使用者并不会因为没有中心服务器而不能工作（如果是SVN之类的，如果服务器挂了是不能够提交改动的）。然而，在进行团队开发的时候，有时候还是非常需要有一个统一的地方管理唯一的一份完整的代码，这样可以非常方便的进行团队协作开发。这里讲述一种极为简单的搭建本地Git服务器的方法。&lt;/p&gt;
-
-&lt;h1 id=&#34;如何搭建&#34;&gt;如何搭建&lt;/h1&gt;
-
-&lt;h2 id=&#34;准备一台linux服务器&#34;&gt;准备一台Linux服务器&lt;/h2&gt;
-
-&lt;p&gt;这里不考虑windows系统，所以请务必准备一台Linux系统，分发版本没有关系，这里假定使用的是&lt;code&gt;Centos 7&lt;/code&gt;。&lt;/p&gt;
-
-&lt;h2 id=&#34;配置git服务器&#34;&gt;配置Git服务器&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;添加用户&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;$ sudo adduser git
-$ sudo passwd git
-Changing password for user git.
-New password:
-Retype new password:
-passwd: all authentication tokens updated successfully.&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;配置好ssh&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;$ sudo su git
-$ cd
-$ mkdir .ssh &amp;amp;&amp;amp; chmod 700 .ssh
-$ touch .ssh/authorized_keys &amp;amp;&amp;amp; chmod 600 .ssh/authorized_keys&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;初始化项目&#34;&gt;初始化项目&lt;/h2&gt;
-
-&lt;p&gt;假定我们有一个叫&lt;code&gt;test&lt;/code&gt;的项目需要管理，那么首先我们需要在Git服务器上面创建并初始化该项目。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;$ sudo su git
-$ cd
-$ mkdir test
-$ cd test
-$ git init --bare
-Initialized empty Git repository in /home/git/test&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;注意，其中&lt;code&gt;git init --bare&lt;/code&gt;就是用来初始化Git项目的，&lt;code&gt;--bare&lt;/code&gt;参数表示只存储Git的管理文件而不展现&lt;code&gt;test&lt;/code&gt;项目本身的文件。查看下初始化之后的目录：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;$ ls
-branches  config  description  HEAD  hooks  info  objects  refs&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;可见里面只有Git管理有关的文件。&lt;/p&gt;
-
-&lt;h2 id=&#34;上传-test-项目&#34;&gt;上传&lt;code&gt;test&lt;/code&gt;项目&lt;/h2&gt;
-
-&lt;p&gt;假定Git服务器IP为&lt;code&gt;10.10.10.10&lt;/code&gt;，回到你的工作机器，打开&lt;code&gt;test&lt;/code&gt;项目目录，上传项目：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;$ cd test
-$ git remote add origin git@10.10.10.10:/home/git/mlc
-$ git remote -v
-origin  git@10.10.10.10:/home/git/mlc (fetch)
-origin  git@10.10.10.10:/home/git/mlc (push)&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;如果发现&lt;code&gt;git remote add origin&lt;/code&gt;执行失败：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;$ git remote add origin git@10.10.10.10:/home/git/mlc
-fatal: remote origin already exists.&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;说明曾经已经设置过&lt;code&gt;origin&lt;/code&gt;地址了，可以更改如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;$ git remote remove origin
-$ git remote -v
-$ git remote add origin git@10.10.10.10:/home/git/mlc
-$ git remote -v
-origin  git@10.10.10.10:/home/git/mlc (fetch)
-origin  git@10.10.10.10:/home/git/mlc (push)&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;设置好之后，可以上传&lt;code&gt;test&lt;/code&gt;项目了：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-console&#34; data-lang=&#34;console&#34;&gt;$ git push origin master
-git@10.10.10.10&amp;#39;s password:
-Counting objects: 4, done.
-Delta compression using up to 8 threads.
-Compressing objects: 100% (3/3), done.
-Writing objects: 100% (4/4), 531 bytes | 0 bytes/s, done.
-Total 4 (delta 0), reused 0 (delta 0)
-To 10.10.10.10:/home/git/mlc
- * [new branch]      master -&amp;gt; master&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;可见，Git服务器已经可以正常工作了。&lt;/p&gt;
-
-&lt;h1 id=&#34;结语&#34;&gt;结语&lt;/h1&gt;
-
-&lt;p&gt;本文只是简单的介绍原生的Git服务器的搭建，实际上，在现实工作中很多情况下都会有专门的基于Git的管理系统，使用起来非常方便。这里面非开源的最有名当然是&lt;code&gt;Github&lt;/code&gt;了，开源的里面目前最好的应该是&lt;code&gt;Gitlab&lt;/code&gt;了，参照官方文档，你可以非常方便的搭建自己的Git服务器了。&lt;/p&gt;
-
-&lt;h1 id=&#34;参考&#34;&gt;参考&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://git-scm.com/book/en/v2/Git-on-the-Server-Setting-Up-the-Server&#34;&gt;Git on the Server - Setting Up the Server&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
 </description>
       
     </item>

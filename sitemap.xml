@@ -10,6 +10,13 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/post/aosp/2018-07-03-android_dhcp/</loc>
+    <lastmod>2018-07-03T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/post/docker/2018-06-22-%E4%BD%BF%E7%94%A8docker%E7%BC%96%E8%AF%91android%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81/</loc>
     <lastmod>2018-06-22T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -171,15 +178,15 @@
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/tags/android/</loc>
-    <lastmod>2018-06-22T00:00:00+00:00</lastmod>
+    <loc>https://mazhidong.github.io/categories/android/</loc>
+    <lastmod>2018-07-03T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/categories/android/</loc>
-    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
+    <loc>https://mazhidong.github.io/tags/android/</loc>
+    <lastmod>2018-07-03T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -207,20 +214,27 @@
   
   <url>
     <loc>https://mazhidong.github.io/categories/</loc>
-    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
+    <lastmod>2018-07-03T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/tags/docker/</loc>
-    <lastmod>2018-06-22T00:00:00+00:00</lastmod>
+    <loc>https://mazhidong.github.io/tags/dhcp/</loc>
+    <lastmod>2018-07-03T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://mazhidong.github.io/categories/docker/</loc>
+    <lastmod>2018-06-22T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://mazhidong.github.io/tags/docker/</loc>
     <lastmod>2018-06-22T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
@@ -241,13 +255,6 @@
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/tags/git/</loc>
-    <lastmod>2017-09-04T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://mazhidong.github.io/categories/git/</loc>
     <lastmod>2017-09-04T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -255,8 +262,8 @@
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/tags/github/</loc>
-    <lastmod>2018-03-22T00:00:00+00:00</lastmod>
+    <loc>https://mazhidong.github.io/tags/git/</loc>
+    <lastmod>2017-09-04T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -269,8 +276,8 @@
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/tags/linux/</loc>
-    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
+    <loc>https://mazhidong.github.io/tags/github/</loc>
+    <lastmod>2018-03-22T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -283,8 +290,15 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/tags/linux/</loc>
+    <lastmod>2018-06-19T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/post/</loc>
-    <lastmod>2018-06-22T00:00:00+00:00</lastmod>
+    <lastmod>2018-07-03T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>

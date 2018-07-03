@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dhcp on Fantasy Blogs</title>
+    <link>https://mazhidong.github.io/tags/dhcp/</link>
+    <description>Recent content in Dhcp on Fantasy Blogs</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 03 Jul 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://mazhidong.github.io/tags/dhcp/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>android_dhcp</title>
+      <link>https://mazhidong.github.io/post/aosp/2018-07-03-android_dhcp/</link>
+      <pubDate>Tue, 03 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/aosp/2018-07-03-android_dhcp/</guid>
+      <description>系统环境 Android 4.0.3 问题描述 dhcp的时候一直停留在获取ip地址 设置静态IP能正常使用 获取ip地址 一直返回超时 dhcp.wlan0.reason = &amp;ldquo;&amp;rdquo; 问题解决 /system/etc/dhcpcd/dhcpcd-run-hooks 需要添加执行权限 chmod 755 /system/etc/dhcpcd/dhcpcd-run-hooks</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -44,7 +44,7 @@
 &lt;li&gt;dhcp的时候一直停留在获取ip地址&lt;/li&gt;
 &lt;li&gt;设置静态IP能正常使用&lt;/li&gt;
 &lt;li&gt;获取ip地址 一直返回超时&lt;/li&gt;
-&lt;li&gt;dhcp.wlan0.reason = &amp;ldquo;&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;dhcp.wlan0.result = &amp;ldquo;&amp;rdquo;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;问题解决&#34;&gt;问题解决&lt;/h2&gt;

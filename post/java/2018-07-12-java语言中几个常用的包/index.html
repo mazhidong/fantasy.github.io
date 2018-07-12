@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Java语言中几个常用的包&#34; - Fantasy Blogs</title>
+  <link rel="alternate" hreflang="zh-cn" href="https://mazhidong.github.io/" />
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="author" content="Fantasy" />
+  <meta name="description" content="概述 Java采用包结构来组织和管理类和接口文件。本文介绍Java语言类库中几个常用的包，因为这几个包在软件开发与应用中经常需要用到，其中有些" />
+
+  <meta name="keywords" content="mzd, fantasy, blogs" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.40" />
+
+
+<link rel="canonical" href="https://mazhidong.github.io/post/java/2018-07-12-java%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8C%85/" />
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="/favicon.ico" />
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+<link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
+<link href="/lib/fancybox/jquery.fancybox-3.1.20.min.css" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Java语言中几个常用的包&#34;" />
+<meta property="og:description" content="概述 Java采用包结构来组织和管理类和接口文件。本文介绍Java语言类库中几个常用的包，因为这几个包在软件开发与应用中经常需要用到，其中有些" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mazhidong.github.io/post/java/2018-07-12-java%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8C%85/" />
+
+
+
+<meta property="article:published_time" content="2018-07-12T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2018-07-12T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Java语言中几个常用的包&#34;">
+<meta itemprop="description" content="概述 Java采用包结构来组织和管理类和接口文件。本文介绍Java语言类库中几个常用的包，因为这几个包在软件开发与应用中经常需要用到，其中有些">
+
+
+<meta itemprop="datePublished" content="2018-07-12T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-07-12T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="6001">
+
+
+
+<meta itemprop="keywords" content="java,教程," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Java语言中几个常用的包&#34;"/>
+<meta name="twitter:description" content="概述 Java采用包结构来组织和管理类和接口文件。本文介绍Java语言类库中几个常用的包，因为这几个包在软件开发与应用中经常需要用到，其中有些"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Fantasy</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">About</li>
+      </a>
+  </ul>
+</nav>
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">
+    
+      Fantasy
+    
+  </a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/">Home</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/post/">Archives</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/tags/">Tags</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/categories/">Categories</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="/about/">About</a>
+          
+
+        
+
+      </li>
+    
+  </ul>
+</nav>
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">Java语言中几个常用的包&#34;</h1>
+      
+      <div class="post-meta">
+        <span class="post-time"> 2018-07-12 </span>
+        <div class="post-category">
+            
+              <a href="/categories/java/"> java </a>
+            
+          </div>
+        <span class="more-meta"> 约 6001 字 </span>
+        <span class="more-meta"> 预计阅读 12 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li><a href="#概述">概述</a>
+<ul>
+<li><a href="#第一个包-java-lang包">第一个包：java.lang包。</a></li>
+<li><a href="#第二个包-java-util包">第二个包：java.util包。</a></li>
+<li><a href="#第三个包-java-io包">第三个包：java.io包。</a></li>
+<li><a href="#第四个包-java-net包">第四个包：java.net包。</a></li>
+<li><a href="#第五个包-java-sql包">第五个包：java.sql包。</a></li>
+<li><a href="#第六个包-java-awt包">第六个包：java.awt包</a></li>
+<li><a href="#第七个包-javax-swing包">第七个包：javax.swing包。</a></li>
+<li><a href="#第八个包-java-text包">第八个包：java.text包。</a></li>
+</ul></li>
+<li><a href="#总结">总结</a></li>
+<li><a href="#详细说明">详细说明</a></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h1 id="概述">概述</h1>
+
+<p>Java采用包结构来组织和管理类和接口文件。本文介绍Java语言类库中几个常用的包，因为这几个包在软件开发与应用中经常需要用到，其中有些包是必要的。若是离开它，还真不能做事情了。</p>
+
+<h2 id="第一个包-java-lang包">第一个包：java.lang包。</h2>
+
+<ul>
+<li>阿情说：该包提供了Java语言进行程序设计的基础类，它是默认导入的包。该包里面的Runnable接口和Object、Math、String、StringBuffer、System、Thread以及Throwable类需要重点掌握，因为它们应用很广。</li>
+</ul>
+
+<h2 id="第二个包-java-util包">第二个包：java.util包。</h2>
+
+<ul>
+<li>阿情说：该包提供了包含集合框架、遗留的集合类、事件模型、日期和时间实施、国际化和各种实用工具类（字符串标记生成器、随机数生成器和位数组）。</li>
+</ul>
+
+<h2 id="第三个包-java-io包">第三个包：java.io包。</h2>
+
+<ul>
+<li>阿情说：该包通过文件系统、数据流和序列化提供系统的输入与输出。</li>
+</ul>
+
+<h2 id="第四个包-java-net包">第四个包：java.net包。</h2>
+
+<ul>
+<li>阿情说：该包提供实现网络应用与开发的类。</li>
+</ul>
+
+<h2 id="第五个包-java-sql包">第五个包：java.sql包。</h2>
+
+<ul>
+<li>阿情说：该包提供了使用Java语言访问并处理存储在数据源（通常是一个关系型数据库）中的数据API。</li>
+</ul>
+
+<h2 id="第六个包-java-awt包">第六个包：java.awt包</h2>
+
+<h2 id="第七个包-javax-swing包">第七个包：javax.swing包。</h2>
+
+<ul>
+<li>阿情说：这两个包提供了GUI设计与开发的类。java.awt包提供了创建界面和绘制图形图像的所有类，而javax.swing包提供了一组“轻量级”的组件，尽量让这些组件在所有平台上的工作方式相同。</li>
+</ul>
+
+<h2 id="第八个包-java-text包">第八个包：java.text包。</h2>
+
+<ul>
+<li><p>阿情说：提供了与自然语言无关的方式来处理文本、日期、数字和消息的类和接口。</p></li>
+
+<li><p>关于上述这些包结构，除了第一个包是自动导入外，其余的包都需要使用import语句导入，才可使用其包里面的类与接口。若想深入了解它们，请多阅读JDKAPI文档，同时，多使用这些包里的类与接口来解决问题和满足需求。</p></li>
+</ul>
+
+<h1 id="总结">总结</h1>
+
+<ol>
+<li><p>Java语言采用包结构组织和管理类与接口，避免命名冲突，结构富有条理而清晰。</p></li>
+
+<li><p>关注上述常用包，实则是掌握这些包结构下的类与接口的应用。利用它们，加上创意，设计和造就一个个“产品”。</p></li>
+</ol>
+
+<h1 id="详细说明">详细说明</h1>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span><span class="lnt">182
+</span><span class="lnt">183
+</span><span class="lnt">184
+</span><span class="lnt">185
+</span><span class="lnt">186
+</span><span class="lnt">187
+</span><span class="lnt">188
+</span><span class="lnt">189
+</span><span class="lnt">190
+</span><span class="lnt">191
+</span><span class="lnt">192
+</span><span class="lnt">193
+</span><span class="lnt">194
+</span><span class="lnt">195
+</span><span class="lnt">196
+</span><span class="lnt">197
+</span><span class="lnt">198
+</span><span class="lnt">199
+</span><span class="lnt">200
+</span><span class="lnt">201
+</span><span class="lnt">202
+</span><span class="lnt">203
+</span><span class="lnt">204
+</span><span class="lnt">205
+</span><span class="lnt">206
+</span><span class="lnt">207
+</span><span class="lnt">208
+</span><span class="lnt">209
+</span><span class="lnt">210
+</span><span class="lnt">211
+</span><span class="lnt">212
+</span><span class="lnt">213
+</span><span class="lnt">214
+</span><span class="lnt">215
+</span><span class="lnt">216
+</span><span class="lnt">217
+</span><span class="lnt">218
+</span><span class="lnt">219
+</span><span class="lnt">220
+</span><span class="lnt">221
+</span><span class="lnt">222
+</span><span class="lnt">223
+</span><span class="lnt">224
+</span><span class="lnt">225
+</span><span class="lnt">226
+</span><span class="lnt">227
+</span><span class="lnt">228
+</span><span class="lnt">229
+</span><span class="lnt">230
+</span><span class="lnt">231
+</span><span class="lnt">232
+</span><span class="lnt">233
+</span><span class="lnt">234
+</span><span class="lnt">235
+</span><span class="lnt">236
+</span><span class="lnt">237
+</span><span class="lnt">238
+</span><span class="lnt">239
+</span><span class="lnt">240
+</span><span class="lnt">241
+</span><span class="lnt">242
+</span><span class="lnt">243
+</span><span class="lnt">244
+</span><span class="lnt">245
+</span><span class="lnt">246
+</span><span class="lnt">247
+</span><span class="lnt">248
+</span><span class="lnt">249
+</span><span class="lnt">250
+</span><span class="lnt">251
+</span><span class="lnt">252
+</span><span class="lnt">253
+</span><span class="lnt">254
+</span><span class="lnt">255
+</span><span class="lnt">256
+</span><span class="lnt">257
+</span><span class="lnt">258
+</span><span class="lnt">259
+</span><span class="lnt">260
+</span><span class="lnt">261
+</span><span class="lnt">262
+</span><span class="lnt">263
+</span><span class="lnt">264
+</span><span class="lnt">265
+</span><span class="lnt">266
+</span><span class="lnt">267
+</span><span class="lnt">268
+</span><span class="lnt">269
+</span><span class="lnt">270
+</span><span class="lnt">271
+</span><span class="lnt">272
+</span><span class="lnt">273
+</span><span class="lnt">274
+</span><span class="lnt">275
+</span><span class="lnt">276
+</span><span class="lnt">277
+</span><span class="lnt">278
+</span><span class="lnt">279
+</span><span class="lnt">280
+</span><span class="lnt">281
+</span><span class="lnt">282
+</span><span class="lnt">283
+</span><span class="lnt">284
+</span><span class="lnt">285
+</span><span class="lnt">286
+</span><span class="lnt">287
+</span><span class="lnt">288
+</span><span class="lnt">289
+</span><span class="lnt">290
+</span><span class="lnt">291
+</span><span class="lnt">292
+</span><span class="lnt">293
+</span><span class="lnt">294
+</span><span class="lnt">295
+</span><span class="lnt">296
+</span><span class="lnt">297
+</span><span class="lnt">298
+</span><span class="lnt">299
+</span><span class="lnt">300
+</span><span class="lnt">301
+</span><span class="lnt">302
+</span><span class="lnt">303
+</span><span class="lnt">304
+</span><span class="lnt">305
+</span><span class="lnt">306
+</span><span class="lnt">307
+</span><span class="lnt">308
+</span><span class="lnt">309
+</span><span class="lnt">310
+</span><span class="lnt">311
+</span><span class="lnt">312
+</span><span class="lnt">313
+</span><span class="lnt">314
+</span><span class="lnt">315
+</span><span class="lnt">316
+</span><span class="lnt">317
+</span><span class="lnt">318
+</span><span class="lnt">319
+</span><span class="lnt">320
+</span><span class="lnt">321
+</span><span class="lnt">322
+</span><span class="lnt">323
+</span><span class="lnt">324
+</span><span class="lnt">325
+</span><span class="lnt">326
+</span><span class="lnt">327
+</span><span class="lnt">328
+</span><span class="lnt">329
+</span><span class="lnt">330
+</span><span class="lnt">331
+</span><span class="lnt">332
+</span><span class="lnt">333
+</span><span class="lnt">334
+</span><span class="lnt">335
+</span><span class="lnt">336
+</span><span class="lnt">337
+</span><span class="lnt">338
+</span><span class="lnt">339
+</span><span class="lnt">340
+</span><span class="lnt">341
+</span><span class="lnt">342
+</span><span class="lnt">343
+</span><span class="lnt">344
+</span><span class="lnt">345
+</span><span class="lnt">346
+</span><span class="lnt">347
+</span><span class="lnt">348
+</span><span class="lnt">349
+</span><span class="lnt">350
+</span><span class="lnt">351
+</span><span class="lnt">352
+</span><span class="lnt">353
+</span><span class="lnt">354
+</span><span class="lnt">355
+</span><span class="lnt">356
+</span><span class="lnt">357
+</span><span class="lnt">358
+</span><span class="lnt">359
+</span><span class="lnt">360
+</span><span class="lnt">361
+</span><span class="lnt">362
+</span><span class="lnt">363
+</span><span class="lnt">364
+</span><span class="lnt">365
+</span><span class="lnt">366
+</span><span class="lnt">367
+</span><span class="lnt">368
+</span><span class="lnt">369
+</span><span class="lnt">370
+</span><span class="lnt">371
+</span><span class="lnt">372
+</span><span class="lnt">373
+</span><span class="lnt">374
+</span><span class="lnt">375
+</span><span class="lnt">376
+</span><span class="lnt">377
+</span><span class="lnt">378
+</span><span class="lnt">379
+</span><span class="lnt">380
+</span><span class="lnt">381
+</span><span class="lnt">382
+</span><span class="lnt">383
+</span><span class="lnt">384
+</span><span class="lnt">385
+</span><span class="lnt">386
+</span><span class="lnt">387
+</span><span class="lnt">388
+</span><span class="lnt">389
+</span><span class="lnt">390
+</span><span class="lnt">391
+</span><span class="lnt">392
+</span><span class="lnt">393
+</span><span class="lnt">394
+</span><span class="lnt">395
+</span><span class="lnt">396
+</span><span class="lnt">397
+</span><span class="lnt">398
+</span><span class="lnt">399
+</span><span class="lnt">400
+</span><span class="lnt">401
+</span><span class="lnt">402
+</span><span class="lnt">403
+</span><span class="lnt">404
+</span><span class="lnt">405
+</span><span class="lnt">406
+</span><span class="lnt">407
+</span><span class="lnt">408
+</span><span class="lnt">409
+</span><span class="lnt">410
+</span><span class="lnt">411
+</span><span class="lnt">412
+</span><span class="lnt">413
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">java</span><span class="o">.</span><span class="na">applet</span>
+<span class="n">提供创建</span> <span class="n">applet</span> <span class="n">所必需的类和</span> <span class="n">applet</span> <span class="n">用来与其</span> <span class="n">applet</span> <span class="n">上下文通信的类</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">awt</span>
+<span class="n">包含用于创建用户界面和绘制图形图像的所有类</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">awt</span><span class="o">.</span><span class="na">color</span>
+<span class="n">提供用于颜色空间的类</span><span class="err">。</span> 
+<span class="n">java</span><span class="o">.</span><span class="na">awt</span><span class="o">.</span><span class="na">datatransfer</span>
+<span class="n">提供在应用程序之间和在应用程序内部传输数据的接口和类</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">awt</span><span class="o">.</span><span class="na">dnd</span>
+<span class="n">Drag</span> <span class="n">和</span> <span class="n">Drop</span> <span class="n">是一种直接操作动作</span><span class="err">，</span><span class="n">在许多图形用户界面系统中都会遇到它</span><span class="err">，</span><span class="n">它提供了一种机制</span><span class="err">，</span><span class="n">能够在两个与</span> <span class="n">GUI</span> <span class="n">中显示元素逻辑相关的实体之间传输信息</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">awt</span><span class="o">.</span><span class="na">event</span>
+<span class="n">提供处理由</span> <span class="n">AWT</span> <span class="n">组件所激发的各类事件的接口和类</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">awt</span><span class="o">.</span><span class="na">font</span>
+<span class="n">提供与字体相关的类和接口</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">awt</span><span class="o">.</span><span class="na">geom</span>
+<span class="n">提供用于在与二维几何形状相关的对象上定义和执行操作的</span> <span class="n">Java</span> <span class="n">2D</span> <span class="n">类</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">awt</span><span class="o">.</span><span class="na">im</span>
+<span class="n">提供输入方法框架所需的类和接口</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">awt</span><span class="o">.</span><span class="na">im</span><span class="o">.</span><span class="na">spi</span>
+<span class="n">提供启用可以与</span> <span class="n">Java</span> <span class="n">运行时环境一起使用的输入方法开发的接口</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">awt</span><span class="o">.</span><span class="na">image</span>
+<span class="n">提供创建和修改图像的各种类</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">awt</span><span class="o">.</span><span class="na">image</span><span class="o">.</span><span class="na">renderable</span>
+<span class="n">提供用于生成与呈现无关的图像的类和接口</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">awt</span><span class="o">.</span><span class="na">print</span>
+<span class="n">为通用的打印</span> <span class="n">API</span> <span class="n">提供类和接口</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">beans</span>
+<span class="n">包含与开发</span> <span class="n">beans</span> <span class="n">有关的类</span><span class="err">，</span><span class="n">即基于</span> <span class="n">JavaBeansTM</span> <span class="n">架构的组件</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">beancontext</span>
+<span class="n">提供与</span> <span class="n">bean</span> <span class="n">上下文有关的类和接口</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">io</span>
+<span class="n">通过数据流</span><span class="err">、</span><span class="n">序列化和文件系统提供系统输入和输出</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">lang</span>
+<span class="n">提供利用</span> <span class="n">Java</span> <span class="n">编程语言进行程序设计的基础类</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">annotation</span>
+<span class="n">为</span> <span class="n">Java</span> <span class="n">编程语言注释设施提供库支持</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">instrument</span>
+<span class="n">提供允许</span> <span class="n">Java</span> <span class="n">编程语言代理检测运行在</span> <span class="n">JVM</span> <span class="n">上的程序的服务</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">management</span>
+<span class="n">提供管理接口</span><span class="err">，</span><span class="n">用于监视和管理</span> <span class="n">Java</span> <span class="n">虚拟机以及</span> <span class="n">Java</span> <span class="n">虚拟机在其上运行的操作系统</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">ref</span>
+<span class="n">提供了引用对象类</span><span class="err">，</span><span class="n">支持在某种程度上与垃圾回收器之间的交互</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">reflect</span>
+<span class="n">提供类和接口</span><span class="err">，</span><span class="n">以获得关于类和对象的反射信息</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">math</span>
+<span class="nf">提供用于执行任意精度整数算法</span> <span class="o">(</span><span class="n">BigInteger</span><span class="o">)</span> <span class="n">和任意精度小数算法</span> <span class="o">(</span><span class="n">BigDecimal</span><span class="o">)</span> <span class="n">的类</span><span class="err">。</span> 
+<span class="n">java</span><span class="o">.</span><span class="na">net</span>
+<span class="n">为实现网络应用程序提供类</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">nio</span>
+<span class="n">定义作为数据容器的缓冲区</span><span class="err">，</span><span class="n">并提供其他</span> <span class="n">NIO</span> <span class="n">包的概述</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">channels</span>
+<span class="n">定义了各种通道</span><span class="err">，</span><span class="n">这些通道表示到能够执行</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">操作的实体</span><span class="err">（</span><span class="n">如文件和套接字</span><span class="err">）</span><span class="n">的连接</span><span class="err">；</span><span class="n">定义了用于多路复用的</span><span class="err">、</span><span class="n">非阻塞</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">操作的选择器</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">channels</span><span class="o">.</span><span class="na">spi</span>
+<span class="n">用于</span> <span class="n">java</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">channels</span> <span class="n">包的服务提供者类</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">charset</span>
+<span class="n">定义用来在字节和</span> <span class="n">Unicode</span> <span class="n">字符之间转换的</span> <span class="n">charset</span><span class="err">、</span><span class="n">解码器和编码器</span>
+<span class="n">java</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">charset</span><span class="o">.</span><span class="na">spi</span>
+<span class="n">java</span><span class="o">.</span><span class="na">nio</span><span class="o">.</span><span class="na">charset</span> <span class="n">包的服务提供者类</span>
+<span class="n">java</span><span class="o">.</span><span class="na">rmi</span>
+<span class="n">提供</span> <span class="n">RMI</span> <span class="n">包</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">rmi</span><span class="o">.</span><span class="na">activation</span>
+<span class="n">为</span> <span class="n">RMI</span> <span class="n">对象激活提供支持</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">rmi</span><span class="o">.</span><span class="na">dgc</span>
+<span class="n">为</span> <span class="n">RMI</span> <span class="n">分布式垃圾回收提供了类和接口</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">rmi</span><span class="o">.</span><span class="na">registry</span>
+<span class="n">提供</span> <span class="n">RMI</span> <span class="n">注册表的一个类和两个接口</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">rmi</span><span class="o">.</span><span class="na">server</span>
+<span class="n">提供支持服务器端</span> <span class="n">RMI</span> <span class="n">的类和接口</span><span class="err">。</span> 
+<span class="n">java</span><span class="o">.</span><span class="na">security</span>
+<span class="n">为安全框架提供类和接口</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">acl</span>
+<span class="n">此包中的类和接口已经被</span> <span class="n">java</span><span class="o">.</span><span class="na">security</span> <span class="n">包中的类取代</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">cert</span>
+<span class="n">提供用于解析和管理证书</span><span class="err">、</span><span class="n">证书撤消列表</span> <span class="o">(</span><span class="n">CRL</span><span class="o">)</span> <span class="n">和证书路径的类和接口</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">interfaces</span>
+<span class="n">提供的接口用于生成</span> <span class="n">RSA</span> <span class="n">Laboratory</span> <span class="n">Technical</span> <span class="n">Note</span> <span class="n">PKCS</span><span class="err">#</span><span class="n">1</span> <span class="n">中定义的</span> <span class="n">RSA</span><span class="err">（</span><span class="n">Rivest</span><span class="err">、</span><span class="n">Shamir</span> <span class="n">和</span> <span class="n">Adleman</span> <span class="n">AsymmetricCipher</span> <span class="n">算法</span><span class="err">）</span><span class="n">密钥</span><span class="err">，</span><span class="n">以及</span> <span class="n">NIST</span> <span class="n">的</span> <span class="n">FIPS</span><span class="o">-</span><span class="n">186</span> <span class="n">中定义的</span> <span class="n">DSA</span><span class="err">（</span><span class="n">数字签名算法</span><span class="err">）</span><span class="n">密钥</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">spec</span>
+<span class="n">提供密钥规范和算法参数规范的类和接口</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">sql</span>
+<span class="n">提供使用</span> <span class="n">JavaTM</span> <span class="n">编程语言访问并处理存储在数据源</span><span class="err">（</span><span class="n">通常是一个关系数据库</span><span class="err">）</span><span class="n">中的数据的</span> <span class="n">API</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">text</span>
+<span class="n">提供以与自然语言无关的方式来处理文本</span><span class="err">、</span><span class="n">日期</span><span class="err">、</span><span class="n">数字和消息的类和接口</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">text</span><span class="o">.</span><span class="na">spi</span>
+<span class="n">java</span><span class="o">.</span><span class="na">text</span> <span class="n">包中类的服务提供者类</span><span class="err">。</span> 
+<span class="n">java</span><span class="o">.</span><span class="na">util</span>
+<span class="n">包含</span> <span class="n">collection</span> <span class="n">框架</span><span class="err">、</span><span class="n">遗留的</span> <span class="n">collection</span> <span class="n">类</span><span class="err">、</span><span class="n">事件模型</span><span class="err">、</span><span class="n">日期和时间设施</span><span class="err">、</span><span class="n">国际化和各种实用工具类</span><span class="err">（</span><span class="n">字符串标记生成器</span><span class="err">、</span><span class="n">随机数生成器和位数组</span><span class="err">）。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">concurrent</span>
+<span class="n">在并发编程中很常用的实用工具类</span><span class="err">。</span> 
+<span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">concurrent</span><span class="o">.</span><span class="na">atomic</span>
+<span class="n">类的小工具包</span><span class="err">，</span><span class="n">支持在单个变量上解除锁的线程安全编程</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">concurrent</span><span class="o">.</span><span class="na">locks</span>
+<span class="n">为锁和等待条件提供一个框架的接口和类</span><span class="err">，</span><span class="n">它不同于内置同步和监视器</span><span class="err">。</span> 
+<span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">jar</span>
+<span class="n">提供读写</span> <span class="nf">JAR</span> <span class="o">(</span><span class="n">Java</span> <span class="n">ARchive</span><span class="o">)</span> <span class="n">文件格式的类</span><span class="err">，</span><span class="n">该格式基于具有可选清单文件的标准</span> <span class="n">ZIP</span> <span class="n">文件格式</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">logging</span>
+<span class="n">提供</span> <span class="n">JavaTM</span> <span class="n">2</span> <span class="n">平台核心日志工具的类和接口</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">prefs</span>
+<span class="n">此包允许应用程序存储并获取用户和系统首选项和配置数据</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">regex</span>
+<span class="n">用于匹配字符序列与正则表达式指定模式的类</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">spi</span>
+<span class="n">java</span><span class="o">.</span><span class="na">util</span> <span class="n">包中类的服务提供者类</span><span class="err">。</span>
+<span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">zip</span>
+<span class="n">提供用于读写标准</span> <span class="n">ZIP</span> <span class="n">和</span> <span class="n">GZIP</span> <span class="n">文件格式的类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">accessibility</span>
+<span class="n">定义了用户界面组件与提供对这些组件进行访问的辅助技术之间的协定</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">activation</span>
+
+<span class="n">javax</span><span class="o">.</span><span class="na">activity</span>
+<span class="n">包含解组期间通过</span> <span class="n">ORB</span> <span class="n">机制抛出的与</span> <span class="n">Activity</span> <span class="n">服务有关的异常</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">annotation</span>
+
+
+<span class="n">javax</span><span class="o">.</span><span class="na">annotation</span><span class="o">.</span><span class="na">processing</span>
+<span class="n">用来声明注释处理器并允许注释处理器与注释处理工具环境通信的工具</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">crypto</span>
+<span class="n">为加密操作提供类和接口</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">crypto</span><span class="o">.</span><span class="na">interfaces</span> 
+<span class="n">根据</span> <span class="n">RSA</span> <span class="n">Laboratories</span><span class="err">&#39;</span> <span class="n">PKCS</span> <span class="err">#</span><span class="n">3</span> <span class="n">的定义</span><span class="err">，</span><span class="n">提供</span> <span class="n">Diffie</span><span class="o">-</span><span class="n">Hellman</span> <span class="n">密钥接口</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">crypto</span><span class="o">.</span><span class="na">spec</span> 
+<span class="n">为密钥规范和算法参数规范提供类和接口</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">imageio</span>
+<span class="n">Java</span> <span class="n">Image</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">API</span> <span class="n">的主要包</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">imageio</span><span class="o">.</span><span class="na">event</span>
+<span class="n">Java</span> <span class="n">Image</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">API</span> <span class="n">的一个包</span><span class="err">，</span><span class="n">用于在读取和写入图像期间处理事件的同步通知</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">imageio</span><span class="o">.</span><span class="na">metadata</span>
+<span class="n">用于处理读写元数据的</span> <span class="n">Java</span> <span class="n">Image</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">API</span> <span class="n">的包</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">imageio</span><span class="o">.</span><span class="na">plugins</span><span class="o">.</span><span class="na">bmp</span>
+<span class="n">包含供内置</span> <span class="n">BMP</span> <span class="n">插件使用的公共类的包</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">imageio</span><span class="o">.</span><span class="na">plugins</span><span class="o">.</span><span class="na">jpeg</span> 
+<span class="n">支持内置</span> <span class="n">JPEG</span> <span class="n">插件的类</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">imageio</span><span class="o">.</span><span class="na">spi</span>
+<span class="n">包含用于</span> <span class="n">reader</span><span class="err">、</span><span class="n">writer</span><span class="err">、</span><span class="n">transcoder</span> <span class="n">和流的插件接口以及一个运行时注册表的</span> <span class="n">Java</span> <span class="n">Image</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">API</span> <span class="n">包</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">imageio</span><span class="o">.</span><span class="na">stream</span>
+<span class="n">Java</span> <span class="n">Image</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">API</span> <span class="n">的一个包</span><span class="err">，</span><span class="n">用来处理从文件和流中产生的低级别</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">jws</span>
+
+
+<span class="n">javax</span><span class="o">.</span><span class="na">jws</span><span class="o">.</span><span class="na">soap</span>
+
+
+<span class="n">javax</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">model</span>
+<span class="n">用来为</span> <span class="n">Java</span> <span class="n">编程语言建立模型的包的类和层次结构</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">model</span><span class="o">.</span><span class="na">element</span>
+<span class="n">用于</span> <span class="n">Java</span> <span class="n">编程语言的模型元素的接口</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">model</span><span class="o">.</span><span class="na">type</span>
+<span class="n">用来为</span> <span class="n">Java</span> <span class="n">编程语言类型建立模型的接口</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">model</span><span class="o">.</span><span class="na">util</span>
+<span class="n">用来帮助处理程序元素和类型的实用工具</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">management</span>
+<span class="n">提供</span> <span class="n">Java</span> <span class="n">Management</span> <span class="n">Extensions</span> <span class="n">的核心类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">management</span><span class="o">.</span><span class="na">loading</span> 
+<span class="n">提供实现高级动态加载的类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">management</span><span class="o">.</span><span class="na">modelmbean</span>
+<span class="n">提供了</span> <span class="n">ModelMBean</span> <span class="n">类的定义</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">management</span><span class="o">.</span><span class="na">monitor</span>
+<span class="n">提供</span> <span class="n">monitor</span> <span class="n">类的定义</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">management</span><span class="o">.</span><span class="na">openmbean</span>
+<span class="n">提供开放数据类型和</span> <span class="n">Open</span> <span class="n">MBean</span> <span class="n">描述符类</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">management</span><span class="o">.</span><span class="na">relation</span>
+<span class="n">提供</span> <span class="n">Relation</span> <span class="n">Service</span> <span class="n">的定义</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">management</span><span class="o">.</span><span class="na">remote</span>
+<span class="n">对</span> <span class="n">JMX</span> <span class="n">MBean</span> <span class="n">服务器进行远程访问使用的接口</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">management</span><span class="o">.</span><span class="na">remote</span><span class="o">.</span><span class="na">rmi</span>
+<span class="n">RMI</span> <span class="n">连接器是供</span> <span class="n">JMX</span> <span class="n">Remote</span> <span class="n">API</span> <span class="n">使用的一种连接器</span><span class="err">，</span><span class="n">后者使用</span> <span class="n">RMI</span> <span class="n">将客户端请求传输到远程</span> <span class="n">MBean</span> <span class="n">服务器</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">management</span><span class="o">.</span><span class="na">timer</span>
+<span class="n">提供对</span> <span class="n">Timer</span> <span class="n">MBean</span><span class="err">（</span><span class="n">计时器</span> <span class="n">MBean</span><span class="err">）</span><span class="n">的定义</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">naming</span>
+<span class="n">为访问命名服务提供类和接口</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">naming</span><span class="o">.</span><span class="na">directory</span>
+<span class="n">扩展</span> <span class="n">javax</span><span class="o">.</span><span class="na">naming</span> <span class="n">包以提供访问目录服务的功能</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">naming</span><span class="o">.</span><span class="na">event</span>
+<span class="n">在访问命名和目录服务时提供对事件通知的支持</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">naming</span><span class="o">.</span><span class="na">ldap</span>
+<span class="n">提供对</span> <span class="n">LDAPv3</span> <span class="n">扩展操作和控件的支持</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">naming</span><span class="o">.</span><span class="na">spi</span>
+<span class="n">提供一些方法来动态地插入对通过</span> <span class="n">javax</span><span class="o">.</span><span class="na">naming</span> <span class="n">和相关包访问命名和目录服务的支持</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">net</span>
+<span class="n">提供用于网络应用程序的类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">net</span><span class="o">.</span><span class="na">ssl</span>
+<span class="n">提供用于安全套接字包的类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">print</span>
+<span class="n">为</span> <span class="n">JavaTM</span> <span class="n">Print</span> <span class="n">Service</span> <span class="n">API</span> <span class="n">提供了主要类和接口</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">print</span><span class="o">.</span><span class="na">attribute</span>
+<span class="n">提供了描述</span> <span class="n">JavaTM</span> <span class="n">Print</span> <span class="n">Service</span> <span class="n">属性的类型以及如何分类这些属性的类和接口</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">print</span><span class="o">.</span><span class="na">attribute</span><span class="o">.</span><span class="na">standard</span>
+<span class="n">包</span> <span class="n">javax</span><span class="o">.</span><span class="na">print</span><span class="o">.</span><span class="na">attribute</span><span class="o">.</span><span class="na">standard</span> <span class="n">包括特定打印属性的类</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">print</span><span class="o">.</span><span class="na">event</span>
+<span class="n">包</span> <span class="n">javax</span><span class="o">.</span><span class="na">print</span><span class="o">.</span><span class="na">event</span> <span class="n">包含事件类和侦听器接口</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">rmi</span> 
+<span class="n">包含</span> <span class="n">RMI</span><span class="o">-</span><span class="n">IIOP</span> <span class="n">的用户</span> <span class="n">API</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">rmi</span><span class="o">.</span><span class="na">CORBA</span> 
+<span class="n">包含用于</span> <span class="n">RMI</span><span class="o">-</span><span class="n">IIOP</span> <span class="n">的可移植性</span> <span class="n">API</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">rmi</span><span class="o">.</span><span class="na">ssl</span> 
+<span class="nf">通过安全套接字层</span> <span class="o">(</span><span class="n">SSL</span><span class="o">)</span> <span class="n">或传输层安全</span> <span class="o">(</span><span class="n">TLS</span><span class="o">)</span> <span class="n">协议提供</span> <span class="n">RMIClientSocketFactory</span> <span class="n">和</span> <span class="n">RMIServerSocketFactory</span> <span class="n">的实现</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">script</span> 
+<span class="n">脚本</span> <span class="n">API</span> <span class="n">由定义</span> <span class="n">Java</span> <span class="n">TM</span> <span class="n">Scripting</span> <span class="n">Engines</span> <span class="n">的接口和类组成</span><span class="err">，</span><span class="n">并为它们在</span> <span class="n">Java</span> <span class="n">应用程序中的使用提供框架</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">auth</span> 
+<span class="n">此包提供用于进行验证和授权的框架</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">auth</span><span class="o">.</span><span class="na">callback</span> 
+<span class="n">此包提供与应用程序进行交互所必需的类</span><span class="err">，</span><span class="n">以便检索信息</span><span class="err">（</span><span class="n">例如</span><span class="err">，</span><span class="n">包括用户名和密码的验证数据</span><span class="err">）</span><span class="n">或显示信息</span><span class="err">（</span><span class="n">例如</span><span class="err">，</span><span class="n">错误和警告消息</span><span class="err">）。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">auth</span><span class="o">.</span><span class="na">kerberos</span> 
+<span class="n">此包包含与</span> <span class="n">Kerberos</span> <span class="n">网络验证协议相关的实用工具类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">auth</span><span class="o">.</span><span class="na">login</span> 
+<span class="n">此包提供可插入的验证框架</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">auth</span><span class="o">.</span><span class="na">spi</span> 
+<span class="n">此包提供用于实现可插入验证模块的接口</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">auth</span><span class="o">.</span><span class="na">x500</span> 
+<span class="n">此包包含应该用来在</span> <span class="n">Subject</span> <span class="n">中存储</span> <span class="n">X500</span> <span class="n">Principal</span> <span class="n">和</span> <span class="n">X500</span> <span class="n">Private</span> <span class="n">Crendentials</span> <span class="n">的类</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">cert</span> 
+<span class="n">为公钥证书提供类</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">sasl</span> 
+<span class="n">包含用于支持</span> <span class="n">SASL</span> <span class="n">的类和接口</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">sound</span><span class="o">.</span><span class="na">midi</span> 
+<span class="n">提供用于</span> <span class="n">MIDI</span><span class="err">（</span><span class="n">音乐乐器数字接口</span><span class="err">）</span><span class="n">数据的</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span><span class="err">、</span><span class="n">序列化和合成的接口和类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">sound</span><span class="o">.</span><span class="na">midi</span><span class="o">.</span><span class="na">spi</span> 
+<span class="n">在提供新的</span> <span class="n">MIDI</span> <span class="n">设备</span><span class="err">、</span><span class="n">MIDI</span> <span class="n">文件</span> <span class="n">reader</span> <span class="n">和</span> <span class="n">writer</span><span class="err">、</span><span class="n">或音库</span> <span class="n">reader</span> <span class="n">时提供服务提供者要实现的接口</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">sound</span><span class="o">.</span><span class="na">sampled</span> 
+<span class="n">提供用于捕获</span><span class="err">、</span><span class="n">处理和回放取样的音频数据的接口和类</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">sound</span><span class="o">.</span><span class="na">sampled</span><span class="o">.</span><span class="na">spi</span> 
+<span class="n">在提供新音频设备</span><span class="err">、</span><span class="n">声音文件</span> <span class="n">reader</span> <span class="n">和</span> <span class="n">writer</span><span class="err">，</span><span class="n">或音频格式转换器时</span><span class="err">，</span><span class="n">提供将为其创建子类的服务提供者的抽象类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">sql</span> 
+<span class="n">为通过</span> <span class="n">JavaTM</span> <span class="n">编程语言进行服务器端数据源访问和处理提供</span> <span class="n">API</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">sql</span><span class="o">.</span><span class="na">rowset</span> 
+<span class="n">JDBC</span> <span class="n">RowSet</span> <span class="n">实现的标准接口和基类</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">sql</span><span class="o">.</span><span class="na">rowset</span><span class="o">.</span><span class="na">serial</span> 
+<span class="n">提供实用工具类</span><span class="err">，</span><span class="n">允许</span> <span class="n">SQL</span> <span class="n">类型与</span> <span class="n">Java</span> <span class="n">编程语言数据类型之间的可序列化映射关系</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">sql</span><span class="o">.</span><span class="na">rowset</span><span class="o">.</span><span class="na">spi</span> 
+<span class="n">第三方供应商在其同步提供者的实现中必须使用的标准类和接口</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span> 
+<span class="n">提供一组</span><span class="err">“</span><span class="n">轻量级</span><span class="err">”（</span><span class="n">全部是</span> <span class="n">Java</span> <span class="n">语言</span><span class="err">）</span><span class="n">组件</span><span class="err">，</span><span class="n">尽量让这些组件在所有平台上的工作方式都相同</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">border</span> 
+<span class="n">提供围绕</span> <span class="n">Swing</span> <span class="n">组件绘制特殊边框的类和接口</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">colorchooser</span> 
+<span class="n">包含供</span> <span class="n">JColorChooser</span> <span class="n">组件使用的类和接口</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">event</span> 
+<span class="n">供</span> <span class="n">Swing</span> <span class="n">组件触发的事件使用</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">filechooser</span> 
+<span class="n">包含</span> <span class="n">JFileChooser</span> <span class="n">组件使用的类和接口</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">plaf</span> 
+<span class="n">提供一个接口和许多抽象类</span><span class="err">，</span><span class="n">Swing</span> <span class="n">用它们来提供自己的可插入外观功能</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">plaf</span><span class="o">.</span><span class="na">basic</span> 
+<span class="n">提供了根据基本外观构建的用户界面对象</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">plaf</span><span class="o">.</span><span class="na">metal</span> 
+<span class="n">提供根据</span> <span class="n">Java</span> <span class="n">外观</span><span class="err">（</span><span class="n">曾经代称为</span> <span class="n">Metal</span><span class="err">）</span><span class="n">构建的用户界面对象</span><span class="err">，</span><span class="n">Java</span> <span class="n">外观是默认外观</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">plaf</span><span class="o">.</span><span class="na">multi</span> 
+<span class="n">提供了组合两个或多个外观的用户界面对象</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">plaf</span><span class="o">.</span><span class="na">synth</span> 
+<span class="n">Synth</span> <span class="nf">是一个可更换皮肤</span> <span class="o">(</span><span class="n">skinnable</span><span class="o">)</span> <span class="n">的外观</span><span class="err">，</span><span class="n">在其中可委托所有绘制</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">table</span> 
+<span class="n">提供用于处理</span> <span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">JTable</span> <span class="n">的类和接口</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">text</span> 
+<span class="n">提供类</span> <span class="n">HTMLEditorKit</span> <span class="n">和创建</span> <span class="n">HTML</span> <span class="n">文本编辑器的支持类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">text</span><span class="o">.</span><span class="na">html</span> 
+<span class="n">提供类</span> <span class="n">HTMLEditorKit</span> <span class="n">和创建</span> <span class="n">HTML</span> <span class="n">文本编辑器的支持类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">text</span><span class="o">.</span><span class="na">html</span><span class="o">.</span><span class="na">parser</span> 
+<span class="n">提供默认的</span> <span class="n">HTML</span> <span class="n">解析器以及支持类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">text</span><span class="o">.</span><span class="na">rtf</span> 
+<span class="nf">提供一个类</span> <span class="o">(</span><span class="n">RTFEditorKit</span><span class="o">)</span><span class="err">，</span><span class="n">用于创建富文本格式</span><span class="err">（</span><span class="n">Rich</span><span class="o">-</span><span class="n">Text</span><span class="o">-</span><span class="n">Format</span><span class="err">）</span><span class="n">的文本编辑器</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">tree</span> 
+<span class="n">提供处理</span> <span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">JTree</span> <span class="n">的类和接口</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">swing</span><span class="o">.</span><span class="na">undo</span> 
+<span class="n">允许开发人员为应用程序</span><span class="err">（</span><span class="n">例如文本编辑器</span><span class="err">）</span><span class="n">中的撤消</span><span class="o">/</span><span class="n">恢复提供支持</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">tools</span> 
+<span class="n">为能够从程序</span><span class="err">（</span><span class="n">例如</span><span class="err">，</span><span class="n">编译器</span><span class="err">）</span><span class="n">中调用的工具提供接口</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">transaction</span> 
+<span class="n">包含解组期间通过</span> <span class="n">ORB</span> <span class="n">机制抛出的三个异常</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">transaction</span><span class="o">.</span><span class="na">xa</span> 
+<span class="n">提供定义事务管理器和资源管理器之间的协定的</span> <span class="n">API</span><span class="err">，</span><span class="n">它允许事务管理器添加或删除</span> <span class="n">JTA</span> <span class="n">事务中的资源对象</span><span class="err">（</span><span class="n">由资源管理器驱动程序提供</span><span class="err">）。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span> 
+<span class="n">根据</span> <span class="n">XML</span> <span class="n">规范定义核心</span> <span class="n">XML</span> <span class="n">常量和功能</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">bind</span> 
+<span class="n">为包含解组</span><span class="err">、</span><span class="n">编组和验证功能的客户端应用程序提供运行时绑定框架</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">bind</span><span class="o">.</span><span class="na">annotation</span> 
+<span class="n">定义将</span> <span class="n">Java</span> <span class="n">程序元素定制成</span> <span class="n">XML</span> <span class="n">模式映射的注释</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">bind</span><span class="o">.</span><span class="na">annotation</span><span class="o">.</span><span class="na">adapters</span> 
+<span class="n">XmlAdapter</span> <span class="n">及其规范定义的子类允许任意</span> <span class="n">Java</span> <span class="n">类与</span> <span class="n">JAXB</span> <span class="n">一起使用</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">bind</span><span class="o">.</span><span class="na">attachment</span> 
+<span class="n">此包由基于</span> <span class="n">MIME</span> <span class="n">的包处理器实现</span><span class="err">，</span><span class="n">该处理器能够解释并创建基于</span> <span class="n">MIME</span> <span class="n">的包格式的已优化的二进制数据</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">bind</span><span class="o">.</span><span class="na">helpers</span> 
+<span class="n">仅由</span> <span class="n">JAXB</span> <span class="n">提供者用于</span><span class="err">：</span> <span class="n">提供某些</span> <span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">bind</span> <span class="n">接口的部分默认实现</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">bind</span><span class="o">.</span><span class="na">util</span> 
+<span class="n">有用的客户端实用工具类</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">crypto</span> 
+<span class="n">用于</span> <span class="n">XML</span> <span class="n">加密的通用类</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">crypto</span><span class="o">.</span><span class="na">dom</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">crypto</span> <span class="n">包的特定于</span> <span class="n">DOM</span> <span class="n">的类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">crypto</span><span class="o">.</span><span class="na">dsig</span> 
+<span class="n">用于生成和验证</span> <span class="n">XML</span> <span class="n">数字签名的类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">crypto</span><span class="o">.</span><span class="na">dsig</span><span class="o">.</span><span class="na">dom</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">crypto</span><span class="o">.</span><span class="na">dsig</span> <span class="n">包特定于</span> <span class="n">DOM</span> <span class="n">的类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">crypto</span><span class="o">.</span><span class="na">dsig</span><span class="o">.</span><span class="na">keyinfo</span> 
+<span class="n">用来解析和处理</span> <span class="n">KeyInfo</span> <span class="n">元素和结构的类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">crypto</span><span class="o">.</span><span class="na">dsig</span><span class="o">.</span><span class="na">spec</span> 
+<span class="n">XML</span> <span class="n">数字签名的参数类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">datatype</span> 
+<span class="n">XML</span><span class="o">/</span><span class="n">Java</span> <span class="n">类型映射关系</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">namespace</span> 
+<span class="n">XML</span> <span class="n">名称空间处理</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">parsers</span> 
+<span class="n">提供允许处理</span> <span class="n">XML</span> <span class="n">文档的类</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">soap</span> 
+<span class="n">提供用于创建和构建</span> <span class="n">SOAP</span> <span class="n">消息的</span> <span class="n">API</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">stream</span>
+
+
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">stream</span><span class="o">.</span><span class="na">events</span>
+
+
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">stream</span><span class="o">.</span><span class="na">util</span>
+
+
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">transform</span> 
+<span class="n">此包定义了用于处理转换指令</span><span class="err">，</span><span class="n">以及执行从源到结果的转换的一般</span> <span class="n">API</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">transform</span><span class="o">.</span><span class="na">dom</span> 
+<span class="n">此包实现特定于</span> <span class="n">DOM</span> <span class="n">的转换</span> <span class="n">API</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">transform</span><span class="o">.</span><span class="na">sax</span> 
+<span class="n">此包实现特定于</span> <span class="n">SAX2</span> <span class="n">的转换</span> <span class="n">API</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">transform</span><span class="o">.</span><span class="na">stax</span> 
+<span class="n">提供特定于</span> <span class="n">StAX</span> <span class="n">的转换</span> <span class="n">API</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">transform</span><span class="o">.</span><span class="na">stream</span> 
+<span class="n">此包实现特定于流和</span> <span class="n">URI</span> <span class="n">的转换</span> <span class="n">API</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">validation</span> 
+<span class="n">此包提供了用于</span> <span class="n">XML</span> <span class="n">文档验证的</span> <span class="n">API</span><span class="err">。</span>  
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">ws</span> 
+<span class="n">此包包含核心</span> <span class="n">JAX</span><span class="o">-</span><span class="n">WS</span> <span class="n">API</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">handler</span> 
+<span class="n">该包定义用于消息处理程序的</span> <span class="n">API</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">handler</span><span class="o">.</span><span class="na">soap</span> 
+<span class="n">该包定义用于</span> <span class="n">SOAP</span> <span class="n">消息处理程序的</span> <span class="n">API</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">http</span> 
+<span class="n">该包定义特定于</span> <span class="n">HTTP</span> <span class="n">绑定的</span> <span class="n">API</span><span class="err">。</span>
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">soap</span> 
+<span class="n">该包定义特定于</span> <span class="n">SOAP</span> <span class="n">绑定的</span> <span class="n">API</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">spi</span> 
+<span class="n">该包定义用于</span> <span class="n">JAX</span><span class="o">-</span><span class="n">WS</span> <span class="n">2</span><span class="o">.</span><span class="na">0</span> <span class="n">的</span> <span class="n">SPI</span><span class="err">。</span> 
+<span class="n">javax</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">xpath</span> 
+<span class="n">此包提供了用于</span> <span class="n">XPath</span> <span class="n">表达式的计算和访问计算环境的</span> <span class="n">object</span><span class="o">-</span><span class="n">model</span> <span class="n">neutral</span> <span class="n">API</span><span class="err">。</span>
+<span class="n">org</span><span class="o">.</span><span class="na">ietf</span><span class="o">.</span><span class="na">jgss</span> 
+<span class="n">此包提供一个框架</span><span class="err">，</span><span class="n">该框架允许应用程序开发人员通过利用统一的</span> <span class="n">API</span> <span class="n">使用一些来自各种基础安全机制</span><span class="err">（</span><span class="n">如</span> <span class="n">Kerberos</span><span class="err">）</span><span class="n">的安全服务</span><span class="err">，</span><span class="n">如验证</span><span class="err">、</span><span class="n">数据完整性和和数据机密性</span><span class="err">。</span>
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">CORBA</span> 
+<span class="n">提供</span> <span class="n">OMG</span> <span class="n">CORBA</span> <span class="n">API</span> <span class="n">到</span> <span class="n">JavaTM</span> <span class="n">编程语言的映射</span><span class="err">，</span><span class="n">包括</span> <span class="n">ORB</span> <span class="n">类</span><span class="err">，</span><span class="n">如果已实现该类</span><span class="err">，</span><span class="n">则程序员可以使用此类作为全功能对象请求代理</span><span class="err">（</span><span class="n">Object</span> <span class="n">Request</span> <span class="n">Broker</span><span class="err">，</span><span class="n">ORB</span><span class="err">）。</span>
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">CORBA_2_3</span> 
+<span class="n">CORBA_2_3</span> <span class="n">包定义对</span> <span class="n">Java</span><span class="o">[</span><span class="n">tm</span><span class="o">]</span> <span class="n">Standard</span> <span class="n">Edition</span> <span class="n">6</span> <span class="n">中现有</span> <span class="n">CORBA</span> <span class="n">接口所进行的添加</span><span class="err">。</span>
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">CORBA_2_3</span><span class="o">.</span><span class="na">portable</span> 
+<span class="n">提供输入和输出值类型的各种方法</span><span class="err">，</span><span class="n">并包含</span> <span class="n">org</span><span class="o">/</span><span class="n">omg</span><span class="o">/</span><span class="n">CORBA</span><span class="o">/</span><span class="n">portable</span> <span class="n">包的其他更新</span><span class="err">。</span> 
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">CORBA</span><span class="o">.</span><span class="na">DynAnyPackage</span> 
+<span class="n">提供与</span> <span class="n">DynAny</span> <span class="n">接口一起使用的异常</span><span class="err">（</span><span class="n">InvalidValue</span><span class="err">、</span><span class="n">Invalid</span><span class="err">、</span><span class="n">InvalidSeq</span> <span class="n">和</span> <span class="n">TypeMismatch</span><span class="err">）。</span>
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">CORBA</span><span class="o">.</span><span class="na">ORBPackage</span> 
+<span class="n">提供由</span> <span class="n">ORB</span><span class="o">.</span><span class="na">resolve_initial_references</span> <span class="n">方法抛出的异常</span> <span class="n">InvalidName</span><span class="err">，</span><span class="n">以及由</span> <span class="n">ORB</span> <span class="n">类中的动态</span> <span class="n">Any</span> <span class="n">创建方法抛出的异常</span> <span class="n">InconsistentTypeCode</span><span class="err">。</span> 
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">CORBA</span><span class="o">.</span><span class="na">portable</span> 
+<span class="n">提供可移植性层</span><span class="err">，</span><span class="n">即可以使一个供应商生成的代码运行在另一个供应商</span> <span class="n">ORB</span> <span class="n">上的</span> <span class="n">ORB</span> <span class="n">API</span> <span class="n">集合</span><span class="err">。</span>
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">CORBA</span><span class="o">.</span><span class="na">TypeCodePackage</span> 
+<span class="n">提供用户定义的异常</span> <span class="n">BadKind</span> <span class="n">和</span> <span class="n">Bounds</span><span class="err">，</span><span class="n">它们将由</span> <span class="n">TypeCode</span> <span class="n">类中的方法抛出</span><span class="err">。</span>  
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">CosNaming</span> 
+<span class="n">为</span> <span class="n">Java</span> <span class="n">IDL</span> <span class="n">提供命名服务</span><span class="err">。</span> 
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">CosNaming</span><span class="o">.</span><span class="na">NamingContextExtPackage</span> 
+<span class="n">此包包含以下在</span> <span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">CosNaming</span><span class="o">.</span><span class="na">NamingContextExt</span> <span class="n">中使用的类</span><span class="err">：</span> <span class="n">AddressHelper</span> <span class="n">StringNameHelper</span> <span class="n">URLStringHelper</span> <span class="n">InvalidAddress</span> <span class="n">包规范</span> <span class="n">有关</span> <span class="n">Java</span><span class="o">[</span><span class="n">tm</span><span class="o">]</span> <span class="n">Platform</span><span class="o">,</span> <span class="n">Standard</span> <span class="n">Edition</span> <span class="n">6</span> <span class="n">ORB</span> <span class="n">遵守的官方规范的受支持部分的明确列表</span><span class="err">，</span><span class="n">请参阅</span> <span class="n">Official</span> <span class="n">Specifications</span> <span class="k">for</span> <span class="n">CORBA</span> <span class="n">support</span> <span class="n">in</span> <span class="n">Java</span><span class="o">[</span><span class="n">tm</span><span class="o">]</span> <span class="n">SE</span> <span class="n">6</span><span class="err">。</span> 
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">CosNaming</span><span class="o">.</span><span class="na">NamingContextPackage</span> 
+<span class="n">此包包含</span> <span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">CosNaming</span> <span class="n">包的</span> <span class="n">Exception</span> <span class="n">类</span><span class="err">。</span>
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">Dynamic</span> 
+<span class="n">此包包含</span> <span class="n">OMG</span> <span class="n">Portable</span> <span class="n">Interceptor</span> <span class="n">规范</span> <span class="nl">http:</span><span class="c1">//cgi.omg.org/cgi-bin/doc?ptc/2000-08-06 的第 21.9 小节中指定的 Dynamic 模块。
+</span><span class="c1"></span><span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">DynamicAny</span> 
+<span class="n">提供一些类和接口使得在运行时能够遍历与</span> <span class="n">any</span> <span class="n">有关联的数据值</span><span class="err">，</span><span class="n">并提取数据值的基本成分</span><span class="err">。</span> 
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">DynamicAny</span><span class="o">.</span><span class="na">DynAnyFactoryPackage</span> 
+<span class="n">此包包含</span> <span class="n">DynamicAny</span> <span class="n">模块的</span> <span class="n">DynAnyFactory</span> <span class="n">接口中的类和异常</span><span class="err">，</span><span class="n">该模块在</span> <span class="n">OMG</span> <span class="n">The</span> <span class="n">Common</span> <span class="n">Object</span> <span class="n">Request</span> <span class="nl">Broker:</span> <span class="n">Architecture</span> <span class="n">and</span> <span class="n">Specification</span> <span class="nl">http:</span><span class="c1">//cgi.omg.org/cgi-bin/doc?formal/99-10-07 的第 9.2.2 小节中指定。 
+</span><span class="c1"></span><span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">DynamicAny</span><span class="o">.</span><span class="na">DynAnyPackage</span> 
+<span class="n">此包包含</span> <span class="n">DynAny</span> <span class="n">模块的</span> <span class="n">DynAnyFactory</span> <span class="n">接口中的类和异常</span><span class="err">，</span><span class="n">该模块在</span> <span class="n">OMG</span> <span class="n">The</span> <span class="n">Common</span> <span class="n">Object</span> <span class="n">Request</span> <span class="nl">Broker:</span> <span class="n">Architecture</span> <span class="n">and</span> <span class="n">Specification</span> <span class="nl">http:</span><span class="c1">//cgi.omg.org/cgi-bin/doc?formal/99-10-07 的第 9.2 小节中指定。
+</span><span class="c1"></span><span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">IOP</span> 
+<span class="n">此包包含在</span> <span class="n">OMG</span> <span class="n">文档</span> <span class="n">The</span> <span class="n">Common</span> <span class="n">Object</span> <span class="n">Request</span> <span class="nl">Broker:</span> <span class="n">Architecture</span> <span class="n">and</span> <span class="n">Specification</span> <span class="nl">http:</span><span class="c1">//cgi.omg.org/cgi-bin/doc?formal/99-10-07 的 13.6.小节中指定的 IOP 模块。
+</span><span class="c1"></span><span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">IOP</span><span class="o">.</span><span class="na">CodecFactoryPackage</span> 
+<span class="n">此包包含</span> <span class="nl">IOP:</span><span class="o">:</span><span class="n">CodeFactory</span> <span class="n">接口中指定的异常</span><span class="err">（</span><span class="n">作为</span> <span class="n">Portable</span> <span class="n">Interceptor</span> <span class="n">规范的一部分</span><span class="err">）。</span>  
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">IOP</span><span class="o">.</span><span class="na">CodecPackage</span> 
+<span class="n">此包根据</span> <span class="nl">IOP:</span><span class="o">:</span><span class="n">Codec</span> <span class="n">IDL</span> <span class="n">接口定义生成</span><span class="err">。</span> 
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">Messaging</span> 
+<span class="n">此包包含</span> <span class="n">OMG</span> <span class="n">Messaging</span> <span class="n">Interceptor</span> <span class="n">规范</span> <span class="nl">http:</span><span class="c1">//cgi.omg.org/cgi-bin/doc?formal/99-10-07 中指定的 Messaging 模块。
+</span><span class="c1"></span><span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">PortableInterceptor</span> 
+<span class="n">提供一个注册</span> <span class="n">ORB</span> <span class="nf">钩子</span> <span class="o">(</span><span class="n">hook</span><span class="o">)</span> <span class="n">的机制</span><span class="err">，</span><span class="n">通过这些钩子</span> <span class="n">ORB</span> <span class="n">服务可以截取执行</span> <span class="n">ORB</span> <span class="n">的正常流</span><span class="err">。</span> 
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">PortableInterceptor</span><span class="o">.</span><span class="na">ORBInitInfoPackage</span> 
+<span class="n">此包包含</span> <span class="n">OMG</span> <span class="n">Portable</span> <span class="n">Interceptor</span> <span class="n">规范</span> <span class="nl">http:</span><span class="c1">//cgi.omg.org/cgi-bin/doc?ptc/2000-08-06 的第 21.7.2 小节中指定的 PortableInterceptor 模块的 ORBInitInfo 本地接口中的异常和 typedef。 
+</span><span class="c1"></span><span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">PortableServer</span> 
+<span class="n">提供一些类和接口</span><span class="err">，</span><span class="n">用来生成跨多个供应商</span> <span class="n">ORB</span> <span class="n">的可移植应用程序的服务器端</span><span class="err">。</span> 
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">PortableServer</span><span class="o">.</span><span class="na">CurrentPackage</span> 
+<span class="n">提供各种方法实现</span><span class="err">，</span><span class="n">这些实现能够访问调用方法的对象的身份</span><span class="err">。</span>
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">PortableServer</span><span class="o">.</span><span class="na">POAManagerPackage</span> 
+<span class="n">封装</span> <span class="n">POA</span> <span class="n">关联的处理状态</span><span class="err">。</span> 
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">PortableServer</span><span class="o">.</span><span class="na">POAPackage</span> 
+<span class="n">允许程序员构造可在不同</span> <span class="n">ORB</span> <span class="n">产品间移植的对象实现</span><span class="err">。</span>
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">PortableServer</span><span class="o">.</span><span class="na">portable</span> 
+<span class="n">提供一些类和接口</span><span class="err">，</span><span class="n">用来生成跨多个供应商</span> <span class="n">ORB</span> <span class="n">的可移植应用程序的服务器端</span><span class="err">。</span>
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">PortableServer</span><span class="o">.</span><span class="na">ServantLocatorPackage</span> 
+<span class="n">提供定位</span> <span class="n">servant</span> <span class="n">的类和接口</span><span class="err">。</span>
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">SendingContext</span> 
+<span class="n">为值类型的编组提供支持</span><span class="err">。</span> 
+<span class="n">org</span><span class="o">.</span><span class="na">omg</span><span class="o">.</span><span class="na">stub</span><span class="o">.</span><span class="na">java</span><span class="o">.</span><span class="na">rmi</span> 
+<span class="n">包含用于</span> <span class="n">java</span><span class="o">.</span><span class="na">rmi</span> <span class="n">包中出现的</span> <span class="n">Remote</span> <span class="n">类型的</span> <span class="n">RMI</span><span class="o">-</span><span class="n">IIOP</span> <span class="n">Stub</span><span class="err">。</span> 
+<span class="n">org</span><span class="o">.</span><span class="na">w3c</span><span class="o">.</span><span class="na">dom</span> 
+<span class="nf">为文档对象模型</span> <span class="o">(</span><span class="n">DOM</span><span class="o">)</span> <span class="n">提供接口</span><span class="err">，</span><span class="n">该模型是</span> <span class="n">Java</span> <span class="n">API</span> <span class="k">for</span> <span class="n">XML</span> <span class="n">Processing</span> <span class="n">的组件</span> <span class="n">API</span><span class="err">。</span>
+<span class="n">org</span><span class="o">.</span><span class="na">w3c</span><span class="o">.</span><span class="na">dom</span><span class="o">.</span><span class="na">bootstrap</span> 
+
+
+<span class="n">org</span><span class="o">.</span><span class="na">w3c</span><span class="o">.</span><span class="na">dom</span><span class="o">.</span><span class="na">events</span> 
+
+
+<span class="n">org</span><span class="o">.</span><span class="na">w3c</span><span class="o">.</span><span class="na">dom</span><span class="o">.</span><span class="na">ls</span>
+
+
+<span class="n">org</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">sax</span> 
+<span class="n">此包提供了核心</span> <span class="n">SAX</span> <span class="n">API</span><span class="err">。</span> 
+<span class="n">org</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">sax</span><span class="o">.</span><span class="na">ext</span> 
+<span class="n">此包包含适合的</span> <span class="n">SAX</span> <span class="n">驱动程序不一定支持的</span> <span class="n">SAX2</span> <span class="n">设施的接口</span><span class="err">。</span>  
+<span class="n">org</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">sax</span><span class="o">.</span><span class="na">helpers</span> 
+<span class="n">此包包含</span><span class="err">“</span><span class="n">帮助器</span><span class="err">”</span><span class="n">类</span><span class="err">，</span><span class="n">其中包括对引导基于</span> <span class="n">SAX</span> <span class="n">的应用程序的支持</span></code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Fantasy</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2018-07-12</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          
+          <a href="/tags/java/">java</a>
+          
+          <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+        
+          <a class="next" href="/post/aosp/2018-07-03-android_dhcp/">
+            <span class="next-text nav-default">android_dhcp</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+    
+
+  
+
+  
+
+  <div id="comments-gitment"></div>
+  <link rel="stylesheet" href="/lib/gitment/gitment-0.0.3.min.css">
+    <script src="/lib/gitment/gitment-0.0.3.min.js"></script>
+  <script type="text/javascript">
+  const gitment = new Gitment({
+    id: '2018-07-12-Java语言中几个常用的包.md',
+    title: 'Java语言中几个常用的包\x22',
+    link: decodeURI(location.href),
+    desc: '概述 Java采用包结构来组织和管理类和接口文件。本文介绍Java语言类库中几个常用的包，因为这几个包在软件开发与应用中经常需要用到，其中有些',
+    owner: 'mazhidong',
+    repo: 'comments',
+    oauth: {
+      client_id: 'a7ad9d79ce4e98eabdc8',
+      client_secret: '13ffc9363807f8929fe31ce5a7022fb8676dab45'
+    }
+  })
+  gitment.render('comments-gitment')
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://github.com/imsun/gitment">comments powered by gitment.</a></noscript>
+  </article>
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:591888356@qq.com" rel="me noopener" class="iconfont icon-email"
+        title="email" target="_blank">
+      </a>
+      <a href="https://github.com/mazhidong" rel="me noopener" class="iconfont icon-github"
+        title="github" target="_blank">
+      </a>
+  <a href="https://mazhidong.github.io/index.xml" rel="noopener" type="application/rss+xml" class="iconfont icon-rss"
+    title="rss" target="_blank">
+  </a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span><span class="author">Fantasy</span></span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox-3.1.20.min.js"></script>
+<script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
+
+
+
+
+
+
+</body>
+</html>

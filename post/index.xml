@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Fantasy Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 03 Jul 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 12 Jul 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mazhidong.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Java语言中几个常用的包&#34;</title>
+      <link>https://mazhidong.github.io/post/java/2018-07-12-java%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8C%85/</link>
+      <pubDate>Thu, 12 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/java/2018-07-12-java%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8C%85/</guid>
+      <description>概述 Java采用包结构来组织和管理类和接口文件。本文介绍Java语言类库中几个常用的包，因为这几个包在软件开发与应用中经常需要用到，其中有些</description>
+    </item>
     
     <item>
       <title>android_dhcp</title>
@@ -180,15 +189,6 @@
       
       <guid>https://mazhidong.github.io/post/linux/2017-10-09-linux-study-overview/</guid>
       <description>概述 从大二（2006年）开始接触Linux到现在已经有10几年了，遥记得那时候Ubuntu还是个位数时代，现在都到17了，真的是光阴如梭啊。</description>
-    </item>
-    
-    <item>
-      <title>如何搭建本地的Git服务器</title>
-      <link>https://mazhidong.github.io/post/git/2017-09-04-how-to-setup-git-server/</link>
-      <pubDate>Mon, 04 Sep 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/git/2017-09-04-how-to-setup-git-server/</guid>
-      <description>概述 本文将介绍如何在本地搭建Git服务器。我们知道Git其实是个分布式的版本管理系统，与中心化的版本管理系统如SVN有根本的不同，每个使用者</description>
     </item>
     
   </channel>

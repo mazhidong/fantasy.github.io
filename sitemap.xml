@@ -10,6 +10,13 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/post/java/2018-07-12-java%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8C%85/</loc>
+    <lastmod>2018-07-12T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/post/aosp/2018-07-03-android_dhcp/</loc>
     <lastmod>2018-07-03T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -283,6 +290,20 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/tags/java/</loc>
+    <lastmod>2018-07-12T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://mazhidong.github.io/categories/java/</loc>
+    <lastmod>2018-07-12T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/tags/linux/</loc>
     <lastmod>2018-06-19T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -298,7 +319,7 @@
   
   <url>
     <loc>https://mazhidong.github.io/post/</loc>
-    <lastmod>2018-07-03T00:00:00+00:00</lastmod>
+    <lastmod>2018-07-12T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -368,7 +389,7 @@
   
   <url>
     <loc>https://mazhidong.github.io/tags/%E6%95%99%E7%A8%8B/</loc>
-    <lastmod>2018-03-22T00:00:00+00:00</lastmod>
+    <lastmod>2018-07-12T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>

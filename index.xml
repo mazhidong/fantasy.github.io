@@ -24,6 +24,188 @@
     </item>
     
     <item>
+      <title>Java8中Map的遍历方式总结&#34;</title>
+      <link>https://mazhidong.github.io/post/java/2018-07-20-java8%E4%B8%ADmap%E7%9A%84%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Fri, 20 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/java/2018-07-20-java8%E4%B8%ADmap%E7%9A%84%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/</guid>
+      
+        <description>&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;39
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;40
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;41
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;42
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;43
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;44
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;45
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;46
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;47
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;48
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;49
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;50
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;51
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;52
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;53
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;54
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;55
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;56
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;57
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;58
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;59
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;60
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;61
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;62
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;63
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;64
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;65
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;66
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;67
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;68
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;69
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;70
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;71
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;72
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;73
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;74
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;75
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;76
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;77
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;78
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;79
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;80
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;81
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;82
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;83
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;public class LambdaMap {
+
+    private Map&amp;lt;String, Object&amp;gt; map = new HashMap&amp;lt;&amp;gt;();
+
+    @Before
+    public void initData() {
+        map.put(&amp;#34;key1&amp;#34;, &amp;#34;value1&amp;#34;);
+        map.put(&amp;#34;key2&amp;#34;, &amp;#34;value2&amp;#34;);
+        map.put(&amp;#34;key3&amp;#34;, &amp;#34;value3&amp;#34;);
+        map.put(&amp;#34;key4&amp;#34;, 4);
+        map.put(&amp;#34;key5&amp;#34;, 5);
+        map.put(&amp;#34;key5&amp;#34;, &amp;#39;h&amp;#39;);
+    }
+
+
+    /**
+     * 遍历Map的方式一
+     * 通过Map.keySet遍历key和value
+     */
+    @Test
+    public void testErgodicWayOne() {
+        System.out.println(&amp;#34;---------------------Before JAVA8 ------------------------------&amp;#34;);
+        for (String key : map.keySet()) {
+            System.out.println(&amp;#34;map.get(&amp;#34; + key + &amp;#34;) = &amp;#34; + map.get(key));
+        }
+        System.out.println(&amp;#34;---------------------JAVA8 ------------------------------&amp;#34;);
+        map.keySet().forEach(key -&amp;gt; System.out.println(&amp;#34;map.get(&amp;#34; + key + &amp;#34;) = &amp;#34; + map.get(key)));
+    }
+
+    /**
+     * 遍历Map第二种
+     * 通过Map.entrySet使用Iterator遍历key和value
+     */
+    @Test
+    public void testErgodicWayTwo() {
+        System.out.println(&amp;#34;---------------------Before JAVA8 ------------------------------&amp;#34;);
+        Iterator&amp;lt;Map.Entry&amp;lt;String, Object&amp;gt;&amp;gt; iterator = map.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry&amp;lt;String, Object&amp;gt; entry = iterator.next();
+            System.out.println(&amp;#34;key:value = &amp;#34; + entry.getKey() + &amp;#34;:&amp;#34; + entry.getValue());
+        }
+        System.out.println(&amp;#34;---------------------JAVA8 ------------------------------&amp;#34;);
+        map.entrySet().iterator().forEachRemaining(item -&amp;gt; System.out.println(&amp;#34;key:value=&amp;#34; + item.getKey() + &amp;#34;:&amp;#34; + item.getValue()));
+    }
+
+    /**
+     * 遍历Map第三种
+     * 通过Map.entrySet遍历key和value，在大容量时推荐使用
+     */
+    @Test
+    public void testErgodicWayThree() {
+        System.out.println(&amp;#34;---------------------Before JAVA8 ------------------------------&amp;#34;);
+        for (Map.Entry&amp;lt;String, Object&amp;gt; entry : map.entrySet()) {
+            System.out.println(&amp;#34;key:value = &amp;#34; + entry.getKey() + &amp;#34;:&amp;#34; + entry.getValue());
+        }
+        System.out.println(&amp;#34;---------------------JAVA8 ------------------------------&amp;#34;);
+        map.entrySet().forEach(entry -&amp;gt; System.out.println(&amp;#34;key:value = &amp;#34; + entry.getKey() + &amp;#34;:&amp;#34; + entry.getValue()));
+    }
+
+    /**
+     * 遍历Map第四种
+     * 通过Map.values()遍历所有的value，但不能遍历key
+     */
+    @Test
+    public void testErgodicWayFour() {
+        System.out.println(&amp;#34;---------------------Before JAVA8 ------------------------------&amp;#34;);
+        for (Object value : map.values()) {
+            System.out.println(&amp;#34;map.value = &amp;#34; + value);
+        }
+        System.out.println(&amp;#34;---------------------JAVA8 ------------------------------&amp;#34;);
+        map.values().forEach(System.out::println); // 等价于map.values().forEach(value -&amp;gt; System.out.println(value));
+    }
+
+    /**
+     * 遍历Map第五种
+     * 通过k,v遍历，Java8独有的
+     */
+    @Test
+    public void testErgodicWayFive() {
+        System.out.println(&amp;#34;---------------------Only JAVA8 ------------------------------&amp;#34;);
+        map.forEach((k, v) -&amp;gt; System.out.println(&amp;#34;key:value = &amp;#34; + k + &amp;#34;:&amp;#34; + v));
+    }
+}&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description>
+      
+    </item>
+    
+    <item>
       <title>Java语言中几个常用的包&#34;</title>
       <link>https://mazhidong.github.io/post/java/2018-07-12-java%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8C%85/</link>
       <pubDate>Thu, 12 Jul 2018 00:00:00 +0000</pubDate>
@@ -8973,322 +9155,6 @@ _init&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;p&gt;其中，&lt;code&gt;a.out&lt;/code&gt;是一个二进制文件。&lt;/p&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title>Linux系统介绍（二）文件系统结构</title>
-      <link>https://mazhidong.github.io/post/linux/2017-10-09-linux-study-file-system-hierarchy/</link>
-      <pubDate>Mon, 09 Oct 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/linux/2017-10-09-linux-study-file-system-hierarchy/</guid>
-      
-        <description>
-
-&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;
-
-&lt;p&gt;多数Linux发行版本都是遵循&lt;code&gt;文件系统结构标准（Filesystem Hierarchy Standard, 简称FHS）&lt;/code&gt;，可以在&lt;a href=&#34;http://www.pathname.com/fhs/&#34;&gt;这里&lt;/a&gt;找到该标准。本文对Linux的文件系统结构进行简单的介绍。&lt;/p&gt;
-
-&lt;h1 id=&#34;根目录&#34;&gt;根目录&lt;code&gt;/&lt;/code&gt;&lt;/h1&gt;
-
-&lt;p&gt;所有的Linux系统都有根目录，由&lt;code&gt;/&lt;/code&gt;表示。Linux系统的所有内容都在该目录下。&lt;/p&gt;
-
-&lt;h1 id=&#34;二进制目录&#34;&gt;二进制目录&lt;/h1&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;目录&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;/bin&lt;/td&gt;
-&lt;td&gt;包括了可执行的二进制文件，通常这些二进制文件可以被所有用户访问。FHS规定，该目录至少包括&lt;code&gt;/bin/cat&lt;/code&gt;跟&lt;code&gt;/bin/date&lt;/code&gt;文件&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/sbin&lt;/td&gt;
-&lt;td&gt;包括了系统的二进制文件，通过需要root权限，用来配置系统&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/lib&lt;/td&gt;
-&lt;td&gt;包括了&lt;code&gt;/bin&lt;/code&gt;所依赖的库&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/lib/modules&lt;/td&gt;
-&lt;td&gt;Linux将从&lt;code&gt;/lib/modules/$kernel-version/&lt;/code&gt;目录下载入内核模块&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/lib32和/lib64&lt;/td&gt;
-&lt;td&gt;顾名思义，分别存放不同位数的库&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/opt&lt;/td&gt;
-&lt;td&gt;该目录用来存放一些可选的软件，通常情况下，很多第三方的客户软件会选择安装在该目录下&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h1 id=&#34;配置文件目录&#34;&gt;配置文件目录&lt;/h1&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;目录&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;/boot&lt;/td&gt;
-&lt;td&gt;顾名思义，用来存放系统启动的配置文件，如grub引导的配置文件&lt;code&gt;/boot/grub/grub.cfg&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/etc&lt;/td&gt;
-&lt;td&gt;几乎大部分配置文件都放在改目录下。历史上&lt;code&gt;etc&lt;/code&gt;的全称是&lt;code&gt;etcetera&lt;/code&gt;，不过，现在一般认为是&lt;code&gt;Editable Text Configuration&lt;/code&gt;的缩写&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/etc/init.d&lt;/td&gt;
-&lt;td&gt;存放daemon启动、停止等的脚本文件。不过在引入systemd之后，启动脚本有所变化&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/etc/skel&lt;/td&gt;
-&lt;td&gt;存放创建新用户之后所需的配置文件的模板，如&lt;code&gt;.bashrc&lt;/code&gt;文件，默认会从该目录拷贝到用户目录&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/etc/sysconfig&lt;/td&gt;
-&lt;td&gt;一般出现在RedHat系列的Linux系统中，存放系统有关配置，如IP的配置文件等&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h1 id=&#34;数据目录&#34;&gt;数据目录&lt;/h1&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;目录&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;/home&lt;/td&gt;
-&lt;td&gt;当创建一个新用户的时候，默认情况下，系统会为用户创建一个&lt;code&gt;/home/&amp;lt;username&amp;gt;&lt;/code&gt;的目录用来存放个人数据。&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/root&lt;/td&gt;
-&lt;td&gt;该目录被很多Linux系统用来存放root用户的个人数据&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/srv&lt;/td&gt;
-&lt;td&gt;可以被解释为&lt;code&gt;served by your system&lt;/code&gt;。FHS允许&lt;code&gt;rsync&lt;/code&gt;，&lt;code&gt;ftp&lt;/code&gt;，&lt;code&gt;www&lt;/code&gt;等数据存放在改目录&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/media&lt;/td&gt;
-&lt;td&gt;该目录通常被用来挂载可移除设备，如CD-ROM，U盘等&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/mnt&lt;/td&gt;
-&lt;td&gt;根据FHS，该目录通常被用来作为短期的挂载点&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/tmp&lt;/td&gt;
-&lt;td&gt;该目录用来存放一些短期的文件，&lt;strong&gt;&lt;em&gt;不要再该目录下存放重要文件，该目录下的文件有可能会被系统回收&lt;/em&gt;&lt;/strong&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h1 id=&#34;内存目录&#34;&gt;内存目录&lt;/h1&gt;
-
-&lt;p&gt;Linux系统中，几乎所有的东西都被映射成文件，文件有的是对应着硬盘、设备（CD-ROM等）等，有的则被Linux映射到内存中。这一节介绍映射到内存中的目录。&lt;/p&gt;
-
-&lt;h2 id=&#34;dev目录&#34;&gt;/dev目录&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;/dev&lt;/code&gt;目录映射了各种设备文件，这些文件由系统启动的时候扫描硬件生成。&lt;/p&gt;
-
-&lt;h3 id=&#34;物理设备文件&#34;&gt;物理设备文件&lt;/h3&gt;
-
-&lt;p&gt;物理设备包括很多种，如硬盘，CD-ROM等。不同的物理设备映射为&lt;code&gt;/dev&lt;/code&gt;目录下不同的文件。如SATA/SCSI设备或USB通常被映射为&lt;code&gt;/dev/sd*&lt;/code&gt;，其中&lt;code&gt;*&lt;/code&gt;可以为&lt;code&gt;[a-z]&lt;/code&gt;中的任意字符；而IDE设备通常被映射为&lt;code&gt;/dev/hd*&lt;/code&gt;，其中&lt;code&gt;*&lt;/code&gt;为&lt;code&gt;[a-z]&lt;/code&gt;中任意字符。&lt;/p&gt;
-
-&lt;h3 id=&#34;dev-tty跟-dev-pts&#34;&gt;/dev/tty跟/dev/pts&lt;/h3&gt;
-
-&lt;p&gt;首先需要搞清楚&lt;code&gt;tty&lt;/code&gt;设备跟&lt;code&gt;pts&lt;/code&gt;设备的区别。这两者都是终端设备，所谓终端设备通常指的是能够接受命令输入，并可能同时能够输出的设备，但是这两者是有本质的不同的：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;tty设备&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;tty&lt;/code&gt;是&lt;code&gt;Teletype&lt;/code&gt;的简称，表示原生的终端设备，通常指的是物理终端设备如串口，键鼠接口等，以及系统内核模拟的终端设备。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;pts设备&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;pts&lt;/code&gt;是&lt;code&gt;Pseudo Terminal Slave&lt;/code&gt;的简称，表示伪终端设备，通常由应用进程模拟出来，如ssh开启的终端等。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;tty&lt;/code&gt;设备通常被映射为&lt;code&gt;/dev/tty*&lt;/code&gt;，其中&lt;code&gt;*&lt;/code&gt;代表数字，如&lt;code&gt;/dev/tty1&lt;/code&gt;等。而&lt;code&gt;pts&lt;/code&gt;设备被映射为&lt;code&gt;/dev/pts/*&lt;/code&gt;，其中&lt;code&gt;*&lt;/code&gt;表示数字，如&lt;code&gt;/dev/pts/1&lt;/code&gt;。&lt;/p&gt;
-
-&lt;h3 id=&#34;dev-null&#34;&gt;/dev/null&lt;/h3&gt;
-
-&lt;p&gt;该文件在Linux中有着特殊的意义，是一个只有输入的文件，且文件有无限的大小，你不能从该文件读出任何东西，任何写入的内容逻辑上相当于消失了。从实现的角度，实际上任何写入的内容都被系统丢弃了。&lt;/p&gt;
-
-&lt;h2 id=&#34;proc目录&#34;&gt;/proc目录&lt;/h2&gt;
-
-&lt;p&gt;该目录用来记录内核以及内核进程的实时信息，可以通过它轻而易举的实现对内核状态的获取甚至改变。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;目录&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;/proc/&lt;id&gt;&lt;/td&gt;
-&lt;td&gt;几乎每个进程都会在该目录下有映射的文件&lt;code&gt;/proc/*&lt;/code&gt;，其中&lt;code&gt;&amp;lt;id&amp;gt;&lt;/code&gt;代表进程的ID。该目录记录的该进程的几乎所有的状态信息。&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/proc/cpuinfo&lt;/td&gt;
-&lt;td&gt;记录了系统的CPU信息，通常通过该文件可以知道系统有多少个CPU（核数）。&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/proc/meminfo&lt;/td&gt;
-&lt;td&gt;记录了系统的内存信息，可以通过它知道系统有多少内存&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/proc/sys&lt;/td&gt;
-&lt;td&gt;在&lt;code&gt;/proc&lt;/code&gt;目录下的绝大部分文件都是只读的文件，但是在该目录下有些文件是可写的，可以通过它们改变内核状态&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/proc/interrupts&lt;/td&gt;
-&lt;td&gt;记录了当前系统的中断信息&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/proc/kcore&lt;/td&gt;
-&lt;td&gt;这个文件代表了系统的物理内存，其大小就是物理内存的大小，因此千万不要用&lt;code&gt;cat&lt;/code&gt;来试图显示该文件内容&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h1 id=&#34;usr目录&#34;&gt;/usr目录&lt;/h1&gt;
-
-&lt;p&gt;&lt;code&gt;/usr&lt;/code&gt;目录估计是被误解最多的目录，一般大家都以为它是&lt;code&gt;user&lt;/code&gt;的简写，感觉应该存放的是用户相关的东西，但是实际上完全不是这样。它其实是&lt;code&gt;Unix System Resources&lt;/code&gt;的简写，表示Unix系统资源。通常情况下，该目录以只读的权限被挂载。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;目录&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;/usr/bin&lt;/td&gt;
-&lt;td&gt;很多命令都存放在这个目录下面，事实上，在Centos跟Solaris系统中，&lt;code&gt;/bin&lt;/code&gt;目录实际上只是一个软连接，连接到此目录&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/usr/include&lt;/td&gt;
-&lt;td&gt;存放大量的头文件，可能会被C代码引用&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/usr/lib&lt;/td&gt;
-&lt;td&gt;存放库文件，同样，在Centos跟Solaris系统中，&lt;code&gt;/lib&lt;/code&gt;其实就是软连接到此目录&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/usr/lib64&lt;/td&gt;
-&lt;td&gt;存放64位的库文件，在Centos中，&lt;code&gt;/lib64&lt;/code&gt;也是软连接到此目录&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/usr/sbin&lt;/td&gt;
-&lt;td&gt;很多daemon程序都是放在此目录下，在Centos中，&lt;code&gt;/sbin&lt;/code&gt;也是软连接到此目录&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/usr/local&lt;/td&gt;
-&lt;td&gt;此目录通常用来安装一些本地的应用&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/usr/share&lt;/td&gt;
-&lt;td&gt;此目录通常用来存放各种体系无关的数据。&lt;code&gt;/usr/share/man&lt;/code&gt;就是用来存放&lt;code&gt;man&lt;/code&gt;命令用到的帮助文档&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/usr/src&lt;/td&gt;
-&lt;td&gt;此目录通常存放内核的代码文件&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h1 id=&#34;var目录&#34;&gt;/var目录&lt;/h1&gt;
-
-&lt;p&gt;&lt;code&gt;/var&lt;/code&gt;目录用来存放可变的数据，如日志，数据库文件等。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;目录&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;/var/log&lt;/td&gt;
-&lt;td&gt;此目录用来存放各种日志文件，包括系统跟应用的日志&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/var/log/messages&lt;/td&gt;
-&lt;td&gt;在RedHat系列系统中，此文件用来记录系统刚刚发生的事情。在Debian和Ubuntu系统中，对应的文件是&lt;code&gt;/var/log/syslog&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/var/cache&lt;/td&gt;
-&lt;td&gt;此目录存放很多应用的缓存数据，如&lt;code&gt;yum&lt;/code&gt;命令可能会缓存部分数据在此目录&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/var/spool&lt;/td&gt;
-&lt;td&gt;一般情况下，该目录会存放邮件cron任务等数据&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;/var/lib&lt;/td&gt;
-&lt;td&gt;通常此目录下会存放应用的状态信息，如&lt;code&gt;/var/lib/mysql&lt;/code&gt;存放&lt;code&gt;mysql&lt;/code&gt;数据库，&lt;code&gt;/var/lib/docker&lt;/code&gt;存放&lt;code&gt;docker&lt;/code&gt;的数据&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
 </description>
       
     </item>

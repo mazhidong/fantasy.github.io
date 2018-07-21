@@ -206,6 +206,310 @@
     </item>
     
     <item>
+      <title>java反射获取方法以及调用方法&#34;</title>
+      <link>https://mazhidong.github.io/post/java/2018-07-20-java%E5%8F%8D%E5%B0%84%E8%8E%B7%E5%8F%96%E6%96%B9%E6%B3%95%E4%BB%A5%E5%8F%8A%E8%B0%83%E7%94%A8%E6%96%B9%E6%B3%95/</link>
+      <pubDate>Fri, 20 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/java/2018-07-20-java%E5%8F%8D%E5%B0%84%E8%8E%B7%E5%8F%96%E6%96%B9%E6%B3%95%E4%BB%A5%E5%8F%8A%E8%B0%83%E7%94%A8%E6%96%B9%E6%B3%95/</guid>
+      
+        <description>
+
+&lt;h1 id=&#34;java反射获取方法以及调用方法&#34;&gt;Java反射获取方法以及调用方法&lt;/h1&gt;
+
+&lt;h2 id=&#34;获取方法&#34;&gt;获取方法&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;先找到方法所在类的字节码&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;找到需要被获取的方法&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Class类中获取方法：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;//获取包括自身和继承（实现）过来的所有的public方法——Method不支持泛型&amp;lt;&amp;gt;，即后面不接&amp;lt;&amp;gt;
+public Method[] getMethods();
+
+//获取自身所有的方法(private、public、protected，和访问权限无关)，不包括继承的
+public Method[] getDeclaredMethods();
+
+//表示获取指定的一个公共的方法，包括继承的
+public Method[] getMethod(String methodName, Class&amp;lt;T&amp;gt;...parameterTypes);
+
+参数： methodName：表示获取的方法的名字
+       parameterTypes：表示获取的方法的参数的Class类型
+
+//表示获取本类中的一个指定的方法（private、protected、public，与访问权限无关），不包括继承的方法
+public Method[] getDeclaredMethod(String methodName, Class&amp;lt;T&amp;gt;...parameterTypes);&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;通过反射调用方法&#34;&gt;通过反射调用方法：&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;先找到方法所在类的字节码&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;找到需要被获取的方法&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;调用该方法&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;class User{
+
+public void sayHello(){...}
+
+public void sayHi(String naem){...}
+
+private  void sayGoodBye(String name, int age){...}
+
+}&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;如何使用反射调用一个方法&#34;&gt;如何使用反射调用一个方法？&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在Method类中有一个方法：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;//表示调用当前Method所表示的方法
+public Object invoke(Object  obj,  Object...  args);
+
+     参数：  obj： 表示被调用方法底层所属对象
+             args： 表示调用方法时传递的实际参数
+     返回：方法调用后，底层方法的返回结果
+
+Eg：
+public  String  sayYa（String name）{....}
+
+Class&amp;lt;User&amp;gt; clz=User.class;
+
+Method mt=clz.getMethod(“sayYa”, String.class);
+
+Object obj=clz.newInstance();
+
+Object ret=mt.invoke(obj, “wili”);
+//要调用实例方法，必须有一个对象，方法的底层对象就是指当前Method所在的类的实例对象，
+  sayHi方法具有返回值，调用该方法后的返回结果使用Object接收&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;调用私有方法&#34;&gt;调用私有方法：&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;Method mt=clz.getDeclaredMethod(“sayGoodBye”, String.class, int.class);
+
+//在调用私有方法之前，需设置该方法为可访问的权限：——否则会报错
+mt.setAccessible(true);
+
+mt.invoke(clz.newInstance(), “limi”, 17);&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;调用静态方法&#34;&gt;调用静态方法&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;class User{
+public static void staticMethod(){
+   System.out.println(“static mthod invoke.”);
+}
+}
+
+Eg:
+
+Class&amp;lt;User&amp;gt; clz=User.class;
+Method staticMethod=clz.getMethod(“staticMthod”);&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;两种方式调用静态方法&#34;&gt;两种方式调用静态方法：&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;因为静态方法属于所有实例对象公共的，可以创建该类的一个任意对象，通过该对象调用&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;//staticMethod无参，故参数列表类型不填
+staticMethod.invoke(clz.newInstance());&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;如果底层方法是静态的，那么可以忽略指定的obj参数，将obj参数设置为null即可&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;staticMethod.invoke(null);&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;使用反射调用可变参数的方法&#34;&gt;使用反射调用可变参数的方法&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;class User{
+public static int  sum(int... ages){
+   System.out.println(args);//打印结果可看出：可变参数底层就是一个数组
+   Int sum=0;
+   for(int i : args){
+      Sum+=i;
+   }
+return sum;
+}&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;public static void show(String... args){...}
+}
+
+Eg:
+Class&amp;lt;User&amp;gt; clz=User.class;
+//可变参数底层就是一个数组
+Method m=clz.getMethod(“sum”, int[].class);
+M.invoke(null,  new int[]{1,2,3});
+Method m=clz.getMethod(“show”, String[].class);
+//会报错，可变参数是引用类型时，底层会自动解包，
+  上述调用被解包后变成M.invoke(null,“A”,”B”,”C”);
+  ——为了解决该问题，我们再使用一层数组把实际参数包装起来
+M.invoke(null,  new String[]{“A”,”B”,”C”});
+//正确
+M.invoke(null,  new Object[]{new String[]{“A”,”B”,”C”}});&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;通用方法&#34;&gt;通用方法：&lt;/h2&gt;
+
+&lt;p&gt;以后在使用反射调用invoke方法时，在传递实际参数的时候，无论是基本数据类型，还是引用类型，或者是可变参数类型，把实际参数都包装在一维数组中。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;m.invoke(方法的底层对象，new Object[]{实际参数})；
+
+Eg：
+//方法参数为基本类型，且只有一个参数，解包后变成m.invoke(null，17});
+m.invoke(null， new Object[]{17});
+//方法参数为String类型，且只有一个参数
+m.invoke(null， new Object[]{“xxx”});
+//方法参数为int类型，且为可变参数或者数组类型
+m.invoke(null， new Object[]{new int[]{1,2}});
+//方法参数为String类型，且为可变参数或者数组类型,
+  new String[]{“A”,”B”}为传递的实际参数
+m.invoke(null， new Object[]{new String[]{“A”,”B”}});&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description>
+      
+    </item>
+    
+    <item>
       <title>Java语言中几个常用的包&#34;</title>
       <link>https://mazhidong.github.io/post/java/2018-07-12-java%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8C%85/</link>
       <pubDate>Thu, 12 Jul 2018 00:00:00 +0000</pubDate>
@@ -8765,396 +9069,6 @@ Test1 test2
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title>Linux系统介绍（一）命令行</title>
-      <link>https://mazhidong.github.io/post/linux/2017-10-09-linux-study-command-line/</link>
-      <pubDate>Mon, 09 Oct 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/linux/2017-10-09-linux-study-command-line/</guid>
-      
-        <description>
-
-&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;
-
-&lt;p&gt;随着Linux的发展，现在已经有了非常多的桌面版本，比如著名的Ubuntu。用这些桌面版本系统，可以满足基本的操作，然而对于一些高级点的操作，还是离不开Linux的命令行(Command Line)。而Linux的精髓也更多的体现在命令行上，其强大的功能，海量的工具，可以帮你轻而易举的完成各种复杂的系统管理操作。本文将详细讲述Linux命令行。&lt;/p&gt;
-
-&lt;h1 id=&#34;基础命令&#34;&gt;基础命令&lt;/h1&gt;
-
-&lt;h2 id=&#34;帮助类&#34;&gt;帮助类&lt;/h2&gt;
-
-&lt;h3 id=&#34;man&#34;&gt;man&lt;/h3&gt;
-
-&lt;p&gt;Linux有着海量的命令，而每个命令又有很多的不同参数，要记住所有的这些命令是比较困难的，因此，在使用Linux命令行的时候，必须时刻记着查看Linux的帮助，而查看帮助就是采用&lt;code&gt;man&lt;/code&gt;命令。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;查看命令帮助&lt;/p&gt;
-
-&lt;p&gt;以&lt;code&gt;ls&lt;/code&gt;命令为例，如果要查看帮助的话可以输入&lt;code&gt;man ls&lt;/code&gt;，查看基本的帮助信息也可以直接&lt;code&gt;ls --help&lt;/code&gt;。其将以分页的形式显示该命令的完整文档，操作该文档的基本命令有：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;按&lt;code&gt;u&lt;/code&gt;上翻页&lt;/li&gt;
-&lt;li&gt;按&lt;code&gt;d&lt;/code&gt;下翻页&lt;/li&gt;
-&lt;li&gt;按空格下翻页&lt;/li&gt;
-&lt;li&gt;按回车下移一行&lt;/li&gt;
-&lt;li&gt;按&lt;code&gt;/&lt;/code&gt;进入搜索模式，输入要搜索的关键字，按回车搜索。&lt;/li&gt;
-&lt;li&gt;按&lt;code&gt;n&lt;/code&gt;搜索下一个&lt;/li&gt;
-&lt;li&gt;按&lt;code&gt;N&lt;/code&gt;搜索上一个&lt;/li&gt;
-&lt;li&gt;按&lt;code&gt;q&lt;/code&gt;退出查看&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;查看配置文件的帮助&lt;/p&gt;
-
-&lt;p&gt;有些系统的配置文件也同样有对应的帮助文档，可以通过&lt;code&gt;man $configfile&lt;/code&gt;来查看，比如&lt;code&gt;/etc/system/sysctl.conf&lt;/code&gt;配置文件，查看其帮助可以采用命令&lt;code&gt;man sysctl.conf&lt;/code&gt;。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;查看后台进程(daemon)的帮助&lt;/p&gt;
-
-&lt;p&gt;Linux在后台运行着很多的程序（称为daemon），如果需要查看某个daemon的帮助，可以用命令&lt;code&gt;man $daemon&lt;/code&gt;来查看。如&lt;code&gt;man ntpd&lt;/code&gt;将查看时间同步daemon的帮助文档。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;搜索需要查看的命令&lt;/p&gt;
-
-&lt;p&gt;Linux命令实在太多，有时候如果不记得准确的命令的名字，可以采用&lt;code&gt;man -k $keyword&lt;/code&gt;来搜索，如&lt;code&gt;man -k syslog&lt;/code&gt;将列出相关命令：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# man -k syslog
-ipmievd (8)          - IPMI event daemon for sending events to syslog
-logger (1)           - a shell command interface to the syslog(3) system log module
-rsyslog.conf (5)     - rsyslogd(8) configuration file
-rsyslogd (8)         - reliable and extended syslogd&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;whatis&#34;&gt;whatis&lt;/h3&gt;
-
-&lt;p&gt;&lt;code&gt;man&lt;/code&gt;命令将展示完整的文档，可以通过&lt;code&gt;whatis&lt;/code&gt;来查看命令的简单介绍。&lt;/p&gt;
-
-&lt;h3 id=&#34;whereis&#34;&gt;whereis&lt;/h3&gt;
-
-&lt;p&gt;如果需要知道某个命令的完整路径，可以采用&lt;code&gt;whereis $command&lt;/code&gt;来查看。&lt;/p&gt;
-
-&lt;h2 id=&#34;目录操作类&#34;&gt;目录操作类&lt;/h2&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;命令&lt;/th&gt;
-&lt;th&gt;解释&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;pwd&lt;/td&gt;
-&lt;td&gt;查看当前目录路径&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;cd $path&lt;/td&gt;
-&lt;td&gt;切换到其它路径&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;cd ~&lt;/td&gt;
-&lt;td&gt;返回home目录&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;cd ..&lt;/td&gt;
-&lt;td&gt;返回上一级&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;cd -&lt;/td&gt;
-&lt;td&gt;返回上一次的目录&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;ls $path&lt;/td&gt;
-&lt;td&gt;查看目录下的内容&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;ls -a&lt;/td&gt;
-&lt;td&gt;显示目录下所有文件，包括隐藏文件&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;ls -lh&lt;/td&gt;
-&lt;td&gt;列表的形式显示，&lt;code&gt;-h&lt;/code&gt;以可读的方式显示大小&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;mkdir&lt;/td&gt;
-&lt;td&gt;创建目录，要递归创建采用&lt;code&gt;mkdir -p&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h2 id=&#34;文件操作类&#34;&gt;文件操作类&lt;/h2&gt;
-
-&lt;h3 id=&#34;说明&#34;&gt;说明&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;大小写敏感
-在Linux系统中，文件名都是大小写敏感的。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;所有都是文件
-Linux基本上将文件，目录，设备等等都视为文件。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;file命令&#34;&gt;file命令&lt;/h3&gt;
-
-&lt;p&gt;查看文件的类型，如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# file bugs.tgz
-bugs.tgz: gzip compressed data, from Unix, last modified: Tue Dec 13 01:38:27 2016&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;可以显示文件的类型及修改时间等信息。查看特殊文件如设备文件的时候，还可以带上&lt;code&gt;-s&lt;/code&gt;的参数，这样可以识别更多的信息：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# file /dev/sda
-/dev/sda: block special
-# file -s /dev/sda
-/dev/sda: x86 boot sector; partition 1: ID=0x83, active, starthead 32, startsector 2048, 1024000 sectors; partition 2: ID=0x8e, starthead 221, startsector 1026048, 208689152 sectors, code offset 0x63&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;touch&#34;&gt;touch&lt;/h3&gt;
-
-&lt;p&gt;&lt;code&gt;touch&lt;/code&gt;用来创建空文件，或者用来更新文件时间为当前时间。如果加上&lt;code&gt;-t&lt;/code&gt;参数，可以为文件设置指定的时间。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# date
-Mon Oct  9 03:19:24 EDT 2017
-# ls -l
-total 4
--rw-r--r--. 1 root root 6 Jun 19  2016 login.html
-# touch test.txt
-# ls -l
-total 4
--rw-r--r--. 1 root root 6 Jun 19  2016 login.html
--rw-r--r--. 1 root root 0 Oct  9 03:19 test.txt
-# touch login.html
-# ls -l
-total 4
--rw-r--r--. 1 root root 6 Oct  9 03:19 login.html
--rw-r--r--. 1 root root 0 Oct  9 03:19 test.txt
-# touch -t 201701011010 login.html
-# ls -l
-total 4
--rw-r--r--. 1 root root 6 Jan  1  2017 login.html
--rw-r--r--. 1 root root 0 Oct  9 03:19 test.txt&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;删除-复制-移动&#34;&gt;删除、复制、移动&lt;/h3&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;命令&lt;/th&gt;
-&lt;th&gt;解释&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;rm&lt;/td&gt;
-&lt;td&gt;永久删除一个文件，对于此命令，没有所谓的垃圾箱，请慎重&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;rm -i&lt;/td&gt;
-&lt;td&gt;询问是否真的要删除&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;rm -rf&lt;/td&gt;
-&lt;td&gt;通常&lt;code&gt;rm&lt;/code&gt;只是删除文件，如果需要删除目录的时候，必须带上&lt;code&gt;-r&lt;/code&gt;参数，&lt;code&gt;-f&lt;/code&gt;参数表示强制删除&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;cp&lt;/td&gt;
-&lt;td&gt;拷贝文件&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;cp -rf&lt;/td&gt;
-&lt;td&gt;拷贝目录下所有的文件，并强制覆盖&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;mv&lt;/td&gt;
-&lt;td&gt;移动文件到另一个目录，或者在当前目录下对某个文件改名字&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h2 id=&#34;文件内容操作类&#34;&gt;文件内容操作类&lt;/h2&gt;
-
-&lt;h3 id=&#34;head&#34;&gt;head&lt;/h3&gt;
-
-&lt;p&gt;查看某个文件的头几行，可以用&lt;code&gt;head&lt;/code&gt;命令：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# head -n 5 /var/log/messages
-Oct  9 03:10:01 traffic-base1 rsyslogd: [origin software=&amp;#34;rsyslogd&amp;#34; swVersion=&amp;#34;7.4.7&amp;#34; x-pid=&amp;#34;697&amp;#34; x-info=&amp;#34;http://www.rsyslog.com&amp;#34;] rsyslogd was HUPed
-Oct  9 03:20:01 traffic-base1 systemd: Started Session 79213 of user root.
-Oct  9 03:20:01 traffic-base1 systemd: Starting Session 79213 of user root.
-Oct  9 03:28:26 traffic-base1 puppet-agent[14530]: Unable to fetch my node definition, but the agent run will continue:
-Oct  9 03:28:26 traffic-base1 puppet-agent[14530]: Connection refused - connect(2)
-# head -c 5 /var/log/messages
-Oct  &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;其中&lt;code&gt;-n&lt;/code&gt;参数表示显示多少行，不带此参数，默认显示10行。&lt;code&gt;-c&lt;/code&gt;表示显示多少个字符，这里显示了前面5个字符。&lt;/p&gt;
-
-&lt;h3 id=&#34;tail&#34;&gt;tail&lt;/h3&gt;
-
-&lt;p&gt;与&lt;code&gt;head&lt;/code&gt;相反，&lt;code&gt;tail&lt;/code&gt;用来显示文件最后几行。同样&lt;code&gt;-n&lt;/code&gt;可以用来限制多少行。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;tail&lt;/code&gt;有个非常重要的用处，&lt;strong&gt;&lt;em&gt;就是用来监听某个动态文件的内容，比如实时查看某个日志文件&lt;/em&gt;&lt;/strong&gt;：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# tail -n 5 -F /var/log/messages
-Oct  9 03:28:27 traffic-base1 puppet: from /usr/share/ruby/vendor_ruby/puppet/util/command_line.rb:146:in `run&amp;#39;
-Oct  9 03:28:27 traffic-base1 puppet: from /usr/share/ruby/vendor_ruby/puppet/util/command_line.rb:92:in `execute&amp;#39;
-Oct  9 03:28:27 traffic-base1 puppet: from /usr/bin/puppet:8:in `&amp;lt;main&amp;gt;&amp;#39;
-Oct  9 03:30:01 traffic-base1 systemd: Started Session 79218 of user root.
-Oct  9 03:30:01 traffic-base1 systemd: Starting Session 79218 of user root.
-Oct  9 03:40:01 traffic-base1 systemd: Started Session 79223 of user root.
-Oct  9 03:40:01 traffic-base1 systemd: Starting Session 79223 of user root.&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;它将不停的侦听文件的改变，并实时的将最后新写入的行打印出来。&lt;/p&gt;
-
-&lt;h3 id=&#34;cat-file1-file2-file3&#34;&gt;cat $file1 $file2 $file3 &amp;hellip;&lt;/h3&gt;
-
-&lt;p&gt;要显示文件的所有内容，可以用&lt;code&gt;cat&lt;/code&gt;命令。&lt;code&gt;cat&lt;/code&gt;也可以用来创建新文件：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# cat &amp;gt; test.txt
-Today is a good day!
-# cat test.txt
-Today is a good day!&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;这样就可以直接输入文件内容了，输入完成之后按Ctrl+d结束输入。当然，也可以定制结束符：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# cat &amp;gt; test.txt &amp;lt;&amp;lt;stop
-&amp;gt; It&amp;#39;s a good day!
-&amp;gt; stop
-# cat test.txt
-It&amp;#39;s a good day!&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;tac&#34;&gt;tac&lt;/h3&gt;
-
-&lt;p&gt;&lt;code&gt;tac&lt;/code&gt;名字其实就是&lt;code&gt;cat&lt;/code&gt;倒过来写，所以其作用也是一样，就是把文件以倒着的顺序显示出来。&lt;/p&gt;
-
-&lt;h3 id=&#34;more跟less&#34;&gt;more跟less&lt;/h3&gt;
-
-&lt;p&gt;&lt;code&gt;cat&lt;/code&gt;会直接把整个文件一次性的显示出来，当文件较大时，显示可能会刷屏，这样不利于查看。如果需要以翻页的形式显示文件的内容，可以采用&lt;code&gt;more&lt;/code&gt;或者&lt;code&gt;less&lt;/code&gt;命令，其查看方式跟&lt;code&gt;man&lt;/code&gt;命令的查看方式类似，可以参考前面的说明。&lt;/p&gt;
-
-&lt;h3 id=&#34;strings&#34;&gt;strings&lt;/h3&gt;
-
-&lt;p&gt;&lt;code&gt;strings&lt;/code&gt;命令会将文件中的可读字符显示出来，即便改文件是一个二进制文件。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# strings a.out | tail -n 5
-_edata
-_Znwm@@GLIBCXX_3.4
-_ZN3Out5InnerC1EPS_
-main
-_init&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;其中，&lt;code&gt;a.out&lt;/code&gt;是一个二进制文件。&lt;/p&gt;
 </description>
       
     </item>

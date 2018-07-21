@@ -21,6 +21,15 @@
     </item>
     
     <item>
+      <title>java反射获取方法以及调用方法&#34;</title>
+      <link>https://mazhidong.github.io/post/java/2018-07-20-java%E5%8F%8D%E5%B0%84%E8%8E%B7%E5%8F%96%E6%96%B9%E6%B3%95%E4%BB%A5%E5%8F%8A%E8%B0%83%E7%94%A8%E6%96%B9%E6%B3%95/</link>
+      <pubDate>Fri, 20 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/java/2018-07-20-java%E5%8F%8D%E5%B0%84%E8%8E%B7%E5%8F%96%E6%96%B9%E6%B3%95%E4%BB%A5%E5%8F%8A%E8%B0%83%E7%94%A8%E6%96%B9%E6%B3%95/</guid>
+      <description>Java反射获取方法以及调用方法 获取方法 先找到方法所在类的字节码 找到需要被获取的方法 Class类中获取方法： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 //</description>
+    </item>
+    
+    <item>
       <title>Java语言中几个常用的包&#34;</title>
       <link>https://mazhidong.github.io/post/java/2018-07-12-java%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8C%85/</link>
       <pubDate>Thu, 12 Jul 2018 00:00:00 +0000</pubDate>
@@ -180,15 +189,6 @@
       
       <guid>https://mazhidong.github.io/post/linux/2017-10-09-linux-study-command-line/</guid>
       <description>概述 随着Linux的发展，现在已经有了非常多的桌面版本，比如著名的Ubuntu。用这些桌面版本系统，可以满足基本的操作，然而对于一些高级点的</description>
-    </item>
-    
-    <item>
-      <title>Linux系统介绍（二）文件系统结构</title>
-      <link>https://mazhidong.github.io/post/linux/2017-10-09-linux-study-file-system-hierarchy/</link>
-      <pubDate>Mon, 09 Oct 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/linux/2017-10-09-linux-study-file-system-hierarchy/</guid>
-      <description>概述 多数Linux发行版本都是遵循文件系统结构标准（Filesystem Hierarchy Standard, 简称FHS），可以在这里找到该标准。本文对Linux的文件系统结</description>
     </item>
     
   </channel>

@@ -24,6 +24,468 @@
     </item>
     
     <item>
+      <title>Java：类与继承</title>
+      <link>https://mazhidong.github.io/post/java/2018-07-25-java%E7%B1%BB%E4%B8%8E%E7%BB%A7%E6%89%BF/</link>
+      <pubDate>Wed, 25 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/java/2018-07-25-java%E7%B1%BB%E4%B8%8E%E7%BB%A7%E6%89%BF/</guid>
+      
+        <description>
+
+&lt;h1 id=&#34;java-类与继承&#34;&gt;Java：类与继承&lt;/h1&gt;
+
+&lt;p&gt;　　对于面向对象的程序设计语言来说，类毫无疑问是其最重要的基础。抽象、封装、继承、多态这四大特性都离不开类，只有存在类，才能体现面向对象编程的特点，今天我们就来了解一些类与继承的相关知识。首先，我们讲述一下与类的初始化相关的东西，然后再从几个方面阐述继承这一大特性。以下是本文的目录大纲：&lt;/p&gt;
+
+&lt;p&gt;　　一.你了解类吗？&lt;/p&gt;
+
+&lt;p&gt;　　二.你了解继承吗？&lt;/p&gt;
+
+&lt;p&gt;　　三.常见的面试笔试题&lt;/p&gt;
+
+&lt;p&gt;　　若有不正之处，请多多谅解并欢迎批评指正。&lt;/p&gt;
+
+&lt;p&gt;　　请尊重作者劳动成果，转载请标明原文链接：&lt;/p&gt;
+
+&lt;p&gt;　　&lt;a href=&#34;http://www.cnblogs.com/dolphin0520/p/3803432.html&#34;&gt;http://www.cnblogs.com/dolphin0520/p/3803432.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;一-你了解类吗&#34;&gt;一.你了解类吗？&lt;/h2&gt;
+
+&lt;p&gt;　　在Java中，类文件是以.java为后缀的代码文件，在每个类文件中最多只允许出现一个public类，当有public类的时候，类文件的名称必须和public类的名称相同，若不存在public，则类文件的名称可以为任意的名称（当然以数字开头的名称是不允许的）。&lt;/p&gt;
+
+&lt;p&gt;　　在类内部，对于成员变量，如果在定义的时候没有进行显示的赋值初始化，则Java会保证类的每个成员变量都得到恰当的初始化：&lt;/p&gt;
+
+&lt;p&gt;　　1）对于  char、short、byte、int、long、float、double等基本数据类型的变量来说会默认初始化为0（boolean变量默认会被初始化为false）；&lt;/p&gt;
+
+&lt;p&gt;　　2）对于引用类型的变量，会默认初始化为null。&lt;/p&gt;
+
+&lt;p&gt;　　如果没有显示地定义构造器，则编译器会自动创建一个无参构造器，但是要记住一点，如果显示地定义了构造器，编译器就不会自动添加构造器。注意，所有的构造器默认为static的。&lt;/p&gt;
+
+&lt;p&gt;　　下面我们着重讲解一下 初始化 顺序：&lt;/p&gt;
+
+&lt;p&gt;　　当程序执行时，需要生成某个类的对象，Java执行引擎会先检查是否加载了这个类，如果没有加载，则先执行类的加载再生成对象，如果已经加载，则直接生成对象。&lt;/p&gt;
+
+&lt;p&gt;　　在类的加载过程中，类的static成员变量会被初始化，另外，如果类中有static语句块，则会执行static语句块。static成员变量和static语句块的执行顺序同代码中的顺序一致。记住，在Java中，类是按需加载，只有当需要用到这个类的时候，才会加载这个类，并且只会加载一次。&lt;/p&gt;
+
+&lt;h2 id=&#34;看下面这个例子就明白了&#34;&gt;看下面这个例子就明白了：&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;public class Test {
+    public static void main(String[] args) throws ClassNotFoundException {
+         
+        Bread bread1 = new Bread();
+        Bread bread2 = new Bread();
+    }
+}
+ 
+ 
+class Bread {
+    static{
+        System.out.println(&amp;#34;Bread is loaded&amp;#34;);
+    }
+    public Bread() {
+        System.out.println(&amp;#34;bread&amp;#34;);
+    }
+}&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;运行这段代码就会发现-bread-is-loaded-只会被打印一次&#34;&gt;运行这段代码就会发现&amp;rdquo;Bread is loaded&amp;rdquo;只会被打印一次。&lt;/h3&gt;
+
+&lt;p&gt;　　在生成对象的过程中，会先初始化对象的成员变量，然后再执行构造器。也就是说类中的变量会在任何方法（包括构造器）调用之前得到初始化，即使变量散步于方法定义之间。
+　　&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;public class Test {
+    public static void main(String[] args)  {
+        new Meal();
+    }
+}
+
+class Meal {
+    public Meal() {
+        System.out.println(&amp;#34;meal&amp;#34;);
+    }
+     
+    Bread bread = new Bread();
+} 
+
+class Bread {
+    public Bread() {
+        System.out.println(&amp;#34;bread&amp;#34;);
+    }
+}&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;输出结果为&#34;&gt;输出结果为：&lt;/h3&gt;
+
+&lt;p&gt;bread
+meal&lt;/p&gt;
+
+&lt;h2 id=&#34;二-你了解继承吗&#34;&gt;二.你了解继承吗？&lt;/h2&gt;
+
+&lt;p&gt;　　继承是所有OOP语言不可缺少的部分，在java中使用extends关键字来表示继承关系。当创建一个类时，总是在继承，如果没有明确指出要继承的类，就总是隐式地从根类Object进行继承。比如下面这段代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;class Person {
+    public Person() {
+         
+    }
+}
+ 
+class Man extends Person {
+    public Man() {
+         
+    }
+}&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;　　类Man继承于Person类，这样一来的话，Person类称为父类（基类），Man类称为子类（导出类）。如果两个类存在继承关系，则子类会自动继承父类的方法和变量，在子类中可以调用父类的方法和变量。在java中，只允许单继承，也就是说 一个类最多只能显示地继承于一个父类。但是一个类却可以被多个类继承，也就是说一个类可以拥有多个子类。
+　　
+1. 子类继承父类的成员变量&lt;/p&gt;
+
+&lt;p&gt;　　当子类继承了某个类之后，便可以使用父类中的成员变量，但是并不是完全继承父类的所有成员变量。具体的原则如下：&lt;/p&gt;
+
+&lt;p&gt;　　1）能够继承父类的public和protected成员变量；不能够继承父类的private成员变量；&lt;/p&gt;
+
+&lt;p&gt;　　2）对于父类的包访问权限成员变量，如果子类和父类在同一个包下，则子类能够继承；否则，子类不能够继承；&lt;/p&gt;
+
+&lt;p&gt;　　3）对于子类可以继承的父类成员变量，如果在子类中出现了同名称的成员变量，则会发生隐藏现象，即子类的成员变量会屏蔽掉父类的同名成员变量。如果要在子类中访问父类中同名成员变量，需要使用super关键字来进行引用。&lt;/p&gt;
+
+&lt;p&gt;　2. 子类继承父类的方法&lt;/p&gt;
+
+&lt;p&gt;　　同样地，子类也并不是完全继承父类的所有方法。&lt;/p&gt;
+
+&lt;p&gt;　　1）能够继承父类的public和protected成员方法；不能够继承父类的private成员方法；&lt;/p&gt;
+
+&lt;p&gt;　　2）对于父类的包访问权限成员方法，如果子类和父类在同一个包下，则子类能够继承；否则，子类不能够继承；&lt;/p&gt;
+
+&lt;p&gt;　　3）对于子类可以继承的父类成员方法，如果在子类中出现了同名称的成员方法，则称为覆盖，即子类的成员方法会覆盖掉父类的同名成员方法。如果要在子类中访问父类中同名成员方法，需要使用super关键字来进行引用。&lt;/p&gt;
+
+&lt;p&gt;　　注意：隐藏和覆盖是不同的。隐藏是针对成员变量和静态方法的，而覆盖是针对普通方法的。（后面会讲到）&lt;/p&gt;
+
+&lt;p&gt;　3. 构造器&lt;/p&gt;
+
+&lt;p&gt;　　子类是不能够继承父类的构造器，但是要注意的是，如果父类的构造器都是带有参数的，则必须在子类的构造器中显示地通过super关键字调用父类的构造器并配以适当的参数列表。如果父类有无参构造器，则在子类的构造器中用super关键字调用父类构造器不是必须的，如果没有使用super关键字，系统会自动调用父类的无参构造器。看下面这个例子就清楚了：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;class Shape {
+     
+    protected String name;
+     
+    public Shape(){
+        name = &amp;#34;shape&amp;#34;;
+    }
+     
+    public Shape(String name) {
+        this.name = name;
+    }
+}
+ 
+class Circle extends Shape {
+     
+    private double radius;
+     
+    public Circle() {
+        radius = 0;
+    }
+     
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+     
+    public Circle(double radius,String name) {
+        this.radius = radius;
+        this.name = name;
+    }
+}&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;　　这样的代码是没有问题的，如果把父类的无参构造器去掉，则下面的代码必然会出错：&lt;/p&gt;
+
+&lt;p&gt;　　改成下面这样就行了：&lt;/p&gt;
+
+&lt;p&gt;　　4. super&lt;/p&gt;
+
+&lt;p&gt;　　super主要有两种用法：&lt;/p&gt;
+
+&lt;p&gt;　　1）super.成员变量/super.成员方法;&lt;/p&gt;
+
+&lt;p&gt;　　2）super(parameter1,parameter2&amp;hellip;.)&lt;/p&gt;
+
+&lt;p&gt;　　第一种用法主要用来在子类中调用父类的同名成员变量或者方法；第二种主要用在子类的构造器中显示地调用父类的构造器，要注意的是，如果是用在子类构造器中，则必须是子类构造器的第一个语句。&lt;/p&gt;
+
+&lt;h2 id=&#34;三-常见的面试笔试题&#34;&gt;三.常见的面试笔试题&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;下面这段代码的输出结果是什么？&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;public class Test {
+    public static void main(String[] args)  {
+        new Circle();
+    }
+}
+
+class Draw {
+     
+    public Draw(String type) {
+        System.out.println(type+&amp;#34; draw constructor&amp;#34;);
+    }
+}
+
+class Shape {
+    private Draw draw = new Draw(&amp;#34;shape&amp;#34;);
+     
+    public Shape(){
+        System.out.println(&amp;#34;shape constructor&amp;#34;);
+    }
+}
+
+class Circle extends Shape {
+    private Draw draw = new Draw(&amp;#34;circle&amp;#34;);
+    public Circle() {
+        System.out.println(&amp;#34;circle constructor&amp;#34;);
+    }
+}&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;shape draw constructor
+shape constructor
+circle draw constructor
+circle constructor&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;　　这道题目主要考察的是类继承时构造器的调用顺序和初始化顺序。要记住一点：父类的构造器调用以及初始化过程一定在子类的前面。由于Circle类的父类是Shape类，所以Shape类先进行初始化，然后再执行Shape类的构造器。接着才是对子类Circle进行初始化，最后执行Circle的构造器。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;下面这段代码的输出结果是什么？&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;39
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;40
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;public class Test {
+    public static void main(String[] args)  {
+        Shape shape = new Circle();
+        System.out.println(shape.name);
+        shape.printType();
+        shape.printName();
+    }
+}
+
+class Shape {
+    public String name = &amp;#34;shape&amp;#34;;
+    
+    public Shape(){
+        System.out.println(&amp;#34;shape constructor&amp;#34;);
+    }
+     
+    public void printType() {
+        System.out.println(&amp;#34;this is shape&amp;#34;);
+    }
+     
+    public static void printName() {
+        System.out.println(&amp;#34;shape&amp;#34;);
+    }
+}
+
+class Circle extends Shape {
+    public String name = &amp;#34;circle&amp;#34;;
+     
+    public Circle() {
+        System.out.println(&amp;#34;circle constructor&amp;#34;);
+    }
+     
+    public void printType() {
+        System.out.println(&amp;#34;this is circle&amp;#34;);
+    }
+     
+    public static void printName() {
+        System.out.println(&amp;#34;circle&amp;#34;);
+    }
+}&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;shape constructor
+circle constructor
+shape
+this is circle
+shape&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description>
+      
+    </item>
+    
+    <item>
       <title>Java8中Map的遍历方式总结&#34;</title>
       <link>https://mazhidong.github.io/post/java/2018-07-20-java8%E4%B8%ADmap%E7%9A%84%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/</link>
       <pubDate>Fri, 20 Jul 2018 00:00:00 +0000</pubDate>
@@ -7768,1307 +8230,6 @@ ls: cannot access tttt*: No such file or directory
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;p&gt;如果你的Linux发行版本对grep输出的颜色设置正确，会发现只有第一行是grep出来的，由此可见&lt;code&gt;3&amp;gt;&amp;amp;1 1&amp;gt;&amp;amp;2 2&amp;gt;&amp;amp;3&lt;/code&gt;居然将stdout跟stderr互换了一下，至于怎么解释，可以参照前面的赋值方式自行拆解一下。&lt;/p&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title>Linux系统介绍（三）shell基础</title>
-      <link>https://mazhidong.github.io/post/linux/2017-10-10-linux-study-shell-basic/</link>
-      <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/linux/2017-10-10-linux-study-shell-basic/</guid>
-      
-        <description>
-
-&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;
-
-&lt;p&gt;首先，咱们来了解一下，什么是&lt;code&gt;Shell&lt;/code&gt;。操作系统内核给我们提供了各种接口，同时也提供了各种用户层的库，理论上我们基于这些可以编写程序实现各种我们想要的功能，不过问题是，咱们不可能做什么事情都要重新编写程序，这样使用起来也太困难了。因此，操作系统（包括Linux）通常都会引入一个&lt;code&gt;Shell&lt;/code&gt;这样的特殊程序，这个程序会接受输入的命令然后执行，并可能将执行结果呈现出来。总结来说，&lt;code&gt;Shell&lt;/code&gt;是一个从输入设备或者文件读取命令，并且解释、执行的用户态程序。&lt;/p&gt;
-
-&lt;p&gt;在Linux系统中，通常使用的&lt;code&gt;Shell&lt;/code&gt;程序包括有：
-* Sh (Bourne Shell)
-* Bash (Bourne Again Shell)
-* Csh (C Shell)
-* Ksh (Korn Shell)&lt;/p&gt;
-
-&lt;p&gt;一般来说，&lt;code&gt;Bash&lt;/code&gt;应该是使用最多的&lt;code&gt;Shell&lt;/code&gt;程序了，本文也主要基于&lt;code&gt;Bash&lt;/code&gt;来展开。&lt;/p&gt;
-
-&lt;h1 id=&#34;shell展开-shell-expansion&#34;&gt;Shell展开（Shell Expansion）&lt;/h1&gt;
-
-&lt;p&gt;&lt;code&gt;Shell&lt;/code&gt;程序是一个命令解释器，因此在终端输入命令之后，&lt;code&gt;Shell&lt;/code&gt;将扫描命令并做适当的修改，这个过程称为Shell展开。Shell展开是Shell解释执行之前极为重要的一步，了解它将有利于你对Shell命令或者脚本的理解，本章节将逐步带大家来了解这个过程。&lt;/p&gt;
-
-&lt;h2 id=&#34;命令参数解析&#34;&gt;命令参数解析&lt;/h2&gt;
-
-&lt;p&gt;这里的空格包括了制表符（Tab）。当Shell程序扫描输入的命令时，会以*连续*的空格为界，将命令切分成一组参数，因此你输入多个空格为界跟输入一个空格的效果是一样的。通常来讲，第一个参数就是要执行的命令，而后面的参数则是改命令的参数。一下几个命令其实是等效的：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# echo Hello World
-Hello World
-# echo   Hello World
-Hello World
-#    echo Hello World
-Hello World&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h2 id=&#34;引号&#34;&gt;引号&lt;/h2&gt;
-
-&lt;p&gt;当然，有时候你需要在一个参数中包括空格，这样的话你就需要将这个参数以引号引起来，引号包括了单引号&lt;code&gt;&#39;&lt;/code&gt;跟双引号&lt;code&gt;&amp;quot;&lt;/code&gt;，两者都可以。&lt;code&gt;shell&lt;/code&gt;会将引号中的字符串视为一个参数，不论里面有没有空格。当然，特别指出的是，不要用反引号&lt;code&gt;`&lt;/code&gt;，反引号将在后面详细讲述。&lt;/p&gt;
-
-&lt;p&gt;如命令&lt;code&gt;echo &#39;Hello World!&#39;&lt;/code&gt;在&lt;code&gt;shell&lt;/code&gt;解析之后会有两个参数，分别为&lt;code&gt;echo&lt;/code&gt;跟&lt;code&gt;Hello World!&lt;/code&gt;。而如果不用引号&lt;code&gt;echo Hello World!&lt;/code&gt;，则将解析为三个参数。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;特别提一下，对于&lt;code&gt;echo&lt;/code&gt;命令，如果需要输出需要转义的字符，如回车等，则需要执行&lt;code&gt;echo -e &amp;quot;Hello World!\n&amp;quot;&lt;/code&gt;，如果不加&lt;code&gt;-e&lt;/code&gt;，则&lt;code&gt;\n&lt;/code&gt;会被直接显示出来。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&amp;gt;    # echo &amp;#34;hello\n&amp;#34;
-&amp;gt;    hello\n
-&amp;gt;    # echo -e &amp;#34;hello\n&amp;#34;
-&amp;gt;    hello
-&amp;gt;
-&amp;gt;    ```
-
-## 命令
-
-对于`shell`来说，命令有内部命令（Builtin Commands）跟外部命令（External Commands）之分，所谓内部命令指的是包含在`shell`解析器中的命令。内部命令一般有[4种类型](http://www.gnu.org/software/bash/manual/bashref.html#Shell-Builtin-Commands)：
-
-* `sh`内部命令
-
-    这些内部命令来源于`Bourne Shell`，通常包括了以下命令：
-    `: . break cd continue eval exec exit export getopts hash pwd readonly return shift test/[ times trap umask unset`。
-
-* `bash`内部命令
-
-    这些内部命令来源于`Bourne Again Shell`，通常包括了以下命令：
-    `alias bind builtin caller command declare echo enable help let local logout mapfile printf read readarray source type typeset ulimit unalias`。
-
-* 修改`shell`行为的内部命令
-
-    这些内部命令用来修改`shell`的默认行为。包括了`set shopt`命令。
-
-* 特殊内部命令
-
-    由于历史原因，POSIX标准将一些内部命令划分为特殊内部命令，特殊的之处在于这些命令的查找时间以及命令运行后的状态等方面，只有当Bash以[POSIX模式](http://www.gnu.org/software/bash/manual/bashref.html#Bash-POSIX-Mode)运行时，这些命令才是特殊命令，否则它们跟其它内部命令没啥区别。特殊内部命令包括了`break : . continue eval exec exit export readonly return set shift trap unset`。
-
-**内部命令可能会被提前至于内存中，因此运行起来会比外部命令要快。**对于外部命令，可以认为除了内部命令之后就可以认为是外部命令了，通常来讲，`/bin`跟`/sbin`下的都是外部命令，当然，应用有关的通常也是外部命令。
-
-我们可以通过`type`命令来查看一个命令是否是内部命令：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;type-cd&#34;&gt;type cd&lt;/h1&gt;
-
-&lt;p&gt;cd is a shell builtin&lt;/p&gt;
-
-&lt;h1 id=&#34;type-awk&#34;&gt;type awk&lt;/h1&gt;
-
-&lt;p&gt;awk is /usr/bin/awk&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;另外，对于很多内部命令，它们可能对应的会有外部命令版本，可以通过`type`命令来查看：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;type-a-echo&#34;&gt;type -a echo&lt;/h1&gt;
-
-&lt;p&gt;echo is a shell builtin
-echo is /usr/bin/echo&lt;/p&gt;
-
-&lt;h1 id=&#34;type-a-cd&#34;&gt;type -a cd&lt;/h1&gt;
-
-&lt;p&gt;cd is a shell builtin
-cd is /usr/bin/cd&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;反过来，我们一般可以通过命令`which`来查询一个命令是否是外部命令：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;which-awk&#34;&gt;which awk&lt;/h1&gt;
-
-&lt;p&gt;/usr/bin/awk&lt;/p&gt;
-
-&lt;h1 id=&#34;which&#34;&gt;which .&lt;/h1&gt;
-
-&lt;p&gt;/usr/bin/which: no . in (/opt/rh/rh-python34/root/usr/bin:/usr/java/default/bin/:/usr/local/git/bin:/opt/ActiveTcl-8.5/bin:/root/perl5/bin:/root/env/maven/apache-maven-3.3.3/bin:/root/soft/wrk/wrk-4.0.1:/root/usr/go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin)&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;总结一下，通过`which`查询出来的是其外部命令版本，通过`type`默认查询出来的是内部命令：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;which-echo&#34;&gt;which echo&lt;/h1&gt;
-
-&lt;p&gt;/usr/bin/echo&lt;/p&gt;
-
-&lt;h1 id=&#34;type-echo&#34;&gt;type echo&lt;/h1&gt;
-
-&lt;p&gt;echo is a shell builtin&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;对于内部命令的详细说明，可以查看[GNU的文档](http://www.gnu.org/software/bash/manual/bashref.html#Shell-Builtin-Commands)。
-
-## 别名
-
-可以用`alias`命令给一个命令取一个别名：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;alias-print-echo&#34;&gt;alias print=echo&lt;/h1&gt;
-
-&lt;h1 id=&#34;print-hello&#34;&gt;print &amp;ldquo;hello&amp;rdquo;&lt;/h1&gt;
-
-&lt;p&gt;hello&lt;/p&gt;
-
-&lt;h1 id=&#34;type-print&#34;&gt;type print&lt;/h1&gt;
-
-&lt;p&gt;print is aliased to `echo&amp;rsquo;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;别名一个常用的用法是用来缩写已知的命令：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;type-ls&#34;&gt;type ls&lt;/h1&gt;
-
-&lt;p&gt;ls is aliased to `ls &amp;ndash;color=auto&amp;rsquo;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;可见`ls`命令实际上是命令`ls --color=auto`的别名，这样就相当于改变了`ls`命令的默认行为了。在这种情况下，如果仍然想用原先的命令，可以在别名前加反斜杠`` \ ``：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;type-ls-1&#34;&gt;type ls&lt;/h1&gt;
-
-&lt;p&gt;ls is aliased to `ls &amp;ndash;color=auto&amp;rsquo;&lt;/p&gt;
-
-&lt;h1 id=&#34;ls&#34;&gt;\ls&lt;/h1&gt;
-
-&lt;p&gt;Test1  test2  test.cpp  test.log  time.log&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;前面咱们通过`type`命令来查看命令的别名，实际上更加推荐采用`alias`或者`which`来查看：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;alias-ls&#34;&gt;alias ls&lt;/h1&gt;
-
-&lt;p&gt;alias ls=&amp;lsquo;ls &amp;ndash;color=auto&amp;rsquo;&lt;/p&gt;
-
-&lt;h1 id=&#34;which-ls&#34;&gt;which ls&lt;/h1&gt;
-
-&lt;p&gt;alias ls=&amp;lsquo;ls &amp;ndash;color=auto&amp;rsquo;
-    /usr/bin/ls&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;如果要取消别名，则可以采用`unalias`命令:&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;which-ls-1&#34;&gt;which ls&lt;/h1&gt;
-
-&lt;p&gt;alias ls=&amp;lsquo;ls &amp;ndash;color=auto&amp;rsquo;
-    /usr/bin/ls&lt;/p&gt;
-
-&lt;h1 id=&#34;unalias-ls&#34;&gt;unalias ls&lt;/h1&gt;
-
-&lt;h1 id=&#34;which-ls-2&#34;&gt;which ls&lt;/h1&gt;
-
-&lt;p&gt;/usr/bin/ls&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;## 显示shell展开的结果
-
-由于`shell`展开的存在，你输入的命令被展开之后可能会发生变化，如果需要知道`shell`展开之后的命令，可以使用内部命令`set`来修改`shell`的默认参数来显示：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;set-x&#34;&gt;set -x&lt;/h1&gt;
-
-&lt;p&gt;++ printf &amp;lsquo;\033]0;%s@%s:%s\007&amp;rsquo; root traffic-base1 &amp;lsquo;~&amp;rsquo;&lt;/p&gt;
-
-&lt;h1 id=&#34;echo-hello-world&#34;&gt;echo hello         world&lt;/h1&gt;
-
-&lt;ul&gt;
-&lt;li&gt;echo hello world
-hello world
-++ printf &amp;lsquo;\033]0;%s@%s:%s\007&amp;rsquo; root traffic-base1 &amp;lsquo;~&amp;rsquo;
-```&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;其中，以&lt;code&gt;+&lt;/code&gt;开头的就是展开之后的命令，可见展开之后，&lt;code&gt;shell&lt;/code&gt;将多余的空格去掉了。如果不要再显示了，可以输入命令&lt;code&gt;set +x&lt;/code&gt;。&lt;/p&gt;
-
-&lt;h1 id=&#34;shell控制操作符-control-operators&#34;&gt;shell控制操作符 (Control Operators）&lt;/h1&gt;
-
-&lt;h2 id=&#34;操作符&#34;&gt;&lt;code&gt;$?&lt;/code&gt;操作符&lt;/h2&gt;
-
-&lt;p&gt;每个命令执行完后都会有个退出码（Exit Code），其值为0时表示命令成功，否则命令失败。这个退出码可以通过&lt;code&gt;$?&lt;/code&gt;来访问，执行完命令后立马访问&lt;code&gt;$?&lt;/code&gt;可以获取该命令的退出码，并以此来判断命令是否成功。每个命令的执行都会产生新的退出码，所以请务必在命令执行完，立刻访问&lt;code&gt;$?&lt;/code&gt;来获取退出码。&lt;/p&gt;
-
-&lt;p&gt;初看起来，&lt;code&gt;$?&lt;/code&gt;似乎是一个&lt;code&gt;shell&lt;/code&gt;变量，但实际上并非如此，因为你无法对&lt;code&gt;$?&lt;/code&gt;赋值。&lt;code&gt;$?&lt;/code&gt;准确来说是&lt;code&gt;shell&lt;/code&gt;的一个内部参数。&lt;/p&gt;
-
-&lt;h2 id=&#34;分号&#34;&gt;分号&lt;code&gt;;&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;shell&lt;/code&gt;命令输入时，你可以将多个命令输入在一行，只要在不同命令之间以分号&lt;code&gt;;&lt;/code&gt;隔开，当然分号不能是在引号中。
-&amp;gt; 必须注意的是，如果将多个命令以&lt;code&gt;;&lt;/code&gt;连接在一起，执行的结果通过&lt;code&gt;$?&lt;/code&gt;查询出来将只是最后一个命令的结果&lt;/p&gt;
-
-&lt;h2 id=&#34;符号&#34;&gt;&lt;code&gt;&amp;amp;&lt;/code&gt;符号&lt;/h2&gt;
-
-&lt;p&gt;通常情况下，&lt;code&gt;shell&lt;/code&gt;会在前台执行命令，并等待命令结束才返回。如果需要将命令放到后台去执行，可以使用&lt;code&gt;&amp;amp;&lt;/code&gt;符号放在命令最后面，这样的话命令会被放在后台执行，&lt;code&gt;shell&lt;/code&gt;会立刻返回而不用等待命令结束。
-&amp;gt; 注意的是，即便放在后台执行，但是如果不处理好命令的输入，则命令的输出可能会继续在当前的终端输出，后面会讲述如何处理命令的输出。&lt;/p&gt;
-
-&lt;h2 id=&#34;操作符-1&#34;&gt;&lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;操作符&lt;/h2&gt;
-
-&lt;p&gt;此操作符表示逻辑与，你可以将两个命令用此操作符连接起来，如&lt;code&gt;cmd1 &amp;amp;&amp;amp; cmd2&lt;/code&gt;，只有当&lt;code&gt;cmd1&lt;/code&gt;执行成功之后，&lt;code&gt;cmd2&lt;/code&gt;才会被执行。这里的成功指的是&lt;code&gt;cmd1&lt;/code&gt;的退出码是0。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# hello &amp;amp;&amp;amp; echo world
--bash: hello: command not found
-# echo hello &amp;amp;&amp;amp; echo world
-hello
-world&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;当然，&lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;也可以将多个命令连接起来，其执行类似，只有当前面的命令成功，后面的才会执行。因此，将多个命令写在一行用&lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;可以实现，只不过&lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;必须按照逻辑与的关系执行，而&lt;code&gt;;&lt;/code&gt;号的话会执行所有的命令。&lt;/p&gt;
-
-&lt;h2 id=&#34;操作符-2&#34;&gt;&lt;code&gt;||&lt;/code&gt;操作符&lt;/h2&gt;
-
-&lt;p&gt;很显然，与&lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;相对，&lt;code&gt;||&lt;/code&gt;操作符表示逻辑或的关系，同样可以连接两个命令，如&lt;code&gt;cmd1 || cmd2&lt;/code&gt;，只有当&lt;code&gt;cmd1&lt;/code&gt;失败了，才会执行&lt;code&gt;cmd2&lt;/code&gt;，这里的失败指的是&lt;code&gt;cmd1&lt;/code&gt;的退出码非0。&lt;/p&gt;
-
-&lt;h2 id=&#34;与-混合&#34;&gt;&lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;与&lt;code&gt;||&lt;/code&gt;混合&lt;/h2&gt;
-
-&lt;p&gt;这两个操作符是可以混合使用的，其遵循的原则保持一致，且是从左向右依次判断，结合这两种操作符，可以实现类似于&lt;code&gt;if then else&lt;/code&gt;的逻辑结构。如&lt;code&gt;cmd1 &amp;amp;&amp;amp; cmd2 || cmd3&lt;/code&gt;意思就是如果&lt;code&gt;cmd1&lt;/code&gt;成功，则执行&lt;code&gt;cmd2&lt;/code&gt;，否则执行&lt;code&gt;cmd3&lt;/code&gt;。但务必注意的是，此处并非真正意思上的&lt;code&gt;if then else&lt;/code&gt;逻辑，因为如果&lt;code&gt;cmd2&lt;/code&gt;也执行失败，&lt;code&gt;cmd3&lt;/code&gt;其实也会被执行。如下例：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# echo hello &amp;amp;&amp;amp; echo ok || echo world
-hello
-ok
-# echo hello &amp;amp;&amp;amp; rm dfsdf || echo world
-hello
-rm: cannot remove ‘dfsdf’: No such file or directory
-world&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;&lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;相当于将两条命令逻辑上连成了一条命令，这样就变成了&lt;code&gt;cmd1-2 || cmd3&lt;/code&gt;，其中&lt;code&gt;cmd1-2&lt;/code&gt;就是&lt;code&gt;cmd1 &amp;amp;&amp;amp; cmd2&lt;/code&gt;，因此，&lt;code&gt;cmd3&lt;/code&gt;只要在&lt;code&gt;cmd1-2&lt;/code&gt;失败的情况下都会被执行，而&lt;code&gt;cmd1-2&lt;/code&gt;失败的情况有两种，一种是&lt;code&gt;cmd1&lt;/code&gt;失败，一种是&lt;code&gt;cmd1&lt;/code&gt;成功但是&lt;code&gt;cmd2&lt;/code&gt;失败。同样的，&lt;code&gt;||&lt;/code&gt;也会将两条命令连成一条命令，如&lt;code&gt;cmd1-2 || cmd3 &amp;amp;&amp;amp; cmd4&lt;/code&gt;就相当于&lt;code&gt;cmd1-2_3 &amp;amp;&amp;amp; cmd4&lt;/code&gt;，&lt;code&gt;cmd4&lt;/code&gt;是否会执行，决定于&lt;code&gt;cmd1-2_3&lt;/code&gt;是否失败，以具体例子说明：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# echo hello &amp;amp;&amp;amp; echo ok || echo world &amp;amp;&amp;amp; rm dsdfsf || echo end
-hello
-ok
-rm: cannot remove ‘dsdfsf’: No such file or directory
-end&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;这行命令相当于&lt;code&gt;cmd1 &amp;amp;&amp;amp; cmd2 || cmd3 &amp;amp;&amp;amp; cmd4 || cmd5&lt;/code&gt;，可以看出&lt;code&gt;cmd1&lt;/code&gt;，&lt;code&gt;cmd2&lt;/code&gt;，&lt;code&gt;cmd4&lt;/code&gt;还是有&lt;code&gt;cmd5&lt;/code&gt;被执行了，而&lt;code&gt;cmd3&lt;/code&gt;没有执行。咱们来解析一下，为何是如此的执行结果。首先，&lt;code&gt;shell&lt;/code&gt;从左往右扫描执行：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;发现&lt;code&gt;cmd1 &amp;amp;&amp;amp; cmd2&lt;/code&gt;，由&lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;连成一个命令&lt;code&gt;cmd1-2&lt;/code&gt;，因为两个命令都是成功的，所以都被执行了，这样可以认为&lt;code&gt;cmd1-2&lt;/code&gt;成功&lt;/li&gt;
-&lt;li&gt;执行成功之后，接下来是&lt;code&gt;||&lt;/code&gt;操作符，这里并不会因为前面的命令是成功的，而不再执行后面所有的命令，而是&lt;code&gt;||&lt;/code&gt;操作符相当于将&lt;code&gt;cmd1-2&lt;/code&gt;与&lt;code&gt;cmd3&lt;/code&gt;连接成了&lt;code&gt;cmd1-2_3&lt;/code&gt;，因为&lt;code&gt;cmd1-2&lt;/code&gt;成功了，所以&lt;code&gt;cmd3&lt;/code&gt;不再执行，但是&lt;code&gt;cmd1-2_3&lt;/code&gt;相当于执行成功了&lt;/li&gt;
-&lt;li&gt;继续执行，发现是&lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;操作符，同样将&lt;code&gt;cmd1-2_3&lt;/code&gt;与&lt;code&gt;cmd4&lt;/code&gt;连接起来，记为&lt;code&gt;cmd1-2_3-4&lt;/code&gt;，因为&lt;code&gt;cmd1-2_3&lt;/code&gt;执行成功了，所以&lt;code&gt;cmd4&lt;/code&gt;也被执行，但是&lt;code&gt;cmd4&lt;/code&gt;执行失败了，所以&lt;code&gt;cmd1-2_3-4&lt;/code&gt;相当于执行失败&lt;/li&gt;
-&lt;li&gt;继续执行，发现是&lt;code&gt;||&lt;/code&gt;操作符，同样将&lt;code&gt;cmd1-2_3-4&lt;/code&gt;与&lt;code&gt;cmd5&lt;/code&gt;连成&lt;code&gt;cmd1-2_3-4_5&lt;/code&gt;，因为&lt;code&gt;cmd1-2_3-4&lt;/code&gt;执行失败，所以&lt;code&gt;cmd5&lt;/code&gt;被执行&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;可见，&lt;code&gt;shell&lt;/code&gt;永远都是从左往右扫描执行，&lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt;跟&lt;code&gt;||&lt;/code&gt;会将前后两个命令连接起来，根据两种操作符的规则就可以知道多个连起来的命令是如何执行的了。&lt;/p&gt;
-
-&lt;h2 id=&#34;符号-1&#34;&gt;&lt;code&gt;#&lt;/code&gt;符号&lt;/h2&gt;
-
-&lt;p&gt;跟其它很多语言一样，&lt;code&gt;#&lt;/code&gt;在&lt;code&gt;shell&lt;/code&gt;里面用来注释。&lt;/p&gt;
-
-&lt;h2 id=&#34;转义符号&#34;&gt;&lt;code&gt;\&lt;/code&gt;转义符号&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;\&lt;/code&gt;符号可以用来转义一些特殊符号，如&lt;code&gt;$&lt;/code&gt;，&lt;code&gt;#&lt;/code&gt;等。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;特别指出的是，如果转义符号放在行末单独使用，则用来连接下一行。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h1 id=&#34;shell变量&#34;&gt;shell变量&lt;/h1&gt;
-
-&lt;h2 id=&#34;基本概念&#34;&gt;基本概念&lt;/h2&gt;
-
-&lt;h3 id=&#34;定义跟引用&#34;&gt;定义跟引用&lt;/h3&gt;
-
-&lt;p&gt;&lt;code&gt;shell&lt;/code&gt;中也可以使用变量，变量不需要像其它语言一样需要预先申明。&lt;code&gt;shell&lt;/code&gt;中赋值给一个不存在的变量就相当于定义了变量，如&lt;code&gt;name=&amp;quot;Mr. Hao&amp;quot;&lt;/code&gt;，就定义了&lt;code&gt;name&lt;/code&gt;变量，后续如果再对&lt;code&gt;name&lt;/code&gt;赋值，就相当于改变改变量的值。与很多语言不同的是，&lt;code&gt;shell&lt;/code&gt;中变量引用以&lt;code&gt;$&lt;/code&gt;符号开头，后面跟变量的名字。如前面的变量，引用如下&lt;code&gt;echo &amp;quot;$name&amp;quot;&lt;/code&gt;。&lt;strong&gt;需要注意的是，在&lt;code&gt;shell&lt;/code&gt;中，变量名是大小写敏感的。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;在&lt;code&gt;shell&lt;/code&gt;展开中会自动展开变量的引用，即便该变量处在双引号中。但是，如果变量引用在单引号中，&lt;code&gt;shell&lt;/code&gt;不会对其进行解析。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# name=&amp;#34;Mr. Hao&amp;#34;
-# echo &amp;#34;$name&amp;#34;
-Mr. Hao
-# set -x
-# echo &amp;#39;$name&amp;#39;
-+ echo &amp;#39;Mr. Hao&amp;#39;
-$name&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;查找变量&#34;&gt;查找变量&lt;/h3&gt;
-
-&lt;p&gt;可以使用&lt;code&gt;set&lt;/code&gt;命令来查找所定义的变量：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# set | grep -E &amp;#39;^name=&amp;#39;
-name=&amp;#39;Mr. Hao&amp;#39;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;删除变量&#34;&gt;删除变量&lt;/h3&gt;
-
-&lt;p&gt;与很多语言不同的是，在&lt;code&gt;shell&lt;/code&gt;中定义的变量是可以删除的，使用&lt;code&gt;unset&lt;/code&gt;命令删除定义的变量。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# set | grep -E &amp;#39;^name=&amp;#39;
-name=&amp;#39;Mr. Hao&amp;#39;
-# unset name
-# set | grep -E &amp;#39;^name=&amp;#39;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;export-声明&#34;&gt;&lt;code&gt;export&lt;/code&gt;声明&lt;/h3&gt;
-
-&lt;p&gt;通常情况下，&lt;code&gt;shell&lt;/code&gt;在执行命令的时候会为该命令创建子进程。如果希望将当前的变量作用到子进程，则需要将变量&lt;code&gt;export&lt;/code&gt;声明，这种变量称之为环境变量，如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# var1=&amp;#34;hello&amp;#34;
-# export var2=&amp;#34;world&amp;#34;
-# bash
-# echo &amp;#34;var1=$var1, var2=$var2&amp;#34;
-var1=, var2=world&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;其中，&lt;code&gt;bash&lt;/code&gt;命令开启了一个新的&lt;code&gt;shell&lt;/code&gt;，可见只有&lt;code&gt;export&lt;/code&gt;声明的变量在新的&lt;code&gt;shell&lt;/code&gt;中才是可见的。环境变量可以通过&lt;code&gt;env&lt;/code&gt;命令列举出来，在后面一节会详细讲述。此外，如果需要将非&lt;code&gt;export&lt;/code&gt;变量重新声明为&lt;code&gt;export&lt;/code&gt;变量，则只需要用&lt;code&gt;export&lt;/code&gt;重新声明一下即可：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# var1=hello
-# env | grep var1
-# export var1
-# env | grep var1
-var1=hello&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;env-命令&#34;&gt;&lt;code&gt;env&lt;/code&gt;命令&lt;/h3&gt;
-
-&lt;p&gt;如果需要查看当前&lt;code&gt;shell&lt;/code&gt;中有哪些&lt;code&gt;export&lt;/code&gt;声明的变量，可以使用&lt;code&gt;env&lt;/code&gt;命令，该命令会列出当前所有&lt;code&gt;export&lt;/code&gt;声明的变量。请注意与&lt;code&gt;set&lt;/code&gt;命令的区别，&lt;code&gt;set&lt;/code&gt;命令会列出所有的变量，包括哪些不是&lt;code&gt;export&lt;/code&gt;声明的变量。通常，我们把&lt;code&gt;env&lt;/code&gt;命令输出的变量称之为&lt;code&gt;环境变量&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;此外，&lt;code&gt;env&lt;/code&gt;也常用来为子&lt;code&gt;shell&lt;/code&gt;预先定义一些临时变量，如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# var1=&amp;#34;hello&amp;#34;
-# env var1=&amp;#34;tmp&amp;#34; bash -c &amp;#39;echo &amp;#34;$var1&amp;#34;&amp;#39;
-tmp
-# echo $var1
-hello&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;其中，用&lt;code&gt;env&lt;/code&gt;命令定义了临时变量&lt;code&gt;var1&lt;/code&gt;，然后&lt;code&gt;bash&lt;/code&gt;命令开启了一个子&lt;code&gt;shell&lt;/code&gt;，并在子&lt;code&gt;shell&lt;/code&gt;中执行了&lt;code&gt;echo &amp;quot;$var1&amp;quot;&lt;/code&gt;命令。可见，输出了定义的临时变量，在命令结束后，又回到之前的&lt;code&gt;shell&lt;/code&gt;，输出的也是之前&lt;code&gt;shell&lt;/code&gt;中定义的值。当然，在使用&lt;code&gt;env&lt;/code&gt;定义临时变量的时候，为了方便，通常我们可以省略&lt;code&gt;env&lt;/code&gt;命令，如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# var1=&amp;#34;hello&amp;#34;
-# var1=&amp;#34;tmp&amp;#34; bash -c &amp;#39;echo &amp;#34;$var1&amp;#34;&amp;#39;
-tmp
-# echo $var1
-hello&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;另外，&lt;code&gt;env&lt;/code&gt;命令还有一种常用的用法，就是用来开启一个干净的子&lt;code&gt;shell&lt;/code&gt;，即在子&lt;code&gt;shell&lt;/code&gt;中不继承所有的变量，即便这些变量在之前的&lt;code&gt;shell&lt;/code&gt;中采用&lt;code&gt;export&lt;/code&gt;声明，此时&lt;code&gt;env&lt;/code&gt;命令需要加入&lt;code&gt;-i&lt;/code&gt;的参数，如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# export var1=&amp;#34;hello world&amp;#34;
-# bash -c &amp;#39;echo &amp;#34;var1=$var1&amp;#34;&amp;#39;
-var1=hello world
-# env -i bash -c &amp;#39;echo &amp;#34;var1=$var1&amp;#34;&amp;#39;
-var1=&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;可见，使用&lt;code&gt;env -i&lt;/code&gt;之后，即便&lt;code&gt;var1&lt;/code&gt;被&lt;code&gt;export&lt;/code&gt;声明，但是在子&lt;code&gt;shell&lt;/code&gt;中也没有被继承。&lt;/p&gt;
-
-&lt;h3 id=&#34;变量解释&#34;&gt;变量解释&lt;/h3&gt;
-
-&lt;p&gt;在前面章节，我们知道&lt;code&gt;shell&lt;/code&gt;采用&lt;code&gt;$&lt;/code&gt;符号引用变量，在&lt;code&gt;$&lt;/code&gt;符号后紧跟变量的名字。而&lt;code&gt;shell&lt;/code&gt;在提取变量名字的时候一般以非字母数字（non-alphanumeric）为边界，这有时候就会产生问题，如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# prefix=Super
-# echo Hello $prefixman and $prefixgirl
-Hello  and&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;可见，&lt;code&gt;shell&lt;/code&gt;并不能提取我们定义的变量&lt;code&gt;prefix&lt;/code&gt;，因为其后并没有非字母数字的字符为界。这种情况下，我们可以使用&lt;code&gt;{}&lt;/code&gt;将变量名保护起来。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# prefix=Super
-# echo Hello ${prefix}man and ${prefix}girl
-Hello Superman and Supergirl&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;非绑定-unbound-变量&#34;&gt;非绑定（unbound）变量&lt;/h3&gt;
-
-&lt;p&gt;所谓非绑定（unbound）变量其实指的是没有预先定义的变量，或者说不存在的变量。默认情况下，&lt;code&gt;shell&lt;/code&gt;在解释这种变量的时候会以空字符串替代：&lt;/p&gt;
-
-&lt;p&gt;```&lt;/p&gt;
-
-&lt;h1 id=&#34;echo-unbound-var&#34;&gt;echo $unbound_var&lt;/h1&gt;
-&lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;如果需要`shell`在这种情况下报错，可以配置`shell`选项`set -o nounset`，或者简写为`set -u`：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;echo-unbound-var-1&#34;&gt;echo $unbound_var&lt;/h1&gt;
-
-&lt;p&gt;bash: unbound_var: unbound variable&lt;/p&gt;
-
-&lt;h1 id=&#34;set-u&#34;&gt;set +u&lt;/h1&gt;
-
-&lt;h1 id=&#34;echo-unbound-var-2&#34;&gt;echo $unbound_var&lt;/h1&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;当然，由例子中可以看到，要取消该配置，可以相应的设置`set +o nounset`，或者简写为`set +u`。
-
-## 特殊变量
-
-在`shell`中预定义了很多特殊的变量，这一节咱们来说一下常见的几个变量。
-
-### `$PS1`变量
-
-在`shell`终端输入命令时，咱们总是可以看到在输入行首总是会有提示符，如：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;mrhao:~$&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;其中，`mrhao:~$ `就是提示符，这个字串实际上是由`shell`变量`$PS1`决定的。如果咱们改变一下该变量的值，提示符也会相应的改变：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;mrhao:~$ PS1=&amp;ldquo;hello &amp;gt; &amp;ldquo;
-hello &amp;gt; echo &amp;ldquo;PS1 value is &amp;lsquo;$PS1&amp;rsquo;&amp;rdquo;
-PS1 value is &amp;lsquo;hello &amp;gt; &amp;lsquo;
-hello &amp;gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;为了方便在提示符中显示系统的某些实时信息，`$PS1`变量定义了一些特殊的字符：
-
-| 字符 | 说明               |
-|------|--------------------|
-| \w   | 表示工作目录       |
-| \u   | 表示用户名         |
-| \h   | 表示系统的hostname |
-
-当然，这里只列举了几个，详细的可以查看Linux手册。另外，`$PS1`中还可以对对其中不同部分采用不同颜色显示，如：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;red-033-01-31m&#34;&gt;RED=&amp;rsquo;[\033[01;31m]&amp;lsquo;&lt;/h1&gt;
-
-&lt;h1 id=&#34;white-033-01-00m&#34;&gt;WHITE=&amp;rsquo;[\033[01;00m]&amp;lsquo;&lt;/h1&gt;
-
-&lt;h1 id=&#34;green-033-01-32m&#34;&gt;GREEN=&amp;rsquo;[\033[01;32m]&amp;lsquo;&lt;/h1&gt;
-
-&lt;h1 id=&#34;blue-033-01-34m&#34;&gt;BLUE=&amp;rsquo;[\033[01;34m]&amp;lsquo;&lt;/h1&gt;
-
-&lt;h1 id=&#34;ps1-green-u-white-blue-h-white-w&#34;&gt;PS1=&amp;ldquo;$GREEN\u$WHITE@$BLUE\h$WHITE\w\$ &amp;ldquo;&lt;/h1&gt;
-
-&lt;p&gt;mrhao@mrhao-host~$ echo &amp;ldquo;$PS1&amp;rdquo;
-[\033[01;32m]\u[\033[01;00m]@[\033[01;34m]\h[\033[01;00m]\w$&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;### `$PATH`变量
-
-当我们在Linux的terminal里面输入命令的时候，`shell`需要在一系列的目录中查找输入的命令，如果没有查找到会直接报`command not found`的错误。而这些查找的目录就定义在`$PATH`变量中。&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;echo-path&#34;&gt;echo $PATH&lt;/h1&gt;
-
-&lt;p&gt;/opt/rh/rh-python34/root/usr/bin:/usr/java/default/bin/:/usr/local/git/bin:/opt/ActiveTcl-8.5/bin:/root/perl5/bin:/root/env/maven/apache-maven-3.3.3/bin:/root/soft/wrk/wrk-4.0.1:/root/usr/go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;其中，每个目录以`:`隔开，如果需要增加目录，可以：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;path-path-opt-local-bin&#34;&gt;PATH=$PATH:/opt/local/bin&lt;/h1&gt;
-
-&lt;h1 id=&#34;echo-path-1&#34;&gt;echo $PATH&lt;/h1&gt;
-
-&lt;p&gt;/opt/rh/rh-python34/root/usr/bin:/usr/java/default/bin/:/usr/local/git/bin:/opt/ActiveTcl-8.5/bin:/root/perl5/bin:/root/env/maven/apache-maven-3.3.3/bin:/root/soft/wrk/wrk-4.0.1:/root/usr/go/bin:/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/opt/local/bin&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&amp;gt; 加入新的路径的时候请务必带上之前的路径，`$PATH:&amp;lt;new path&amp;gt;`否则，很多默认的系统路径将被覆盖，导致很多命令失效。
-
-特别注意的是，`$PATH`变量中目录的顺序是很重要的，如果`shell`在前面的目录中找到了命令，则不会查找后面的目录。如果你想把某个重名的命令优先执行，就需要把它对应的目录放在`$PATH`的前面。
-
-### 网络代理变量
-
-在Linux系统中，很多时候我们需要访问外部网络，比如使用`curl`命令下载文件等等。而有的时候，访问访问外部网络咱们需要设置代理，在Linux系统中，使用网络代理非常简单，只要配置几个变量即可：
-
-| 变量        | 说明                                                                    |
-|-------------|-------------------------------------------------------------------------|
-| http_proxy  | 设置访问`http`请求所需要的代理，如`http_proxy=http://10.10.10.100:80`   |
-| https_proxy | 设置访问`https`请求所需要的代理，如`https_proxy=http://10.10.10.100:80` |
-| ftp_proxy   | 设置访问`ftp`请求所需要的代理，如`ftp_proxy=http://10.10.10.100:80`     |
-| no_proxy    | 设置哪些域名或者IP不需要走代理，如`no_proxy=localhost,127.0.0.1`        |
-
-### `$PWD`变量
-
-`PWD`变量是一个由`shell`自动设置的变量，其值表示当前目录的绝对路径，与命令`pwd`输出相同。
-
-# `shell`嵌入与`shell`选项
-
-## `shell`嵌入（shell embedding）
-
-`shell`可以嵌入在同一个命令行中，也就是`shell`在扫描解释命令行的时候，可能会从当前的`shell`进程中`fork`出一个新的`shell`进程，并将有关命令放在新进程中运行。如下例：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;var1-hello&#34;&gt;var1=hello&lt;/h1&gt;
-
-&lt;h1 id=&#34;echo-var1-world-echo-var1&#34;&gt;echo $(var1=world; echo $var1)&lt;/h1&gt;
-
-&lt;p&gt;world&lt;/p&gt;
-
-&lt;h1 id=&#34;echo-var1&#34;&gt;echo $var1&lt;/h1&gt;
-
-&lt;p&gt;hello&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;如其中`$()`便开启了一个新的`shell`进程，或者成为子`shell`，并在此`shell`中运行命令`var1=world; echo $var1`，此时输出的是子`shell`中定义的`var1`。当命令结束后，子`shell`进程退出，并将输出的结果`world`返回给之前的`shell`（或者父`shell`）的`echo`命令，父`shell`最后输出`world`。而且，在子`shell`中定义相同的`var1`变量并不会改变父`shell`中的变量。
-
-***特别注意的是，因为子`shell`是`fork`出来的进程，根据Linux进程`fork`的特点，子进程将共享父进程的数据空间，而只在写的时候拷贝新的数据空间，因此，创建出来的子`shell`是会继承所有父`shell`的变量，不论该变量是否被`export`声明***&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;var1-hello-1&#34;&gt;var1=hello&lt;/h1&gt;
-
-&lt;h1 id=&#34;var2-echo-var1-world&#34;&gt;var2=&amp;ldquo;$(echo $var1 world)&amp;rdquo;&lt;/h1&gt;
-
-&lt;h1 id=&#34;echo-var2&#34;&gt;echo $var2&lt;/h1&gt;
-
-&lt;p&gt;hello world&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;可见，虽然`var1`变量没有`export`声明，但是在子`shell`中还是可见的。这点与使用`bash -c`开启的`shell`是不同的。
-
-用`$()`可以将子`shell`嵌入到命令行中，当然，`$()`是可以嵌套使用的，这样可以用来在子`shell`中开启它的子`shell`。&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;a-shell&#34;&gt;A=shell&lt;/h1&gt;
-
-&lt;h1 id=&#34;echo-c-b-a-b-sub-echo-c-b-a-echo-c-sub-echo-c-b-a&#34;&gt;echo $C$B$A $(B=sub;echo $C$B$A; echo $(C=sub;echo $C$B$A))&lt;/h1&gt;
-
-&lt;p&gt;shell subshell subsubshell&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;### 反引号（backticks）
-
-在上面我们可以通过`$()`将子`shell`嵌入命令行中，为了方便，我们同样可以用反引号`` ` ``将子`shell`嵌入。&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;var1-hello-2&#34;&gt;var1=hello&lt;/h1&gt;
-
-&lt;h1 id=&#34;echo-var1-world-echo-var1-1&#34;&gt;echo &lt;code&gt;var1=world; echo $var1&lt;/code&gt;&lt;/h1&gt;
-
-&lt;p&gt;world&lt;/p&gt;
-
-&lt;h1 id=&#34;echo-var1-1&#34;&gt;echo $var1&lt;/h1&gt;
-
-&lt;p&gt;hello&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;但是，使用反引号不能够嵌套子`shell`，因此如果需要嵌套子`shell`时，只能使用`$()`。
-
-&amp;gt; 反引号跟单引号是本质的不同的，单引号与双引号一样，用来将连续的字串作为整体引起来，只不过单引号中将不执行变量的引用解析，而反引号则是嵌入子`shell`。
-
-
-## `shell`选项
-
-其实在前面咱们已经使用了不少`shell`的选项，如`set -u`在变量不存在是报错，`set -x`将`shell`展开的结果显示出来等。此外，可以才用`echo $-`将当期设置的`shell`选项打印出来。
-
-# `shell`历史记录
-
-在`shell`中执行命令的时候，`shell`会将最近的命令使用历史记录下来，这样你可以很方便的查看最近做了什么操作。
-
-## 查看历史记录
-
-命令`history`可以用来查看`shell`的历史记录，里面记录了你最近输入的所有命令。当然，很多时候你更加关心最近的几个命令，你可以使用`history 10`来显示最近的10个命令。另外，`shell`通常还会将最近的历史记录写在`~/.bash_history`文件中，因此查看该文件同样可以查看历史记录。
-
-## 执行历史的命令
-
-`shell`提供了很多高级用法使得你可以很方便的执行以前执行过的命令。
-
-首先，咱们先显示一下过去的10个命令，可以看到每个命令前面都有其对应的序号。&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;history-10&#34;&gt;history 10&lt;/h1&gt;
-
-&lt;p&gt;1000  history
- 1001  history 10
- 1002  echo &amp;ldquo;hello world&amp;rdquo;
- 1003  ls -l
- 1004  ps -ef | grep named
- 1005  env | grep http
- 1006  grep hello /var/log/messages
- 1007  tmux ls
- 1008  find . -name &amp;ldquo;hello&amp;rdquo;
- 1009  history 10&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;下面列举比较常用的`shell`重复执行历史记录中命令的方法：
-
-| 命令      | 说明                                                                                                  |
-|-----------|-------------------------------------------------------------------------------------------------------|
-| !!        | 在`shell`中输入两个感叹号会执行上一个命令                                                             |
-| !keyword  | 输入一个感叹号后跟关键字，会搜索历史记录中最先以该关键字开始的命令。如`!find`会执行序号为1008的命令。 |
-| !?keyword | 执行历史记录中第一个包括keyword关键字的命令                                                           |
-| !n        | 其中n代表历史记录中的序号，表示执行序号为n的命令。                                                    |
-| !-n       | 执行倒数第n个命令，如`!-1`其实就相当于`!!`                                                            |
-| cmd!*     | 执行命令`cmd`，其中`!*`会以上一条命令的所有参数替代                                                   |
-
-另外，对于`!keyword`的用法，还有一个高级功能，你可以将符合该条件的命令进行改造后执行，如：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;echo-test1&#34;&gt;echo &amp;ldquo;test1&amp;rdquo;&lt;/h1&gt;
-
-&lt;p&gt;test1&lt;/p&gt;
-
-&lt;h1 id=&#34;ec-s-1-2&#34;&gt;!ec:s/1/2/&lt;/h1&gt;
-
-&lt;p&gt;echo &amp;ldquo;test2&amp;rdquo;
-test2&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;其中，`:s/1/2/`将命令`echo &amp;#34;test1&amp;#34;`替换成`echo &amp;#34;test2&amp;#34;`然后执行了。对于`cmd!*`，示例如下：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;ctt-etc-passwd-cut-d-f1&#34;&gt;ctt /etc/passwd | cut -d: -f1&lt;/h1&gt;
-
-&lt;p&gt;-bash: ctt: command not found&lt;/p&gt;
-
-&lt;h1 id=&#34;cat&#34;&gt;cat !*&lt;/h1&gt;
-
-&lt;p&gt;cat /etc/passwd | cut -d: -f1
-root
-bin
-daemon
-adm
-&amp;hellip;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;## 搜索历史记录
-
-在`shell`终端中按Ctrl-r会打开`shell`的搜索模式，在改模式下输入关键字会显示最近包含改关键字的命令，再按一下Ctrl-r会继续显示前面一条符合条件的命令，找到你需要的命令后回车就可以执行改命令了。
-
-## 修改历史记录的有关配置
-
-有多个配置可以用来改变历史记录的有关信息，通常都是通过有关环境变量来配置：
-
-| 环境变量      | 说明                                                                                       |
-|---------------|--------------------------------------------------------------------------------------------|
-| $HISTSIZE     | 这个变量用来配置`shell`应该保持多少行的历史记录，在很多发行版本中，默认值一般为500或者1000 |
-| $HISTFILE     | 这个变量用来配置历史记录文件存放的位置，通常来讲，默认路径为`~/.bash_history`              |
-| $HISTFILESIZE | 这个变量用来配置历史记录文件可以存放多少行的历史记录                                       |
-
-## 阻止记录某些命令
-
-在有些时候，我们并不想把某些命令记录在历史记录中，比如有的命令里面包括了敏感信息如密码等。在新版本的`shell`中，通常我们可以在输入的命令前面加入空格，这样`shell`就不会记录这样的命令，当然，如果你的发行版本默认并不支持，你可以配置环境变量来打开这个功能：
-
-```sh
-export HISTIGNORE=&amp;#34;[ \t]*&amp;#34;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;例如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# history 5
- 1023  ls -l
- 1024  echo &amp;#34;&amp;#34;
- 1025  history 5
- 1026  ls
- 1027  history 5
-#  echo &amp;#34;password=123456&amp;#34;
-password=123456
-# history 5
- 1025  history 5
- 1026  ls
- 1027  history 5
- 1028   echo &amp;#34;password=123456&amp;#34;
- 1029  history 5
-# export HISTIGNORE=&amp;#34;[ \t]*&amp;#34;
-# history 5
- 1027  history 5
- 1028   echo &amp;#34;password=123456&amp;#34;
- 1029  history 5
- 1030  export HISTIGNORE=&amp;#34;[ \t]*&amp;#34;
- 1031  history 5
-#  echo &amp;#34;password=123456&amp;#34;
-password=123456
-# history 5
- 1027  history 5
- 1028   echo &amp;#34;password=123456&amp;#34;
- 1029  history 5
- 1030  export HISTIGNORE=&amp;#34;[ \t]*&amp;#34;
- 1031  history 5&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;可见，在设置&lt;code&gt;$HISTIGNORE&lt;/code&gt;变量之后，在前面加了空格的命令将不再记录。这在保护敏感信息的时候非常有用。&lt;/p&gt;
-
-&lt;h1 id=&#34;文件匹配-file-globbing&#34;&gt;文件匹配(File Globbing)&lt;/h1&gt;
-
-&lt;p&gt;文件匹配(File Globbing)又成为动态文件名生成，用它可以非常方便的在&lt;code&gt;shell&lt;/code&gt;中输入文件名。&lt;/p&gt;
-
-&lt;h2 id=&#34;星号&#34;&gt;&lt;code&gt;*&lt;/code&gt;星号&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;*&lt;/code&gt;星号在&lt;code&gt;shell&lt;/code&gt;中用来匹配任意数量的字符，比如文件名&lt;code&gt;File*.mp4&lt;/code&gt;，将匹配以&lt;code&gt;File&lt;/code&gt;开头，&lt;code&gt;.mp4&lt;/code&gt;结尾的任何文件名。&lt;code&gt;shell&lt;/code&gt;在扫描解释命令的时候会自动去查找符合该匹配的所有文件或目录。当然，你也可以只用&lt;code&gt;*&lt;/code&gt;来匹配所有的文件及目录，但请注意，只使用&lt;code&gt;*&lt;/code&gt;跟不带&lt;code&gt;*&lt;/code&gt;还是有所区别的，&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# ls
-definition.yaml  example  __init__.py  tags.yaml  test.py  test_sample.html  test_sample.py
-# ls *
-definition.yaml  __init__.py  tags.yaml  test.py  test_sample.html  test_sample.py
-
-example:
-testcase&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;可见，带上&lt;code&gt;*&lt;/code&gt;后不仅把当前目录的所有文件及目录显示出来，而且还把目录下的内容显示出来了。&lt;/p&gt;
-
-&lt;h2 id=&#34;问号&#34;&gt;&lt;code&gt;?&lt;/code&gt;问号&lt;/h2&gt;
-
-&lt;p&gt;问号用来匹配一个字符，如&lt;code&gt;File?.mp4&lt;/code&gt;可以匹配&lt;code&gt;File1.mp4&lt;/code&gt;。&lt;/p&gt;
-
-&lt;h2 id=&#34;方括号&#34;&gt;&lt;code&gt;[]&lt;/code&gt;方括号&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;[]&lt;/code&gt;方括号也用来匹配一个字符，但是在括号里面可以指定一个字符集用来限定匹配的字符必须在该字符集内，字符集里面的字符顺序没有关系。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# ls
-file1  file2  file3  File4  File55  FileA  fileab  Fileab  FileAB  fileabc
-# ls File[5A]
-FileA
-# ls File[A5]
-FileA
-# ls File[A5][5b]
-File55&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;如果需要匹配不在某个字符集里面的字符，可以在&lt;code&gt;[]&lt;/code&gt;第一个字符加入&lt;code&gt;!&lt;/code&gt;：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# ls file[!5]*
-file1  file2  file3  fileab  fileabc&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;特别的，为了方便，&lt;code&gt;[]&lt;/code&gt;中可以使用&lt;code&gt;-&lt;/code&gt;来定义一些连续的字符集（Range匹配），常用的这类字符集包括：&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;字符集&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;0-9&lt;/td&gt;
-&lt;td&gt;表示数字字符集&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;a-z&lt;/td&gt;
-&lt;td&gt;表示小写字母字符集&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;A-Z&lt;/td&gt;
-&lt;td&gt;表示大写字母字符集&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;当然，你也不必要把所有范围都包括在内，如&lt;code&gt;[a-d]&lt;/code&gt;可以用来限定从&lt;code&gt;a&lt;/code&gt;到&lt;code&gt;d&lt;/code&gt;的小写字母集。另外，用&lt;code&gt;-&lt;/code&gt;连起来的字符集还可以跟其它字符集一起使用，如&lt;code&gt;[a-d_]&lt;/code&gt;表示&lt;code&gt;a&lt;/code&gt;到&lt;code&gt;d&lt;/code&gt;的小写字母加上&lt;code&gt;_&lt;/code&gt;所组成的字符集。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Range匹配的大小写问题&lt;/p&gt;
-
-&lt;p&gt;对于&lt;code&gt;[]&lt;/code&gt;的Range匹配，还有一点很重要。在很多发行版本中，默认情况下，&lt;code&gt;[]&lt;/code&gt;的Range匹配是忽略大小写的&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# ls
-Test1  test2
-# ls [a-z]*
-Test1  test2
-# ls [A-Z]*
-Test1  test2
-# ls [t]*
-test2
-# ls [T]*
-Test1&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;blockquote&gt;
-&lt;p&gt;注意，是&lt;code&gt;[]&lt;/code&gt;的Range匹配会忽略大小写，而如果不是Range匹配还是大小写敏感的：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&amp;gt; # ls
-&amp;gt; Test1  test2
-&amp;gt; # ls [T]*
-&amp;gt; Test1
-&amp;gt; # ls [t]*
-&amp;gt; test2
-&amp;gt; ```
-
-如果需要大小写敏感，可以设置环境变量`LC_ALL`：&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;lc-all-c&#34;&gt;LC_ALL=C&lt;/h1&gt;
-
-&lt;h1 id=&#34;ls-a-z&#34;&gt;ls [a-z]*&lt;/h1&gt;
-
-&lt;p&gt;test2&lt;/p&gt;
-
-&lt;h1 id=&#34;ls-a-z-1&#34;&gt;ls [A-Z]*&lt;/h1&gt;
-
-&lt;p&gt;Test1
-```&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;当然，请务必注意，&lt;code&gt;LC_ALL&lt;/code&gt;的会改变当前的语言环境，还请慎重使用，建议只在临时的子&lt;code&gt;shell&lt;/code&gt;中使用。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;阻止文件匹配-file-globbing&#34;&gt;阻止文件匹配(File Globbing)&lt;/h2&gt;
-
-&lt;p&gt;有时候我们就是需要输出&lt;code&gt;*&lt;/code&gt;等匹配符号，这个时候就需要阻止&lt;code&gt;shell&lt;/code&gt;做相应的匹配。可以使用转义符号&lt;code&gt;\&lt;/code&gt;来做到这点，或者将匹配符号放在引号中：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# echo *
-Test1 test2
-# echo \*
-*
-# echo &amp;#39;*&amp;#39;
-*
-# echo &amp;#34;*&amp;#34;
-*&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;shell快捷键&#34;&gt;shell快捷键&lt;/h1&gt;
-
-&lt;p&gt;&lt;code&gt;shell&lt;/code&gt;中支持非常多的快捷键，可以非常方便我们输入命令：&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;快捷键&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Ctrl-d&lt;/td&gt;
-&lt;td&gt;表示&lt;code&gt;EOF&lt;/code&gt;的意思，在shell终端中输入该快捷键会退出该终端&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Ctrl-z&lt;/td&gt;
-&lt;td&gt;该快捷键用来暂停一个在shell终端中正在执行的进程，暂停后可以用&lt;code&gt;fg&lt;/code&gt;命令恢复&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Ctrl-a&lt;/td&gt;
-&lt;td&gt;输入命令时跳到行首&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Ctrl-e&lt;/td&gt;
-&lt;td&gt;跳到行尾&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Ctrl-k&lt;/td&gt;
-&lt;td&gt;删除从光标到行尾的部分&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Ctrl-y&lt;/td&gt;
-&lt;td&gt;粘贴刚刚删除的部分&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Ctrl-w&lt;/td&gt;
-&lt;td&gt;删除从光标至其左边第一个空格处&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
 </description>
       
     </item>

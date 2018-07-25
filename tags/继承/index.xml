@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>继承 on Fantasy Blogs</title>
+    <link>https://mazhidong.github.io/tags/%E7%BB%A7%E6%89%BF/</link>
+    <description>Recent content in 继承 on Fantasy Blogs</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 25 Jul 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://mazhidong.github.io/tags/%E7%BB%A7%E6%89%BF/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Java：类与继承</title>
+      <link>https://mazhidong.github.io/post/java/2018-07-25-java%E7%B1%BB%E4%B8%8E%E7%BB%A7%E6%89%BF/</link>
+      <pubDate>Wed, 25 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/java/2018-07-25-java%E7%B1%BB%E4%B8%8E%E7%BB%A7%E6%89%BF/</guid>
+      <description>Java：类与继承 对于面向对象的程序设计语言来说，类毫无疑问是其最重要的基础。抽象、封装、继承、多态这四大特性都离不开类，只有存在类，才能体</description>
+    </item>
+    
+  </channel>
+</rss>

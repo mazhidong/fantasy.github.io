@@ -25,7 +25,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="Fantasy" />
-  <meta name="description" content="终于配置、下载、编译、刷机各种环节均已打通，回归到自己的初始目标，去除每次重启插入usb后的权限弹窗提示。 环境 源码版本：5.1.1 ##修改 我" />
+  <meta name="description" content="终于配置、下载、编译、刷机各种环节均已打通，回归到自己的初始目标，去除每次重启插入usb后的权限弹窗提示。 环境 源码版本：5.1.1 修改 我们打" />
 
   <meta name="keywords" content="mzd, fantasy, blogs" />
 
@@ -58,7 +58,7 @@
 
 
 <meta property="og:title" content="android framework之旅（四）去除Usb权限弹窗" />
-<meta property="og:description" content="终于配置、下载、编译、刷机各种环节均已打通，回归到自己的初始目标，去除每次重启插入usb后的权限弹窗提示。 环境 源码版本：5.1.1 ##修改 我" />
+<meta property="og:description" content="终于配置、下载、编译、刷机各种环节均已打通，回归到自己的初始目标，去除每次重启插入usb后的权限弹窗提示。 环境 源码版本：5.1.1 修改 我们打" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://mazhidong.github.io/post/aosp/2018-07-03-android-framework%E4%B9%8B%E6%97%85%E5%9B%9B%E5%8E%BB%E9%99%A4usb%E6%9D%83%E9%99%90%E5%BC%B9%E7%AA%97/" />
 
@@ -79,19 +79,19 @@
 
 
 <meta itemprop="name" content="android framework之旅（四）去除Usb权限弹窗">
-<meta itemprop="description" content="终于配置、下载、编译、刷机各种环节均已打通，回归到自己的初始目标，去除每次重启插入usb后的权限弹窗提示。 环境 源码版本：5.1.1 ##修改 我">
+<meta itemprop="description" content="终于配置、下载、编译、刷机各种环节均已打通，回归到自己的初始目标，去除每次重启插入usb后的权限弹窗提示。 环境 源码版本：5.1.1 修改 我们打">
 
 
 <meta itemprop="datePublished" content="2018-08-07T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2018-08-07T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="501">
+<meta itemprop="wordCount" content="415">
 
 
 
 <meta itemprop="keywords" content="android,Usb权限," />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="android framework之旅（四）去除Usb权限弹窗"/>
-<meta name="twitter:description" content="终于配置、下载、编译、刷机各种环节均已打通，回归到自己的初始目标，去除每次重启插入usb后的权限弹窗提示。 环境 源码版本：5.1.1 ##修改 我"/>
+<meta name="twitter:description" content="终于配置、下载、编译、刷机各种环节均已打通，回归到自己的初始目标，去除每次重启插入usb后的权限弹窗提示。 环境 源码版本：5.1.1 修改 我们打"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -220,7 +220,7 @@
               <a href="/categories/android/"> android </a>
             
           </div>
-        <span class="more-meta"> 约 501 字 </span>
+        <span class="more-meta"> 约 415 字 </span>
         <span class="more-meta"> 预计阅读 1 分钟 </span>
       </div>
     </header>
@@ -235,6 +235,7 @@
 <li>
 <ul>
 <li><a href="#环境">环境</a></li>
+<li><a href="#修改">修改</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -251,7 +252,7 @@
 
 <p>源码版本：5.1.1</p>
 
-<p>##修改</p>
+<h2 id="修改">修改</h2>
 
 <p>我们打开/frameworks/base/packages/SystemUI/src/com/android/systemui/usb/UsbPermissionActivity.java文件，伪代码如下：</p>
 <div class="highlight"><div class="chroma">
@@ -346,11 +347,6 @@
 </div>
 <p>最后重新编译/frameworks/base/packages/SystemUI/模块，替换系统文件，重启开发板，验证成功。</p>
 
-<p>作者：风少侠
-链接：<a href="https://www.jianshu.com/p/8166e3242945">https://www.jianshu.com/p/8166e3242945</a>
-來源：简书
-简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。</p>
-
     </div>
 
     
@@ -387,8 +383,8 @@
       <nav class="post-nav">
         
         
-          <a class="next" href="/post/java/2018-07-25-java%E7%B1%BB%E4%B8%8E%E7%BB%A7%E6%89%BF/">
-            <span class="next-text nav-default">Java：类与继承</span>
+          <a class="next" href="/post/aosp/2018-08-07-android_framework%E4%B9%8B%E6%97%85%E5%9B%9B%E5%8E%BB%E9%99%A4usb%E6%9D%83%E9%99%90%E5%BC%B9%E7%AA%97/">
+            <span class="next-text nav-default">android framework之旅（四）去除Usb权限弹窗</span>
             <span class="prev-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
@@ -408,7 +404,7 @@
     id: '2018-07-03-android framework之旅（四）去除Usb权限弹窗.md',
     title: 'android framework之旅（四）去除Usb权限弹窗',
     link: decodeURI(location.href),
-    desc: '终于配置、下载、编译、刷机各种环节均已打通，回归到自己的初始目标，去除每次重启插入usb后的权限弹窗提示。 环境 源码版本：5.1.1 ##修改 我',
+    desc: '终于配置、下载、编译、刷机各种环节均已打通，回归到自己的初始目标，去除每次重启插入usb后的权限弹窗提示。 环境 源码版本：5.1.1 修改 我们打',
     owner: 'mazhidong',
     repo: 'comments',
     oauth: {

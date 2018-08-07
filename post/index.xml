@@ -13,15 +13,6 @@
     
     <item>
       <title>android framework之旅（四）去除Usb权限弹窗</title>
-      <link>https://mazhidong.github.io/post/aosp/2018-07-03-android-framework%E4%B9%8B%E6%97%85%E5%9B%9B%E5%8E%BB%E9%99%A4usb%E6%9D%83%E9%99%90%E5%BC%B9%E7%AA%97/</link>
-      <pubDate>Tue, 07 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/aosp/2018-07-03-android-framework%E4%B9%8B%E6%97%85%E5%9B%9B%E5%8E%BB%E9%99%A4usb%E6%9D%83%E9%99%90%E5%BC%B9%E7%AA%97/</guid>
-      <description>终于配置、下载、编译、刷机各种环节均已打通，回归到自己的初始目标，去除每次重启插入usb后的权限弹窗提示。 环境 源码版本：5.1.1 修改 我们打</description>
-    </item>
-    
-    <item>
-      <title>android framework之旅（四）去除Usb权限弹窗</title>
       <link>https://mazhidong.github.io/post/aosp/2018-08-07-android_framework%E4%B9%8B%E6%97%85%E5%9B%9B%E5%8E%BB%E9%99%A4usb%E6%9D%83%E9%99%90%E5%BC%B9%E7%AA%97/</link>
       <pubDate>Tue, 07 Aug 2018 00:00:00 +0000</pubDate>
       
@@ -189,6 +180,15 @@
       
       <guid>https://mazhidong.github.io/post/linux/2017-11-17-linux-study-common-tools/</guid>
       <description>cat命令 很多时候我们通过cat命令来查看文件内容，它会将文件的所有内容显示出来。当然，cat也可以通过管道接收数据，它主要完成的是将从管道</description>
+    </item>
+    
+    <item>
+      <title>Linux系统介绍（四）IO重定向与管道</title>
+      <link>https://mazhidong.github.io/post/linux/2017-11-16-linux-study-io-pipe/</link>
+      <pubDate>Thu, 16 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/linux/2017-11-16-linux-study-io-pipe/</guid>
+      <description>IO重定向(IO redirection) Linux的有一个强大之处就是可以通过管道(Pipe)跟IO重定向将一系列命令的输出跟输入连接起来。IO重定向是Linux</description>
     </item>
     
   </channel>

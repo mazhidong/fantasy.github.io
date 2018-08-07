@@ -13,15 +13,6 @@
     
     <item>
       <title>android framework之旅（四）去除Usb权限弹窗</title>
-      <link>https://mazhidong.github.io/post/aosp/2018-07-03-android-framework%E4%B9%8B%E6%97%85%E5%9B%9B%E5%8E%BB%E9%99%A4usb%E6%9D%83%E9%99%90%E5%BC%B9%E7%AA%97/</link>
-      <pubDate>Tue, 07 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/aosp/2018-07-03-android-framework%E4%B9%8B%E6%97%85%E5%9B%9B%E5%8E%BB%E9%99%A4usb%E6%9D%83%E9%99%90%E5%BC%B9%E7%AA%97/</guid>
-      <description>终于配置、下载、编译、刷机各种环节均已打通，回归到自己的初始目标，去除每次重启插入usb后的权限弹窗提示。 环境 源码版本：5.1.1 修改 我们打</description>
-    </item>
-    
-    <item>
-      <title>android framework之旅（四）去除Usb权限弹窗</title>
       <link>https://mazhidong.github.io/post/aosp/2018-08-07-android_framework%E4%B9%8B%E6%97%85%E5%9B%9B%E5%8E%BB%E9%99%A4usb%E6%9D%83%E9%99%90%E5%BC%B9%E7%AA%97/</link>
       <pubDate>Tue, 07 Aug 2018 00:00:00 +0000</pubDate>
       

@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Fantasy Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 25 Jul 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 07 Aug 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mazhidong.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>android framework之旅（四）去除Usb权限弹窗</title>
+      <link>https://mazhidong.github.io/post/aosp/2018-08-07-android_framework%E4%B9%8B%E6%97%85%E5%9B%9B%E5%8E%BB%E9%99%A4usb%E6%9D%83%E9%99%90%E5%BC%B9%E7%AA%97/</link>
+      <pubDate>Tue, 07 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/aosp/2018-08-07-android_framework%E4%B9%8B%E6%97%85%E5%9B%9B%E5%8E%BB%E9%99%A4usb%E6%9D%83%E9%99%90%E5%BC%B9%E7%AA%97/</guid>
+      <description>终于配置、下载、编译、刷机各种环节均已打通，回归到自己的初始目标，去除每次重启插入usb后的权限弹窗提示。 环境 源码版本：5.1.1 修改 我们打</description>
+    </item>
     
     <item>
       <title>Java：类与继承</title>
@@ -180,15 +189,6 @@
       
       <guid>https://mazhidong.github.io/post/linux/2017-11-16-linux-study-io-pipe/</guid>
       <description>IO重定向(IO redirection) Linux的有一个强大之处就是可以通过管道(Pipe)跟IO重定向将一系列命令的输出跟输入连接起来。IO重定向是Linux</description>
-    </item>
-    
-    <item>
-      <title>Linux系统介绍（三）shell基础</title>
-      <link>https://mazhidong.github.io/post/linux/2017-10-10-linux-study-shell-basic/</link>
-      <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/linux/2017-10-10-linux-study-shell-basic/</guid>
-      <description>概述 首先，咱们来了解一下，什么是Shell。操作系统内核给我们提供了各种接口，同时也提供了各种用户层的库，理论上我们基于这些可以编写程序实现</description>
     </item>
     
   </channel>

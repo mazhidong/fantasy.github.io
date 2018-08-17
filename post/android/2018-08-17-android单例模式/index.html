@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>android 单例模式 - Fantasy Blogs</title>
+  
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="author" content="Fantasy" />
+  <meta name="description" content="tip 单例模式的实现方式有懒汉，饿汉，双重校验锁，枚举，内部类等等，写法就不全部列举了。Android源码中一个单例辅助类/frameworks" />
+
+  <meta name="keywords" content="mzd, fantasy, blogs" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.40" />
+
+
+<link rel="canonical" href="https://mazhidong.github.io/post/android/2018-08-17-android%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" />
+
+
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+<link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="android 单例模式" />
+<meta property="og:description" content="tip 单例模式的实现方式有懒汉，饿汉，双重校验锁，枚举，内部类等等，写法就不全部列举了。Android源码中一个单例辅助类/frameworks" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mazhidong.github.io/post/android/2018-08-17-android%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" />
+
+
+
+<meta property="article:published_time" content="2018-08-17T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2018-08-17T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="android 单例模式">
+<meta itemprop="description" content="tip 单例模式的实现方式有懒汉，饿汉，双重校验锁，枚举，内部类等等，写法就不全部列举了。Android源码中一个单例辅助类/frameworks">
+
+
+<meta itemprop="datePublished" content="2018-08-17T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-17T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="571">
+
+
+
+<meta itemprop="keywords" content="android,设计模式," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="android 单例模式"/>
+<meta name="twitter:description" content="tip 单例模式的实现方式有懒汉，饿汉，双重校验锁，枚举，内部类等等，写法就不全部列举了。Android源码中一个单例辅助类/frameworks"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Fantasy</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/">Home</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/post/">Archives</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/tags/">Tags</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/categories/">Categories</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/about/">About</a>
+          
+        
+      </li>
+    
+  </ul>
+</nav>
+
+
+  
+    
+
+
+
+
+
+
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css" />
+  <link rel="stylesheet" href="/lib/photoswipe/default-skin/default-skin.min.css" />
+
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+  
+
+  
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">
+    
+      Fantasy
+    
+  </a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/">Home</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/post/">Archives</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/tags/">Tags</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/categories/">Categories</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/about/">About</a>
+          
+
+        
+
+      </li>
+    
+    
+  </ul>
+</nav>
+
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">android 单例模式</h1>
+      
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-17 </span>
+        <div class="post-category">
+            <a href="https://mazhidong.github.io/categories/android/"> android </a>
+            
+          </div>
+        <span class="more-meta"> 约 571 字 </span>
+        <span class="more-meta"> 预计阅读 2 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#正常懒汉单例">正常懒汉单例</a></li>
+<li><a href="#懒汉-双重校验单例">懒汉+双重校验单例</a></li>
+<li><a href="#变种懒汉单例">变种懒汉单例</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<div class="shortcode-notice tip">
+  <div class="shortcode-notice-title tip">
+    
+      tip
+    
+  </div>
+  <p>单例模式的实现方式有懒汉，饿汉，双重校验锁，枚举，内部类等等，写法就不全部列举了。Android源码中一个单例辅助类/frameworks/base/core/java/android/util/Singleton.java，可以实现懒汉式单例，写法挺奇特的，虽然是个hide类，不过拷贝出来就可以用了。</p>
+
+</div>
+
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"><span class="kn">package</span> <span class="nx">android</span><span class="p">.</span><span class="nx">util</span><span class="p">;</span>
+
+<span class="cm">/**
+</span><span class="cm"> * Singleton helper class for lazily initialization.
+</span><span class="cm"> *
+</span><span class="cm"> * Modeled after frameworks/base/include/utils/Singleton.h
+</span><span class="cm"> *
+</span><span class="cm"> * @hide
+</span><span class="cm"> */</span>
+<span class="nx">public</span> <span class="nx">abstract</span> <span class="nx">class</span> <span class="nx">Singleton</span><span class="p">&lt;</span><span class="nx">T</span><span class="p">&gt;</span> <span class="p">{</span>
+    <span class="nx">private</span> <span class="nx">T</span> <span class="nx">mInstance</span><span class="p">;</span>
+
+    <span class="nx">protected</span> <span class="nx">abstract</span> <span class="nx">T</span> <span class="nx">create</span><span class="p">();</span>
+
+    <span class="nx">public</span> <span class="nx">final</span> <span class="nx">T</span> <span class="nx">get</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">synchronized</span> <span class="p">(</span><span class="nx">this</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">mInstance</span> <span class="o">==</span> <span class="nx">null</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">mInstance</span> <span class="p">=</span> <span class="nx">create</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="nx">mInstance</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span> </pre></td></tr></table>
+</div>
+</div>
+<h2 id="正常懒汉单例">正常懒汉单例</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">public class SingletonDemo {
+    private static SingletonDemo mInstance;
+
+    public static final SingletonDemo get() {
+        synchronized (SingletonDemo.class) {
+            if (mInstance == null) {
+                mInstance = new SingletonDemo();
+            }
+            return mInstance;
+        }
+    }
+} </pre></td></tr></table>
+</div>
+</div>
+<h2 id="懒汉-双重校验单例">懒汉+双重校验单例</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">public class SingletonDemo {
+    private static SingletonDemo mInstance;
+
+    public static final SingletonDemo get() {
+        if (mInstance == null) {
+            synchronized (SingletonDemo.class) {
+                if (mInstance == null) {
+                    mInstance = new SingletonDemo();
+                }
+            }
+        }
+        return mInstance;
+    }
+} </pre></td></tr></table>
+</div>
+</div>
+<h2 id="变种懒汉单例">变种懒汉单例</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">public class SingletonDemo {
+
+    public static final SingletonDemo get() {
+        return INSTANCE.get();
+    }
+
+    private static final Singleton&lt;SingletonDemo&gt; INSTANCE = new Singleton&lt;SingletonDemo&gt;() {
+        protected SingletonDemo create() {
+            return new SingletonDemo();
+        }
+    };
+}</pre></td></tr></table>
+</div>
+</div>
+<p>懒汉式单例一般都会再加个双重校验的判断，避免每次调用get()都加锁，影响性能，Android源码中Singleton.java工具类并没有做双重校验（看了下googlesource中的Singleton.java，也是6年前提交的代码了），所以我们在将Singleton.java拷贝出来使用的时候可以加个双重校验优化下。Singleton.java封装了create，get模版，及get中的校验逻辑，从而SingletonDemo中的实现代码就可以更加的简单：1.create()一个单例对象，2.在需要的时候get()。</p>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Fantasy</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2018-08-17</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://mazhidong.github.io/tags/android/">android</a>
+          <a href="https://mazhidong.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+        
+          <a class="next" href="/post/aosp/2018-08-15-exchange-extsd-and-sdcard/">
+            <span class="next-text nav-default">exchange-extsd-and-sdcard</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+
+  
+  
+
+  
+  
+
+  
+
+  <div class="post bg-white">
+      <div id="comments-gitment"></div>
+      <link rel="stylesheet" href="/lib/gitment/gitment-0.0.3.min.css">
+        <script src="/lib/gitment/gitment-0.0.3.min.js"></script>
+      <script type="text/javascript">
+      const gitment = new Gitment({
+        id: '2018-08-17-android单例模式.md',
+        title: 'android 单例模式',
+        link: decodeURI(location.href),
+        desc: 'tip 单例模式的实现方式有懒汉，饿汉，双重校验锁，枚举，内部类等等，写法就不全部列举了。Android源码中一个单例辅助类\/frameworks',
+        owner: 'mazhidong',
+        repo: 'comments',
+        oauth: {
+          client_id: 'a7ad9d79ce4e98eabdc8',
+          client_secret: '13ffc9363807f8929fe31ce5a7022fb8676dab45'
+        }
+      })
+      gitment.render('comments-gitment')
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/imsun/gitment">comments powered by gitment.</a></noscript>
+    </div>
+
+  
+
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:591888356@qq.com" rel="me noopener" class="iconfont icon-email"
+        title="email" target="_blank">
+      </a>
+      <a href="https://github.com/mazhidong" rel="me noopener" class="iconfont icon-github"
+        title="github" target="_blank">
+      </a>
+  <a href="https://mazhidong.github.io/index.xml" rel="noopener alternate" type="application/rss" class="iconfont icon-rss"
+    title="rss" target="_blank">
+  </a>
+  </div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span><span class="author">Fantasy</span></span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+<script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
+
+
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+
+</body>
+</html>

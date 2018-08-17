@@ -10,6 +10,13 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/post/android/2018-08-17-android%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2018-08-17T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/post/aosp/2018-08-15-exchange-extsd-and-sdcard/</loc>
     <lastmod>2018-08-15T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -221,14 +228,14 @@
   
   <url>
     <loc>https://mazhidong.github.io/tags/android/</loc>
-    <lastmod>2018-08-15T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-17T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://mazhidong.github.io/categories/android/</loc>
-    <lastmod>2018-08-15T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-17T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -256,7 +263,7 @@
   
   <url>
     <loc>https://mazhidong.github.io/categories/</loc>
-    <lastmod>2018-08-15T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-17T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -361,7 +368,7 @@
   
   <url>
     <loc>https://mazhidong.github.io/post/</loc>
-    <lastmod>2018-08-15T00:00:00+00:00</lastmod>
+    <lastmod>2018-08-17T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -502,6 +509,13 @@
   <url>
     <loc>https://mazhidong.github.io/tags/%E8%84%9A%E6%9C%AC/</loc>
     <lastmod>2017-08-18T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://mazhidong.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2018-08-17T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>

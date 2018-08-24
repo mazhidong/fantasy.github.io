@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>android 多module打包aar - Fantasy Blogs</title>
+  
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="author" content="Fantasy" />
+  <meta name="description" content="一、打包 aar 1、单个模块打包 打开 Gradle 工具窗口,找到 Android Library 模块. 在 build 任务中双击 assemble. 执行成功后，在 mylibrary/build/outputs/aar 目录下找到 aar 包. 默认 Debug 和 Release 的 AAR 包都会打出来,当然你也" />
+
+  <meta name="keywords" content="mzd, fantasy, blogs" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.40" />
+
+
+<link rel="canonical" href="https://mazhidong.github.io/post/android/2018-08-24-android_%E5%A4%9Amodule%E6%89%93%E5%8C%85aar/" />
+
+
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+<link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="android 多module打包aar" />
+<meta property="og:description" content="一、打包 aar 1、单个模块打包 打开 Gradle 工具窗口,找到 Android Library 模块. 在 build 任务中双击 assemble. 执行成功后，在 mylibrary/build/outputs/aar 目录下找到 aar 包. 默认 Debug 和 Release 的 AAR 包都会打出来,当然你也" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mazhidong.github.io/post/android/2018-08-24-android_%E5%A4%9Amodule%E6%89%93%E5%8C%85aar/" />
+
+
+
+<meta property="article:published_time" content="2018-08-24T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2018-08-24T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="android 多module打包aar">
+<meta itemprop="description" content="一、打包 aar 1、单个模块打包 打开 Gradle 工具窗口,找到 Android Library 模块. 在 build 任务中双击 assemble. 执行成功后，在 mylibrary/build/outputs/aar 目录下找到 aar 包. 默认 Debug 和 Release 的 AAR 包都会打出来,当然你也">
+
+
+<meta itemprop="datePublished" content="2018-08-24T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-08-24T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1134">
+
+
+
+<meta itemprop="keywords" content="android,设计模式," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="android 多module打包aar"/>
+<meta name="twitter:description" content="一、打包 aar 1、单个模块打包 打开 Gradle 工具窗口,找到 Android Library 模块. 在 build 任务中双击 assemble. 执行成功后，在 mylibrary/build/outputs/aar 目录下找到 aar 包. 默认 Debug 和 Release 的 AAR 包都会打出来,当然你也"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Fantasy</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/">Home</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/post/">Archives</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/tags/">Tags</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/categories/">Categories</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/about/">About</a>
+          
+        
+      </li>
+    
+  </ul>
+</nav>
+
+
+  
+    
+
+
+
+
+
+
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css" />
+  <link rel="stylesheet" href="/lib/photoswipe/default-skin/default-skin.min.css" />
+
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+  
+
+  
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">
+    
+      Fantasy
+    
+  </a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/">Home</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/post/">Archives</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/tags/">Tags</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/categories/">Categories</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/about/">About</a>
+          
+
+        
+
+      </li>
+    
+    
+  </ul>
+</nav>
+
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">android 多module打包aar</h1>
+      
+      <div class="post-meta">
+        <span class="post-time"> 2018-08-24 </span>
+        <div class="post-category">
+            <a href="https://mazhidong.github.io/categories/android/"> android </a>
+            
+          </div>
+        <span class="more-meta"> 约 1134 字 </span>
+        <span class="more-meta"> 预计阅读 3 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#一-打包-aar">一、打包 aar</a>
+<ul>
+<li><a href="#1-单个模块打包">1、单个模块打包</a></li>
+<li><a href="#2-多个模块打包">2、多个模块打包</a></li>
+<li><a href="#3-使用fat-aar-plugin能解决fat-aar-https-github-com-vigi0303-fat-aar-plugin-遇到的诸多问题">3、使用fat-aar-plugin能解决fat-aar(<a href="https://github.com/Vigi0303/fat-aar-plugin)遇到的诸多问题">https://github.com/Vigi0303/fat-aar-plugin)遇到的诸多问题</a></a>
+<ul>
+<li><a href="#问题1-部分依赖没有打包进去">问题1:部分依赖没有打包进去</a></li>
+<li><a href="#问题2-the-prefix-tools-for-attribute-tools-overridelibrary-associated-with-an-element-type-uses-sdk-is-not-bound">问题2: The prefix &ldquo;tools&rdquo; for attribute &ldquo;tools:overrideLibrary&rdquo; associated with an element type &ldquo;uses-sdk&rdquo; is not bound.</a></li>
+<li><a href="#问题3-编译运行之后就报异常noclassdeffounderror-android-support-v7-recyclerview-r-styleable">问题3:编译运行之后就报异常NoClassDefFoundError: android.support.v7.recyclerview.R$styleable</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#二-引入-aar">二、引入 aar</a>
+<ul>
+<li><a href="#方法一-通过-libs-引入到-app-中">方法一、通过 libs 引入到 app 中</a></li>
+<li><a href="#方法二-把-aar-作为一个库工程的方式引入">方法二、把 aar 作为一个库工程的方式引入</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="一-打包-aar">一、打包 aar</h2>
+
+<h3 id="1-单个模块打包">1、单个模块打包</h3>
+
+<blockquote>
+<p>打开 Gradle 工具窗口,找到 Android Library 模块. 在 build 任务中双击 assemble.
+  执行成功后，在 mylibrary/build/outputs/aar 目录下找到 aar 包.
+默认 Debug 和 Release 的 AAR 包都会打出来,当然你也可以选择只打 Debug 的包,双击 assembleDebug 任务就可以了. 只打 Release 的包同理.</p>
+</blockquote>
+
+<h3 id="2-多个模块打包">2、多个模块打包</h3>
+
+<blockquote>
+<p>当要打包的模块又依赖了其它几个模块时，常常需要把它们打包成一个 aar。多模块打包使用 fat-aar(<a href="https://github.com/adwiv/android-fat-aar)，">https://github.com/adwiv/android-fat-aar)，</a>
+打包关键步骤如下：
+将下载好的 fat-aar.gradle 文件添加到对应的模块目录中，
+并在 build.gradle中引入 apply from: &lsquo;fat-aar.gradle&rsquo;。
+或直接引用</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">apply from: &#39;https://raw.githubusercontent.com/adwiv/android-fat-aar/master/fat-aar.gradle&#39;</pre></td></tr></table>
+</div>
+</div>
+<p>添加要打包的工程，使用 embedded 关键字。示例代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">    apply from: &#39;fat-aar.gradle&#39;
+    dependencies {
+        ...
+       embedded project(&#39;:DynamicPageLibrary&#39;)
+       embedded project(&#39;:VideoPlayerLib&#39;)
+       embedded project(&#39;:AudioPlayLibrary&#39;)
+       embedded project(&#39;:BaseCloudMusicResource&#39;)
+    }</pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">步骤同上《单个模块打包》一致。</pre></td></tr></table>
+</div>
+</div>
+<h3 id="3-使用fat-aar-plugin能解决fat-aar-https-github-com-vigi0303-fat-aar-plugin-遇到的诸多问题">3、使用fat-aar-plugin能解决fat-aar(<a href="https://github.com/Vigi0303/fat-aar-plugin)遇到的诸多问题">https://github.com/Vigi0303/fat-aar-plugin)遇到的诸多问题</a></h3>
+
+<h4 id="问题1-部分依赖没有打包进去">问题1:部分依赖没有打包进去</h4>
+
+<blockquote>
+<p>升级到 Android Studio 2.3 后，Gradle Plugin 也升级到 2.3.0，对应推荐使用的 Gradle 版本是 3.3。
+这时候会发现项目目录下 {module name}/build/intermediates/exploded-aar/ 目录没了，经过一番查找，发现这并不是一个 Bug，是官方刻意为之，它会在 {user name}/.android/build-cache 下生成一部分缓存文件，来代替 exploded-aar ，如果需要生成它，可以配置项目目录下的 gradle.properties ，添加一行内容：</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">android.enableBuildCache=false</pre></td></tr></table>
+</div>
+</div>
+<blockquote>
+<p>然后重建项目即可在 {module name}/build/intermediates/ 看到 exploded-aar 目录了。
+想重新开启 BuildCache 功能，可以修改为 android.enableBuildCache=true 或者直接删除本行内容即可。
+<a href="https://blog.csdn.net/ys743276112/article/details/62235542">https://blog.csdn.net/ys743276112/article/details/62235542</a></p>
+</blockquote>
+
+<h4 id="问题2-the-prefix-tools-for-attribute-tools-overridelibrary-associated-with-an-element-type-uses-sdk-is-not-bound">问题2: The prefix &ldquo;tools&rdquo; for attribute &ldquo;tools:overrideLibrary&rdquo; associated with an element type &ldquo;uses-sdk&rdquo; is not bound.</h4>
+
+<blockquote>
+<p>问题通常是由插件引起的。 从项目插件中findAndroidManifest.xml，打开它，然后在
+&lt;manifest xmlns:android=&ldquo;<a href="http://schemas.android.com/apk/res/android&quot;">http://schemas.android.com/apk/res/android&quot;</a>
+下添加</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">&lt;manifest xmlns:android=&#34;http://schemas.android.com/apk/res/android&#34;
+	  xmlns:tools=&#34;http://schemas.android.com/tools&#34;</pre></td></tr></table>
+</div>
+</div>
+<p>保存并重新重build。 这应该解决问题。 你可以看到这个post应该是什么样的。
+<a href="http://androidcookie.com/typesuses-sdktoolsoverridelibrarytools.html">http://androidcookie.com/typesuses-sdktoolsoverridelibrarytools.html</a></p>
+
+<h4 id="问题3-编译运行之后就报异常noclassdeffounderror-android-support-v7-recyclerview-r-styleable">问题3:编译运行之后就报异常NoClassDefFoundError: android.support.v7.recyclerview.R$styleable</h4>
+
+<ul>
+<li>重新引入依赖</li>
+<li>提取RecyclerView的classes.jar，把这个jar包放到项目中的libs文件下即可。
+这个jar包就是RecyclerView要使用的，
+可以给它改个名字例如android-support-v7-recyclerview.jar
+<a href="https://blog.csdn.net/jtahz1_23/article/details/50569588">https://blog.csdn.net/jtahz1_23/article/details/50569588</a></li>
+</ul>
+
+<h2 id="二-引入-aar">二、引入 aar</h2>
+
+<h3 id="方法一-通过-libs-引入到-app-中">方法一、通过 libs 引入到 app 中</h3>
+
+<blockquote>
+<p>把 aar 文件放在 libs 目录下
+  在 app 的 build.gradle 中添加如下内容</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">    repositories {
+        flatDir {
+            dirs &#39;libs&#39; 
+        }
+    }</pre></td></tr></table>
+</div>
+</div>
+<p>之后通过如下方式引入</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">    dependencies {
+        compile(name:&#39;test&#39;, ext:&#39;aar&#39;)
+    }</pre></td></tr></table>
+</div>
+</div>
+<p>Rebuild project
+如果发现引入后无法使用，重启 Android studio</p>
+
+<h3 id="方法二-把-aar-作为一个库工程的方式引入">方法二、把 aar 作为一个库工程的方式引入</h3>
+
+<p>当项目中库工程较多且依赖关系比较复杂时，最好采用这一种方式。
+如：某一个库工程也要引入这个 aar 时。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">菜单栏 -&gt; File -&gt; New -&gt; New Module
+-&gt; Import .Jar/.AAR Package
+-&gt; Next
+-&gt; 选择 File name 的文件 -&gt; Subproject name 命名工程 
+-&gt; Finish</pre></td></tr></table>
+</div>
+</div>
+<p>创建完成后是一个工程，工程中包括 aar 文件和 build.gradle 文件。build.gradle文件内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">configurations.create(&#34;default&#34;)
+artifacts.add(&#34;default&#34;, file(&#39;musiclibrary_20170622.aar&#39;))</pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Fantasy</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2018-08-24</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://mazhidong.github.io/tags/android/">android</a>
+          <a href="https://mazhidong.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+        
+          <a class="next" href="/post/android/2018-08-17-android%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
+            <span class="next-text nav-default">android 单例模式</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+
+  
+  
+
+  
+  
+
+  
+
+  <div class="post bg-white">
+      <div id="comments-gitment"></div>
+      <link rel="stylesheet" href="/lib/gitment/gitment-0.0.3.min.css">
+        <script src="/lib/gitment/gitment-0.0.3.min.js"></script>
+      <script type="text/javascript">
+      const gitment = new Gitment({
+        id: '2018-08-24-android_多module打包aar.md',
+        title: 'android 多module打包aar',
+        link: decodeURI(location.href),
+        desc: '一、打包 aar 1、单个模块打包 打开 Gradle 工具窗口,找到 Android Library 模块. 在 build 任务中双击 assemble. 执行成功后，在 mylibrary\/build\/outputs\/aar 目录下找到 aar 包. 默认 Debug 和 Release 的 AAR 包都会打出来,当然你也',
+        owner: 'mazhidong',
+        repo: 'comments',
+        oauth: {
+          client_id: 'a7ad9d79ce4e98eabdc8',
+          client_secret: '13ffc9363807f8929fe31ce5a7022fb8676dab45'
+        }
+      })
+      gitment.render('comments-gitment')
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/imsun/gitment">comments powered by gitment.</a></noscript>
+    </div>
+
+  
+
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:591888356@qq.com" rel="me noopener" class="iconfont icon-email"
+        title="email" target="_blank">
+      </a>
+      <a href="https://github.com/mazhidong" rel="me noopener" class="iconfont icon-github"
+        title="github" target="_blank">
+      </a>
+  <a href="https://mazhidong.github.io/index.xml" rel="noopener alternate" type="application/rss" class="iconfont icon-rss"
+    title="rss" target="_blank">
+  </a>
+  </div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span><span class="author">Fantasy</span></span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+<script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
+
+
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+
+</body>
+</html>

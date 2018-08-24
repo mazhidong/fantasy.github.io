@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Fantasy Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 17 Aug 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 24 Aug 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mazhidong.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>android 多module打包aar</title>
+      <link>https://mazhidong.github.io/post/android/2018-08-24-android_%E5%A4%9Amodule%E6%89%93%E5%8C%85aar/</link>
+      <pubDate>Fri, 24 Aug 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/android/2018-08-24-android_%E5%A4%9Amodule%E6%89%93%E5%8C%85aar/</guid>
+      <description>一、打包 aar 1、单个模块打包 打开 Gradle 工具窗口,找到 Android Library 模块. 在 build 任务中双击 assemble. 执行成功后，在 mylibrary/build/outputs/aar 目录下找到 aar 包. 默认 Debug 和 Release 的 AAR 包都会打出来,当然你也</description>
+    </item>
     
     <item>
       <title>android 单例模式</title>
@@ -180,15 +189,6 @@
       
       <guid>https://mazhidong.github.io/post/aosp/2018-04-26-android-4.4-esh45-bug/</guid>
       <description>现象: 内部存储没有见到sdcard目录,shell进入sdcard目录发现没有文件,正常情况下应该存在 Download,Music,Movi</description>
-    </item>
-    
-    <item>
-      <title>如何在github.io搭建Hugo博客站</title>
-      <link>https://mazhidong.github.io/post/blog/deploy-hugo-blog-in-github.io/</link>
-      <pubDate>Thu, 22 Mar 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/blog/deploy-hugo-blog-in-github.io/</guid>
-      <description>摘要 在前面的博文中介绍了如何在github.io上搭建自己的博客站，基于的是Jekyll，这也是github中比较常用的方式，好处是gith</description>
     </item>
     
   </channel>

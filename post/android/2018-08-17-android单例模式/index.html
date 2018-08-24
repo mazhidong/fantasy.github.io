@@ -349,7 +349,7 @@
 
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -372,9 +372,9 @@
 </span><span class="lnt">21
 </span><span class="lnt">22
 </span><span class="lnt">23
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><span class="kn">package</span> <span class="nx">android</span><span class="p">.</span><span class="nx">util</span><span class="p">;</span>
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">android.util</span><span class="o">;</span>
 
 <span class="cm">/**
 </span><span class="cm"> * Singleton helper class for lazily initialization.
@@ -383,26 +383,26 @@
 </span><span class="cm"> *
 </span><span class="cm"> * @hide
 </span><span class="cm"> */</span>
-<span class="nx">public</span> <span class="nx">abstract</span> <span class="nx">class</span> <span class="nx">Singleton</span><span class="p">&lt;</span><span class="nx">T</span><span class="p">&gt;</span> <span class="p">{</span>
-    <span class="nx">private</span> <span class="nx">T</span> <span class="nx">mInstance</span><span class="p">;</span>
+<span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">Singleton</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">T</span> <span class="n">mInstance</span><span class="o">;</span>
 
-    <span class="nx">protected</span> <span class="nx">abstract</span> <span class="nx">T</span> <span class="nx">create</span><span class="p">();</span>
+    <span class="kd">protected</span> <span class="kd">abstract</span> <span class="n">T</span> <span class="nf">create</span><span class="o">();</span>
 
-    <span class="nx">public</span> <span class="nx">final</span> <span class="nx">T</span> <span class="nx">get</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nx">synchronized</span> <span class="p">(</span><span class="nx">this</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">mInstance</span> <span class="o">==</span> <span class="nx">null</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">mInstance</span> <span class="p">=</span> <span class="nx">create</span><span class="p">();</span>
-            <span class="p">}</span>
-            <span class="k">return</span> <span class="nx">mInstance</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span> </pre></td></tr></table>
+    <span class="kd">public</span> <span class="kd">final</span> <span class="n">T</span> <span class="nf">get</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">synchronized</span> <span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mInstance</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">mInstance</span> <span class="o">=</span> <span class="n">create</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">mInstance</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span> </code></pre></td></tr></table>
 </div>
 </div>
 <h2 id="正常懒汉单例">正常懒汉单例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -414,26 +414,26 @@
 </span><span class="lnt">10
 </span><span class="lnt">11
 </span><span class="lnt">12
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">public class SingletonDemo {
-    private static SingletonDemo mInstance;
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SingletonDemo</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">SingletonDemo</span> <span class="n">mInstance</span><span class="o">;</span>
 
-    public static final SingletonDemo get() {
-        synchronized (SingletonDemo.class) {
-            if (mInstance == null) {
-                mInstance = new SingletonDemo();
-            }
-            return mInstance;
-        }
-    }
-} </pre></td></tr></table>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">SingletonDemo</span> <span class="nf">get</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">synchronized</span> <span class="o">(</span><span class="n">SingletonDemo</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mInstance</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">mInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SingletonDemo</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">mInstance</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span> </code></pre></td></tr></table>
 </div>
 </div>
 <h2 id="懒汉-双重校验单例">懒汉+双重校验单例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -447,28 +447,28 @@
 </span><span class="lnt">12
 </span><span class="lnt">13
 </span><span class="lnt">14
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">public class SingletonDemo {
-    private static SingletonDemo mInstance;
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SingletonDemo</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">SingletonDemo</span> <span class="n">mInstance</span><span class="o">;</span>
 
-    public static final SingletonDemo get() {
-        if (mInstance == null) {
-            synchronized (SingletonDemo.class) {
-                if (mInstance == null) {
-                    mInstance = new SingletonDemo();
-                }
-            }
-        }
-        return mInstance;
-    }
-} </pre></td></tr></table>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">SingletonDemo</span> <span class="nf">get</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mInstance</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">synchronized</span> <span class="o">(</span><span class="n">SingletonDemo</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">mInstance</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">mInstance</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SingletonDemo</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">mInstance</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span> </code></pre></td></tr></table>
 </div>
 </div>
 <h2 id="变种懒汉单例">变种懒汉单例</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -480,20 +480,20 @@
 </span><span class="lnt">10
 </span><span class="lnt">11
 </span><span class="lnt">12
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">public class SingletonDemo {
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SingletonDemo</span> <span class="o">{</span>
 
-    public static final SingletonDemo get() {
-        return INSTANCE.get();
-    }
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">SingletonDemo</span> <span class="nf">get</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">INSTANCE</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+    <span class="o">}</span>
 
-    private static final Singleton&lt;SingletonDemo&gt; INSTANCE = new Singleton&lt;SingletonDemo&gt;() {
-        protected SingletonDemo create() {
-            return new SingletonDemo();
-        }
-    };
-}</pre></td></tr></table>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Singleton</span><span class="o">&lt;</span><span class="n">SingletonDemo</span><span class="o">&gt;</span> <span class="n">INSTANCE</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Singleton</span><span class="o">&lt;</span><span class="n">SingletonDemo</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="kd">protected</span> <span class="n">SingletonDemo</span> <span class="nf">create</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">SingletonDemo</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+<span class="o">}</span></code></pre></td></tr></table>
 </div>
 </div>
 <p>懒汉式单例一般都会再加个双重校验的判断，避免每次调用get()都加锁，影响性能，Android源码中Singleton.java工具类并没有做双重校验（看了下googlesource中的Singleton.java，也是6年前提交的代码了），所以我们在将Singleton.java拷贝出来使用的时候可以加个双重校验优化下。Singleton.java封装了create，get模版，及get中的校验逻辑，从而SingletonDemo中的实现代码就可以更加的简单：1.create()一个单例对象，2.在需要的时候get()。</p>
@@ -531,6 +531,11 @@
       
       <nav class="post-nav">
         
+          <a class="prev" href="/post/android/2018-08-24-android_%E5%A4%9Amodule%E6%89%93%E5%8C%85aar/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">android 多module打包aar</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
         
           <a class="next" href="/post/aosp/2018-08-15-exchange-extsd-and-sdcard/">
             <span class="next-text nav-default">exchange-extsd-and-sdcard</span>

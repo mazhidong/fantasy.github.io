@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Fantasy Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 24 Aug 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 11 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mazhidong.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>dialog隐藏虚拟按键</title>
+      <link>https://mazhidong.github.io/post/android/2018-09-11-dialog%E9%9A%90%E8%97%8F%E8%99%9A%E6%8B%9F%E6%8C%89%E9%94%AE/</link>
+      <pubDate>Tue, 11 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/android/2018-09-11-dialog%E9%9A%90%E8%97%8F%E8%99%9A%E6%8B%9F%E6%8C%89%E9%94%AE/</guid>
+      <description>Android 部分机型没有物理按键，只有虚拟按键，Activity全屏方法如下： 在 1 setContentView(R.layout.activity_main); 之前添加 1 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION); 当用户划出虚拟按键后，自动再隐藏方法如下： 1 2 3 4 5 6</description>
+    </item>
     
     <item>
       <title>android 多module打包aar</title>
@@ -180,15 +189,6 @@
       
       <guid>https://mazhidong.github.io/post/aosp/2018-04-26-android-usb-bug/</guid>
       <description>出现平台 RK3288 系统版本 Android 5.1 问题描述 两个USB不能同时工作.一个USB设备在工作的时候,再载入另外一个USB设备,前一个USB设备不能正常工作. 解</description>
-    </item>
-    
-    <item>
-      <title>ESH45 Android：无法访问 sdcard 目录</title>
-      <link>https://mazhidong.github.io/post/aosp/2018-04-26-android-4.4-esh45-bug/</link>
-      <pubDate>Sun, 22 Apr 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/aosp/2018-04-26-android-4.4-esh45-bug/</guid>
-      <description>现象: 内部存储没有见到sdcard目录,shell进入sdcard目录发现没有文件,正常情况下应该存在 Download,Music,Movi</description>
     </item>
     
   </channel>

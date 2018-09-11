@@ -10,6 +10,13 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/post/android/2018-09-11-dialog%E9%9A%90%E8%97%8F%E8%99%9A%E6%8B%9F%E6%8C%89%E9%94%AE/</loc>
+    <lastmod>2018-09-11T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/post/android/2018-08-24-android_%E5%A4%9Amodule%E6%89%93%E5%8C%85aar/</loc>
     <lastmod>2018-08-24T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -235,14 +242,14 @@
   
   <url>
     <loc>https://mazhidong.github.io/tags/android/</loc>
-    <lastmod>2018-08-24T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-11T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://mazhidong.github.io/categories/android/</loc>
-    <lastmod>2018-08-24T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-11T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -270,7 +277,7 @@
   
   <url>
     <loc>https://mazhidong.github.io/categories/</loc>
-    <lastmod>2018-08-24T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-11T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -375,7 +382,7 @@
   
   <url>
     <loc>https://mazhidong.github.io/post/</loc>
-    <lastmod>2018-08-24T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-11T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -418,6 +425,13 @@
   <url>
     <loc>https://mazhidong.github.io/tags/usb%E6%9D%83%E9%99%90/</loc>
     <lastmod>2018-08-07T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://mazhidong.github.io/tags/widget/</loc>
+    <lastmod>2018-09-11T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>

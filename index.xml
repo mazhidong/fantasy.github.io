@@ -24,6 +24,187 @@
     </item>
     
     <item>
+      <title>dialog隐藏虚拟按键</title>
+      <link>https://mazhidong.github.io/post/android/2018-09-11-dialog%E9%9A%90%E8%97%8F%E8%99%9A%E6%8B%9F%E6%8C%89%E9%94%AE/</link>
+      <pubDate>Tue, 11 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/android/2018-09-11-dialog%E9%9A%90%E8%97%8F%E8%99%9A%E6%8B%9F%E6%8C%89%E9%94%AE/</guid>
+      
+        <description>
+
+&lt;h2 id=&#34;android-部分机型没有物理按键-只有虚拟按键-activity全屏方法如下&#34;&gt;Android 部分机型没有物理按键，只有虚拟按键，Activity全屏方法如下：&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;在&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;setContentView(R.layout.activity_main);&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;之前添加&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;当用户划出虚拟按键后，自动再隐藏方法如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new OnSystemUiVisibilityChangeListener() {
+@Override
+public void onSystemUiVisibilityChange(int visibility) {
+    int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+            //布局位于状态栏下方
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+            //全屏
+            View.SYSTEM_UI_FLAG_FULLSCREEN |
+            //隐藏导航栏
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+    if (Build.VERSION.SDK_INT &amp;gt;= 19) {
+        uiOptions |= 0x00001000;
+    } else {
+        uiOptions |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
+    }
+    getWindow().getDecorView().setSystemUiVisibility(uiOptions);
+}
+});&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;dialog 隐藏方法&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;mDialog.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+mDialog.getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new OnSystemUiVisibilityChangeListener() {
+@Override
+public void onSystemUiVisibilityChange(int visibility) {
+    int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+            //布局位于状态栏下方
+            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+            //全屏
+            View.SYSTEM_UI_FLAG_FULLSCREEN |
+            //隐藏导航栏
+            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+    if (Build.VERSION.SDK_INT &amp;gt;= 19) {
+        uiOptions |= 0x00001000;
+    } else {
+        uiOptions |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
+    }
+    mDialog.getWindow().getDecorView().setSystemUiVisibility(uiOptions);
+}
+});&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;要在mDialog.show();之前。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;dialog 隐藏方法,放在自定义dialog中即可&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;@Override
+public void onStart() {
+super.onStart();
+Window window = this.getWindow();&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;    //如果是在activity中则用这段代码
+    //Window window = getDialog().getWindow();
+    window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+    	    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    // 用在activity中，去标题
+    //window.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    int uiOptions =View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+    	|View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+    	|View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+    	|View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+    	|View.SYSTEM_UI_FLAG_IMMERSIVE
+    	|View.SYSTEM_UI_FLAG_FULLSCREEN
+
+    window.getDecorView().setSystemUiVisibility(uiOptions);
+    }&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description>
+      
+    </item>
+    
+    <item>
       <title>android 多module打包aar</title>
       <link>https://mazhidong.github.io/post/android/2018-08-24-android_%E5%A4%9Amodule%E6%89%93%E5%8C%85aar/</link>
       <pubDate>Fri, 24 Aug 2018 00:00:00 +0000</pubDate>
@@ -6781,76 +6962,6 @@ public interface ViewInjector&amp;lt;T&amp;gt;{
 &lt;p&gt;本文通过具体的实例来描述了如何编写一个基于编译时注解的项目，主要步骤为：项目结构的划分、注解模块的实现、注解处理器的编写以及对外公布的API模块的编写。通过文本的学习应该能够了解基于编译时注解这类框架运行的原理，以及自己如何去编写这样一类框架。&lt;/p&gt;
 
 &lt;p&gt;*源码地址: &lt;a href=&#34;https://github.com/hymanAndroid/ioc-apt-sample&#34;&gt;https://github.com/hymanAndroid/ioc-apt-sample&lt;/a&gt;&lt;/p&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title>Android USB 冲突问题</title>
-      <link>https://mazhidong.github.io/post/aosp/2018-04-26-android-usb-bug/</link>
-      <pubDate>Sun, 22 Apr 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/aosp/2018-04-26-android-usb-bug/</guid>
-      
-        <description>
-
-&lt;h2 id=&#34;出现平台&#34;&gt;出现平台&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;RK3288&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;系统版本&#34;&gt;系统版本&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Android 5.1&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;两个USB不能同时工作.一个USB设备在工作的时候,再载入另外一个USB设备,前一个USB设备不能正常工作.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;修改UsbHostManager ​&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt; ```diff --git a/services/usb/java/com/android/server/usb/UsbHostManager.java b/services/usb/java/com/android/server/usb/UsbHostManager.java
-index e769bda..c1c5774 100644
---- a/services/usb/java/com/android/server/usb/UsbHostManager.java
-+++ b/services/usb/java/com/android/server/usb/UsbHostManager.java
-@@ -230,6 +230,8 @@ public class UsbHostManager {
-         mNewConfigurations = null;
-         mNewInterfaces = null;
-         mNewEndpoints = null;
-
-+           mNewConfiguration = null;
-+           mNewInterface = null; 
-     }
-     }
-```&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;/li&gt;
-&lt;/ul&gt;
 </description>
       
     </item>

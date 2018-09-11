@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Widget on Fantasy Blogs</title>
+    <link>https://mazhidong.github.io/tags/widget/</link>
+    <description>Recent content in Widget on Fantasy Blogs</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 11 Sep 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://mazhidong.github.io/tags/widget/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>dialog隐藏虚拟按键</title>
+      <link>https://mazhidong.github.io/post/android/2018-09-11-dialog%E9%9A%90%E8%97%8F%E8%99%9A%E6%8B%9F%E6%8C%89%E9%94%AE/</link>
+      <pubDate>Tue, 11 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/android/2018-09-11-dialog%E9%9A%90%E8%97%8F%E8%99%9A%E6%8B%9F%E6%8C%89%E9%94%AE/</guid>
+      <description>Android 部分机型没有物理按键，只有虚拟按键，Activity全屏方法如下： 在 1 setContentView(R.layout.activity_main); 之前添加 1 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION); 当用户划出虚拟按键后，自动再隐藏方法如下： 1 2 3 4 5 6</description>
+    </item>
+    
+  </channel>
+</rss>

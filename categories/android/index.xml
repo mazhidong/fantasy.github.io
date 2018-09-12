@@ -6,10 +6,19 @@
     <description>Recent content in Android on Fantasy Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 11 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 12 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mazhidong.github.io/categories/android/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>onActivityResult执行时机</title>
+      <link>https://mazhidong.github.io/post/android/2018-09-12-onactivityresult%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA/</link>
+      <pubDate>Wed, 12 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/android/2018-09-12-onactivityresult%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA/</guid>
+      <description>前言 前两天遇到了个onActivityResult执行时机错误的问题，在解决过程中学习了些onActivityResult与setResul</description>
+    </item>
     
     <item>
       <title>dialog隐藏虚拟按键</title>

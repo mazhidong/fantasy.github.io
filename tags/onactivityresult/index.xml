@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Onactivityresult on Fantasy Blogs</title>
+    <link>https://mazhidong.github.io/tags/onactivityresult/</link>
+    <description>Recent content in Onactivityresult on Fantasy Blogs</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 12 Sep 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://mazhidong.github.io/tags/onactivityresult/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>onActivityResult执行时机</title>
+      <link>https://mazhidong.github.io/post/android/2018-09-12-onactivityresult%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA/</link>
+      <pubDate>Wed, 12 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/android/2018-09-12-onactivityresult%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA/</guid>
+      <description>前言 前两天遇到了个onActivityResult执行时机错误的问题，在解决过程中学习了些onActivityResult与setResul</description>
+    </item>
+    
+  </channel>
+</rss>

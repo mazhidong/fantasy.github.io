@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>dialog隐藏虚拟按键 - Fantasy Blogs</title>
+  <title>onActivityResult执行时机 - Fantasy Blogs</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -25,7 +25,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="Fantasy" />
-  <meta name="description" content="Android 部分机型没有物理按键，只有虚拟按键，Activity全屏方法如下： 在 1 setContentView(R.layout.activity_main); 之前添加 1 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION); 当用户划出虚拟按键后，自动再隐藏方法如下： 1 2 3 4 5 6" />
+  <meta name="description" content="前言 前两天遇到了个onActivityResult执行时机错误的问题，在解决过程中学习了些onActivityResult与setResul" />
 
   <meta name="keywords" content="mzd, fantasy, blogs" />
 
@@ -37,7 +37,7 @@
 <meta name="generator" content="Hugo 0.40" />
 
 
-<link rel="canonical" href="https://mazhidong.github.io/post/android/2018-09-11-dialog%E9%9A%90%E8%97%8F%E8%99%9A%E6%8B%9F%E6%8C%89%E9%94%AE/" />
+<link rel="canonical" href="https://mazhidong.github.io/post/android/2018-09-12-onactivityresult%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA/" />
 
 
 
@@ -57,20 +57,16 @@
 
 
 
-<meta property="og:title" content="dialog隐藏虚拟按键" />
-<meta property="og:description" content="Android 部分机型没有物理按键，只有虚拟按键，Activity全屏方法如下： 在 1 setContentView(R.layout.activity_main); 之前添加 1 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION); 当用户划出虚拟按键后，自动再隐藏方法如下： 1 2 3 4 5 6" />
+<meta property="og:title" content="onActivityResult执行时机" />
+<meta property="og:description" content="前言 前两天遇到了个onActivityResult执行时机错误的问题，在解决过程中学习了些onActivityResult与setResul" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://mazhidong.github.io/post/android/2018-09-11-dialog%E9%9A%90%E8%97%8F%E8%99%9A%E6%8B%9F%E6%8C%89%E9%94%AE/" />
+<meta property="og:url" content="https://mazhidong.github.io/post/android/2018-09-12-onactivityresult%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA/" />
 
 
 
-<meta property="article:published_time" content="2018-09-11T00:00:00&#43;00:00"/>
+<meta property="article:published_time" content="2018-09-12T00:00:00&#43;00:00"/>
 
-<meta property="article:modified_time" content="2018-09-11T00:00:00&#43;00:00"/>
-
-
-
-
+<meta property="article:modified_time" content="2018-09-12T00:00:00&#43;00:00"/>
 
 
 
@@ -78,20 +74,24 @@
 
 
 
-<meta itemprop="name" content="dialog隐藏虚拟按键">
-<meta itemprop="description" content="Android 部分机型没有物理按键，只有虚拟按键，Activity全屏方法如下： 在 1 setContentView(R.layout.activity_main); 之前添加 1 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION); 当用户划出虚拟按键后，自动再隐藏方法如下： 1 2 3 4 5 6">
-
-
-<meta itemprop="datePublished" content="2018-09-11T00:00:00&#43;00:00" />
-<meta itemprop="dateModified" content="2018-09-11T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="354">
 
 
 
-<meta itemprop="keywords" content="android,widget," />
+
+<meta itemprop="name" content="onActivityResult执行时机">
+<meta itemprop="description" content="前言 前两天遇到了个onActivityResult执行时机错误的问题，在解决过程中学习了些onActivityResult与setResul">
+
+
+<meta itemprop="datePublished" content="2018-09-12T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2018-09-12T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="1268">
+
+
+
+<meta itemprop="keywords" content="android,onActivityResult," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="dialog隐藏虚拟按键"/>
-<meta name="twitter:description" content="Android 部分机型没有物理按键，只有虚拟按键，Activity全屏方法如下： 在 1 setContentView(R.layout.activity_main); 之前添加 1 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION); 当用户划出虚拟按键后，自动再隐藏方法如下： 1 2 3 4 5 6"/>
+<meta name="twitter:title" content="onActivityResult执行时机"/>
+<meta name="twitter:description" content="前言 前两天遇到了个onActivityResult执行时机错误的问题，在解决过程中学习了些onActivityResult与setResul"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -302,16 +302,16 @@
           <article class="post bg-white">
     
     <header class="post-header">
-      <h1 class="post-title">dialog隐藏虚拟按键</h1>
+      <h1 class="post-title">onActivityResult执行时机</h1>
       
       <div class="post-meta">
-        <span class="post-time"> 2018-09-11 </span>
+        <span class="post-time"> 2018-09-12 </span>
         <div class="post-category">
             <a href="https://mazhidong.github.io/categories/android/"> android </a>
             
           </div>
-        <span class="more-meta"> 约 354 字 </span>
-        <span class="more-meta"> 预计阅读 1 分钟 </span>
+        <span class="more-meta"> 约 1268 字 </span>
+        <span class="more-meta"> 预计阅读 3 分钟 </span>
       </div>
     </header>
 
@@ -324,7 +324,11 @@
 <ul>
 <li>
 <ul>
-<li><a href="#android-部分机型没有物理按键-只有虚拟按键-activity全屏方法如下">Android 部分机型没有物理按键，只有虚拟按键，Activity全屏方法如下：</a></li>
+<li><a href="#前言">前言</a></li>
+<li><a href="#问题">问题</a></li>
+<li><a href="#解决">解决</a></li>
+<li><a href="#总结下onactivityresult执行错误常见原因">总结下onActivityResult执行错误常见原因</a></li>
+<li><a href="#我遇到的问题">我遇到的问题</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -335,175 +339,57 @@
     <div class="post-content">
       
 
-<h2 id="android-部分机型没有物理按键-只有虚拟按键-activity全屏方法如下">Android 部分机型没有物理按键，只有虚拟按键，Activity全屏方法如下：</h2>
+<h2 id="前言">前言</h2>
 
-<ol>
-<li><p>在</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">setContentView(R.layout.activity_main);</pre></td></tr></table>
-</div>
-</div>
-<p>之前添加</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);</pre></td></tr></table>
-</div>
-</div></li>
+<p>前两天遇到了个onActivityResult执行时机错误的问题，在解决过程中学习了些onActivityResult与setResult的一些细节，记录一下。</p>
 
-<li><p>当用户划出虚拟按键后，自动再隐藏方法如下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new OnSystemUiVisibilityChangeListener() {
-@Override
-public void onSystemUiVisibilityChange(int visibility) {
-    int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-            //布局位于状态栏下方
-            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-            //全屏
-            View.SYSTEM_UI_FLAG_FULLSCREEN |
-            //隐藏导航栏
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-    if (Build.VERSION.SDK_INT &gt;= 19) {
-        uiOptions |= 0x00001000;
-    } else {
-        uiOptions |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
-    }
-    getWindow().getDecorView().setSystemUiVisibility(uiOptions);
-}
-});</pre></td></tr></table>
-</div>
-</div></li>
+<h2 id="问题">问题</h2>
 
-<li><p>dialog 隐藏方法</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">mDialog.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-mDialog.getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new OnSystemUiVisibilityChangeListener() {
-@Override
-public void onSystemUiVisibilityChange(int visibility) {
-    int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-            //布局位于状态栏下方
-            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-            //全屏
-            View.SYSTEM_UI_FLAG_FULLSCREEN |
-            //隐藏导航栏
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-    if (Build.VERSION.SDK_INT &gt;= 19) {
-        uiOptions |= 0x00001000;
-    } else {
-        uiOptions |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
-    }
-    mDialog.getWindow().getDecorView().setSystemUiVisibility(uiOptions);
-}
-});</pre></td></tr></table>
-</div>
-</div>
-<p>要在mDialog.show();之前。</p></li>
+<p>项目接入一个第三方sdk时，需要在一个webview的容器Activity A中调起登录Activity B，完成登录后，Activity B-&gt;setResult-&gt;finish。这时不是应该A的onActivityResult执行吗？可是却什么都没有发生。</p>
 
-<li><p>dialog 隐藏方法,放在自定义dialog中即可</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">@Override
-public void onStart() {
-super.onStart();
-Window window = this.getWindow();</pre></td></tr></table>
-</div>
-</div></li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span></pre></td>
-<td class="lntd">
-<pre class="chroma">    //如果是在activity中则用这段代码
-    //Window window = getDialog().getWindow();
-    window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-    	    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    // 用在activity中，去标题
-    //window.requestWindowFeature(Window.FEATURE_NO_TITLE);
-    int uiOptions =View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-    	|View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-    	|View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-    	|View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-    	|View.SYSTEM_UI_FLAG_IMMERSIVE
-    	|View.SYSTEM_UI_FLAG_FULLSCREEN
+<h2 id="解决">解决</h2>
 
-    window.getDecorView().setSystemUiVisibility(uiOptions);
-    }</pre></td></tr></table>
-</div>
-</div>
+<p>首先查看了B的setResult调用没有问题，然后又确认了启动模式也是 standard的没有问题。不过发现结束登录activity B后回到A后再按下back键，A的onActivityResult就执行了（A为webview的activity，activity栈里有多个实例）。感觉好像有点线索了，于是看第三方sdk的提供的activity，原来在它的activity中使用了一个static 的stack来自己管理activity栈，而启动B是在一个js接口回调提供给A的启动者的，这下就解决问题了。问题在与调用startactivityforresult的activity与B finish后的退回的activity不是一个对象，修改了activity栈相关的代码，bug果然解决了。</p>
+
+<h2 id="总结下onactivityresult执行错误常见原因">总结下onActivityResult执行错误常见原因</h2>
+
+<ul>
+<li><p>待跳转的Activity启动模式错误：
+standard与singletop模式是会在跳转后的Activity finish后执行onActivityResult，而singletask和singleinstance模式是在startActivityforresult后立即执行onActivityResult；</p></li>
+
+<li><p>startActivityforresult（）的第二个参数requestCode必须&gt;=0,而且&lt;0xffff
+api文档里是这么说的：</p></li>
+</ul>
+
+<blockquote>
+<p>@param requestCode If &gt;= 0, this code will be returned in* onActivityResult() when the activity exits.</p>
+</blockquote>
+
+<ul>
+<li><p>在TabHost的子Activity中startActivityForResult调用其他Activity时候遭遇到onActivityResult方法不响应：
+这个问题主要还是和activitygroup有关，不过TabHost也是过时很久了，最好不要用。这个问题可以通过如下办法解决：</p>
+
+<ul>
+<li><p>通过父Activity启动其他Activity;</p></li>
+
+<li><p>实现父Activity的onActivityResult方法,将该处接收到的请求转发给当前活动的子Activity;</p></li>
+
+<li><p>自定义一个转发接口用来实现第2步中的转发功能;</p></li>
+
+<li><p>子Activity中实现第3步接口中的方法用来接收返回信息;</p></li>
+</ul></li>
+
+<li><p>调用startactivityforresult的activity与跳转的activity finish后返回的activity必须是同一个：
+这就是我出现的bug，注意startactivityforresult的调用者不要错了。</p></li>
+</ul>
+
+<h2 id="我遇到的问题">我遇到的问题</h2>
+
+<ul>
+<li>activity设置了launchMode=&ldquo;singleTask&rdquo;</li>
+<li>删除解决</li>
+</ul>
+
     </div>
 
     
@@ -515,7 +401,7 @@ Window window = this.getWindow();</pre></td></tr></table>
   </p>
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
-    <span class="item-content">2018-09-11</span>
+    <span class="item-content">2018-09-12</span>
   </p>
   
   <p class="copyright-item">
@@ -530,21 +416,16 @@ Window window = this.getWindow();</pre></td></tr></table>
     <footer class="post-footer">
       <div class="post-tags">
           <a href="https://mazhidong.github.io/tags/android/">android</a>
-          <a href="https://mazhidong.github.io/tags/widget/">widget</a>
+          <a href="https://mazhidong.github.io/tags/onactivityresult/">onActivityResult</a>
           
         </div>
 
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/android/2018-09-12-onactivityresult%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA/">
-            <i class="iconfont icon-left"></i>
-            <span class="prev-text nav-default">onActivityResult执行时机</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
         
-          <a class="next" href="/post/android/2018-08-24-android_%E5%A4%9Amodule%E6%89%93%E5%8C%85aar/">
-            <span class="next-text nav-default">android 多module打包aar</span>
+          <a class="next" href="/post/android/2018-09-11-dialog%E9%9A%90%E8%97%8F%E8%99%9A%E6%8B%9F%E6%8C%89%E9%94%AE/">
+            <span class="next-text nav-default">dialog隐藏虚拟按键</span>
             <span class="prev-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
@@ -566,10 +447,10 @@ Window window = this.getWindow();</pre></td></tr></table>
         <script src="/lib/gitment/gitment-0.0.3.min.js"></script>
       <script type="text/javascript">
       const gitment = new Gitment({
-        id: '2018-09-11-dialog隐藏虚拟按键.md',
-        title: 'dialog隐藏虚拟按键',
+        id: '2018-09-12-onActivityResult执行时机.md',
+        title: 'onActivityResult执行时机',
         link: decodeURI(location.href),
-        desc: 'Android 部分机型没有物理按键，只有虚拟按键，Activity全屏方法如下： 在 1 setContentView(R.layout.activity_main); 之前添加 1 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION); 当用户划出虚拟按键后，自动再隐藏方法如下： 1 2 3 4 5 6',
+        desc: '前言 前两天遇到了个onActivityResult执行时机错误的问题，在解决过程中学习了些onActivityResult与setResul',
         owner: 'mazhidong',
         repo: 'comments',
         oauth: {

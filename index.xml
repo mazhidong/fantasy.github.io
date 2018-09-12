@@ -24,6 +24,69 @@
     </item>
     
     <item>
+      <title>onActivityResult执行时机</title>
+      <link>https://mazhidong.github.io/post/android/2018-09-12-onactivityresult%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA/</link>
+      <pubDate>Wed, 12 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/android/2018-09-12-onactivityresult%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA/</guid>
+      
+        <description>
+
+&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+
+&lt;p&gt;前两天遇到了个onActivityResult执行时机错误的问题，在解决过程中学习了些onActivityResult与setResult的一些细节，记录一下。&lt;/p&gt;
+
+&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
+
+&lt;p&gt;项目接入一个第三方sdk时，需要在一个webview的容器Activity A中调起登录Activity B，完成登录后，Activity B-&amp;gt;setResult-&amp;gt;finish。这时不是应该A的onActivityResult执行吗？可是却什么都没有发生。&lt;/p&gt;
+
+&lt;h2 id=&#34;解决&#34;&gt;解决&lt;/h2&gt;
+
+&lt;p&gt;首先查看了B的setResult调用没有问题，然后又确认了启动模式也是 standard的没有问题。不过发现结束登录activity B后回到A后再按下back键，A的onActivityResult就执行了（A为webview的activity，activity栈里有多个实例）。感觉好像有点线索了，于是看第三方sdk的提供的activity，原来在它的activity中使用了一个static 的stack来自己管理activity栈，而启动B是在一个js接口回调提供给A的启动者的，这下就解决问题了。问题在与调用startactivityforresult的activity与B finish后的退回的activity不是一个对象，修改了activity栈相关的代码，bug果然解决了。&lt;/p&gt;
+
+&lt;h2 id=&#34;总结下onactivityresult执行错误常见原因&#34;&gt;总结下onActivityResult执行错误常见原因&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;待跳转的Activity启动模式错误：
+standard与singletop模式是会在跳转后的Activity finish后执行onActivityResult，而singletask和singleinstance模式是在startActivityforresult后立即执行onActivityResult；&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;startActivityforresult（）的第二个参数requestCode必须&amp;gt;=0,而且&amp;lt;0xffff
+api文档里是这么说的：&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;@param requestCode If &amp;gt;= 0, this code will be returned in* onActivityResult() when the activity exits.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;在TabHost的子Activity中startActivityForResult调用其他Activity时候遭遇到onActivityResult方法不响应：
+这个问题主要还是和activitygroup有关，不过TabHost也是过时很久了，最好不要用。这个问题可以通过如下办法解决：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;通过父Activity启动其他Activity;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;实现父Activity的onActivityResult方法,将该处接收到的请求转发给当前活动的子Activity;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;自定义一个转发接口用来实现第2步中的转发功能;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;子Activity中实现第3步接口中的方法用来接收返回信息;&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;调用startactivityforresult的activity与跳转的activity finish后返回的activity必须是同一个：
+这就是我出现的bug，注意startactivityforresult的调用者不要错了。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;我遇到的问题&#34;&gt;我遇到的问题&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;activity设置了launchMode=&amp;ldquo;singleTask&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;删除解决&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>dialog隐藏虚拟按键</title>
       <link>https://mazhidong.github.io/post/android/2018-09-11-dialog%E9%9A%90%E8%97%8F%E8%99%9A%E6%8B%9F%E6%8C%89%E9%94%AE/</link>
       <pubDate>Tue, 11 Sep 2018 00:00:00 +0000</pubDate>
@@ -6420,548 +6483,6 @@ public class MainActivity extends Activity {
 &lt;blockquote&gt;
 &lt;p&gt;如果MainActivity说没有什么类，那就先make project再试一下导包&lt;/p&gt;
 &lt;/blockquote&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title>Android 如何编写基于编译时注解的项目</title>
-      <link>https://mazhidong.github.io/post/android/2018-05-02-android-android-%E5%A6%82%E4%BD%95%E7%BC%96%E5%86%99%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%AF%91%E6%97%B6%E6%B3%A8%E8%A7%A3%E7%9A%84%E9%A1%B9%E7%9B%AE/</link>
-      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/android/2018-05-02-android-android-%E5%A6%82%E4%BD%95%E7%BC%96%E5%86%99%E5%9F%BA%E4%BA%8E%E7%BC%96%E8%AF%91%E6%97%B6%E6%B3%A8%E8%A7%A3%E7%9A%84%E9%A1%B9%E7%9B%AE/</guid>
-      
-        <description>
-
-&lt;h2 id=&#34;一-概述&#34;&gt;一、概述&lt;/h2&gt;
-
-&lt;p&gt;在Android应用开发中，我们常常为了提升开发效率会选择使用一些基于注解的框架，但是由于反射造成一定运行效率的损耗，所以我们会更青睐于编译时注解的框架，例如：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/JakeWharton/butterknife&#34;&gt;butterknife&lt;/a&gt;免去我们编写View的初始化以及事件的注入的代码。&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/greenrobot/EventBus&#34;&gt;EventBus3&lt;/a&gt;方便我们实现组建间通讯。&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/sockeqwe/fragmentargs&#34;&gt;fragmentargs&lt;/a&gt;轻松的为fragment添加参数信息，并提供创建方法。&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/baoyongzhang/ParcelableGenerator&#34;&gt;ParcelableGenerator&lt;/a&gt;可实现自动将任意对象转换为Parcelable类型，方便对象传输。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;类似的库还有非常多，大多这些的库都是为了自动帮我们完成日常编码中需要重复编写的部分（例如：每个Activity中的View都需要初始化，每个实现&lt;code&gt;Parcelable&lt;/code&gt;接口的对象都需要编写很多固定写法的代码）。&lt;/p&gt;
-
-&lt;p&gt;这里并不是说上述框架就一定没有使用反射了，其实上述其中部分框架内部还是有部分实现是依赖于反射的，但是很少而且一般都做了缓存的处理，所以相对来说，效率影响很小。&lt;/p&gt;
-
-&lt;p&gt;但是在使用这类项目的时候，有时候出现错误会难以调试，主要原因还是很多用户并不了解这类框架其内部的原理，所以遇到问题时会消耗大量的时间去排查。&lt;/p&gt;
-
-&lt;p&gt;那么，于情于理，在编译时注解框架这么火的时刻，我们有理由去学习：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;如何编写一个机遇编译时注解的项目&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;首先，是为了了解其原理，这样在我们使用类似框架遇到问题的时候，能够找到正确的途径去排查问题；其次，我们如果有好的想法，发现某些代码需要重复创建，我们也可以自己来写个框架方便自己日常的编码，提升编码效率；最后也算是自身技术的提升。&lt;/p&gt;
-
-&lt;p&gt;注：以下使用IDE为&lt;code&gt;Android Studio&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;本文将以编写一个View注入的框架为线索，详细介绍编写此类框架的步骤。&lt;/p&gt;
-
-&lt;h2 id=&#34;二-编写前的准备&#34;&gt;二、编写前的准备&lt;/h2&gt;
-
-&lt;p&gt;在编写此类框架的时候，一般需要建立多个module，例如本文即将实现的例子：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ioc-annotation 用于存放注解等，Java模块&lt;/li&gt;
-&lt;li&gt;ioc-compiler 用于编写注解处理器，Java模块&lt;/li&gt;
-&lt;li&gt;ioc-api 用于给用户提供使用的API，本例为Andriod模块&lt;/li&gt;
-&lt;li&gt;ioc-sample 示例，本例为Andriod模块&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;那么除了示例以为，一般要建立3个module，module的名字你可以自己考虑，上述给出了一个简单的参考。当然如果条件允许的话，有的开发者喜欢将存放注解和API这两个module合并为一个module。&lt;/p&gt;
-
-&lt;p&gt;对于module间的依赖，因为编写注解处理器需要依赖相关注解，所以：&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;ioc-compiler依赖ioc-annotation&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;我们在使用的过程中，会用到注解以及相关API&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;所以ioc-sample依赖ioc-api；ioc-api依赖ioc-annotation&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&#34;三-注解模块的实现&#34;&gt;三、注解模块的实现&lt;/h2&gt;
-
-&lt;p&gt;注解模块，主要用于存放一些注解类，本例是模板butterknife实现View注入，所以本例只需要一个注解类：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;@Retention(RetentionPolicy.CLASS)
-@Target(ElementType.FIELD)
-public @interface BindView
-{
-    int value();
-}&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;我们设置的保留策略为Class，注解用于Field上。这里我们需要在使用时传入一个id，直接以value的形式进行设置即可。&lt;/p&gt;
-
-&lt;p&gt;你在编写的时候，分析自己需要几个注解类，并且正确的设置&lt;code&gt;@Target&lt;/code&gt;以及&lt;code&gt;@Retention&lt;/code&gt;即可。&lt;/p&gt;
-
-&lt;h2 id=&#34;四-注解处理器的实现&#34;&gt;四、注解处理器的实现&lt;/h2&gt;
-
-&lt;p&gt;定义完成注解后，就可以去编写注解处理器了，这块有点复杂，但是也算是有章可循的。&lt;/p&gt;
-
-&lt;p&gt;该模块，我们一般会依赖注解模块，以及可以使用一个&lt;code&gt;auto-service&lt;/code&gt;库&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;build.gradle&lt;/code&gt;的依赖情况如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;dependencies {
-    compile &amp;#39;com.google.auto.service:auto-service:1.0-rc2&amp;#39;
-    compile project (&amp;#39;:ioc-annotation&amp;#39;)
-}&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;&lt;code&gt;auto-service&lt;/code&gt;库可以帮我们去生成&lt;code&gt;META-INF&lt;/code&gt;等信息。&lt;/p&gt;
-
-&lt;h3 id=&#34;1-基本代码&#34;&gt;（1）基本代码&lt;/h3&gt;
-
-&lt;p&gt;注解处理器一般继承于&lt;code&gt;AbstractProcessor&lt;/code&gt;，刚才我们说有章可循，是因为部分代码的写法基本是固定的，如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;@AutoService(Processor.class)
-public class IocProcessor extends AbstractProcessor{
-    private Filer mFileUtils;
-    private Elements mElementUtils;
-    private Messager mMessager;
-    @Override
-    public synchronized void init(ProcessingEnvironment processingEnv){
-        super.init(processingEnv);
-        mFileUtils = processingEnv.getFiler();
-        mElementUtils = processingEnv.getElementUtils();
-        mMessager = processingEnv.getMessager();
-    }
-    @Override
-    public Set&amp;lt;String&amp;gt; getSupportedAnnotationTypes(){
-        Set&amp;lt;String&amp;gt; annotationTypes = new LinkedHashSet&amp;lt;String&amp;gt;();
-        annotationTypes.add(BindView.class.getCanonicalName());
-        return annotationTypes;
-    }
-    @Override
-    public SourceVersion getSupportedSourceVersion(){
-        return SourceVersion.latestSupported();
-    }
-    @Override
-    public boolean process(Set&amp;lt;? extends TypeElement&amp;gt; annotations, RoundEnvironment roundEnv){
-    }&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;在实现&lt;code&gt;AbstractProcessor&lt;/code&gt;后，&lt;code&gt;process()&lt;/code&gt;方法是必须实现的，也是我们编写代码的核心部分，后面会介绍。&lt;/p&gt;
-
-&lt;p&gt;我们一般会实现&lt;code&gt;getSupportedAnnotationTypes()&lt;/code&gt;和&lt;code&gt;getSupportedSourceVersion()&lt;/code&gt;两个方法，这两个方法一个返回支持的注解类型，一个返回支持的源码版本，参考上面的代码，写法基本是固定的。&lt;/p&gt;
-
-&lt;p&gt;除此以外，我们还会选择复写&lt;code&gt;init()&lt;/code&gt;方法，该方法传入一个参数&lt;code&gt;processingEnv&lt;/code&gt;,可以帮助我们去初始化一些父类类：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Filer mFileUtils; 跟文件相关的辅助类，生成JavaSourceCode.&lt;/li&gt;
-&lt;li&gt;Elements mElementUtils;跟元素相关的辅助类，帮助我们去获取一些元素相关的信息。&lt;/li&gt;
-&lt;li&gt;Messager mMessager;跟日志相关的辅助类。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这里简单提一下&lt;code&gt;Elemnet&lt;/code&gt;，我们简单认识下它的几个子类，根据下面的注释，应该已经有了一个简单认知。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;Element 
-  - VariableElement //一般代表成员变量
-  - ExecutableElement //一般代表类中的方法
-  - TypeElement //一般代表代表类
-  - PackageElement //一般代表Package&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;2-process的实现&#34;&gt;（2）process的实现&lt;/h3&gt;
-
-&lt;p&gt;process中的实现，相比较会比较复杂一点，一般你可以认为两个大步骤：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;收集信息&lt;/li&gt;
-&lt;li&gt;生成代理类（本文把编译时生成的类叫代理类）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;什么叫收集信息呢？就是根据你的注解声明，拿到对应的Element，然后获取到我们所需要的信息，这个信息肯定是为了后面生成&lt;code&gt;JavaFileObject&lt;/code&gt;所准备的。&lt;/p&gt;
-
-&lt;p&gt;例如本例，我们会针对每一个类生成一个代理类，例如&lt;code&gt;MainActivity&lt;/code&gt;我们会生成一个&lt;code&gt;MainActivity$$ViewInjector&lt;/code&gt;。那么如果多个类中声明了注解，就对应了多个类，这里就需要：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;一个类对象，代表具体某个类的代理类生成的全部信息，本例中为&lt;code&gt;ProxyInfo&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;一个集合，存放上述类对象（到时候遍历生成代理类），本例中为&lt;code&gt;Map&amp;lt;String, ProxyInfo&amp;gt;&lt;/code&gt;，key为类的全路径。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这里的描述有点模糊没关系，一会结合代码就好理解了。&lt;/p&gt;
-
-&lt;h4 id=&#34;a-收集信息&#34;&gt;a.收集信息&lt;/h4&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;private Map&amp;lt;String, ProxyInfo&amp;gt; mProxyMap = new HashMap&amp;lt;String, ProxyInfo&amp;gt;();
-@Override
-public boolean process(Set&amp;lt;? extends TypeElement&amp;gt; annotations, RoundEnvironment roundEnv){
-    mProxyMap.clear();
-    Set&amp;lt;? extends Element&amp;gt; elements = roundEnv.getElementsAnnotatedWith(BindView.class);
-    //一、收集信息
-    for (Element element : elements){
-        //检查element类型
-        if (!checkAnnotationUseValid(element)){
-            return false;
-        }
-        //field type
-        VariableElement variableElement = (VariableElement) element;
-        //class type
-        TypeElement typeElement = (TypeElement) variableElement.getEnclosingElement();//TypeElement
-        String qualifiedName = typeElement.getQualifiedName().toString();
-
-        ProxyInfo proxyInfo = mProxyMap.get(qualifiedName);
-        if (proxyInfo == null){
-            proxyInfo = new ProxyInfo(mElementUtils, typeElement);
-            mProxyMap.put(qualifiedName, proxyInfo);
-        }
-        BindView annotation = variableElement.getAnnotation(BindView.class);
-        int id = annotation.value();
-        proxyInfo.mInjectElements.put(id, variableElement);
-    }
-    return true;
-}&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;首先我们调用一下&lt;code&gt;mProxyMap.clear();&lt;/code&gt;，因为process可能会多次调用，避免生成重复的代理类，避免生成类的类名已存在异常。&lt;/p&gt;
-
-&lt;p&gt;然后，通过&lt;code&gt;roundEnv.getElementsAnnotatedWith&lt;/code&gt;拿到我们通过&lt;code&gt;@BindView&lt;/code&gt;注解的元素，这里返回值，按照我们的预期应该是&lt;code&gt;VariableElement&lt;/code&gt;集合，因为我们用于成员变量上。&lt;/p&gt;
-
-&lt;p&gt;接下来for循环我们的元素，首先检查类型是否是&lt;code&gt;VariableElement&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;然后拿到对应的类信息&lt;code&gt;TypeElement&lt;/code&gt;，继而生成&lt;code&gt;ProxyInfo&lt;/code&gt;对象，这里通过一个&lt;code&gt;mProxyMap&lt;/code&gt;进行检查，key为&lt;code&gt;qualifiedName&lt;/code&gt;即类的全路径，如果没有生成才会去生成一个新的，&lt;code&gt;ProxyInfo&lt;/code&gt;与类是一一对应的。&lt;/p&gt;
-
-&lt;p&gt;接下来，会将与该类对应的且被&lt;code&gt;@BindView&lt;/code&gt;声明的&lt;code&gt;VariableElement&lt;/code&gt;加入到&lt;code&gt;ProxyInfo&lt;/code&gt;中去，key为我们声明时填写的id，即View的id。&lt;/p&gt;
-
-&lt;p&gt;这样就完成了信息的收集，收集完成信息后，应该就可以去生成代理类了。&lt;/p&gt;
-
-&lt;h4 id=&#34;b-生成代理类&#34;&gt;b.生成代理类&lt;/h4&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;@Override
-public boolean process(Set&amp;lt;? extends TypeElement&amp;gt; annotations, RoundEnvironment roundEnv){
-    //...省略收集信息的代码，以及try,catch相关
-    for(String key : mProxyMap.keySet()){
-        ProxyInfo proxyInfo = mProxyMap.get(key);
-        JavaFileObject sourceFile = mFileUtils.createSourceFile(
-                proxyInfo.getProxyClassFullName(), proxyInfo.getTypeElement());
-            Writer writer = sourceFile.openWriter();
-            writer.write(proxyInfo.generateJavaCode());
-            writer.flush();
-            writer.close();
-    }
-    return true;
-}&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;可以看到生成代理类的代码非常的简短，主要就是遍历我们的&lt;code&gt;mProxyMap&lt;/code&gt;，然后取得每一个&lt;code&gt;ProxyInfo&lt;/code&gt;，最后通过&lt;code&gt;mFileUtils.createSourceFile&lt;/code&gt;来创建文件对象，类名为&lt;code&gt;proxyInfo.getProxyClassFullName()&lt;/code&gt;，写入的内容为&lt;code&gt;proxyInfo.generateJavaCode()&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;看来生成Java代码的方法都在ProxyInfo里面。&lt;/p&gt;
-
-&lt;h4 id=&#34;c-生成java代码&#34;&gt;c.生成Java代码&lt;/h4&gt;
-
-&lt;p&gt;这里我们主要关注其生成Java代码的方式。
-下面主要看生成Java代码的方法：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;err&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ProxyInfo&lt;/span&gt;
-&lt;span class=&#34;c1&#34;&gt;//key为id，value为对应的成员变量
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Map&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Integer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;VariableElement&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;mInjectElements&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;HashMap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Integer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;VariableElement&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;();&lt;/span&gt;
-
-&lt;span class=&#34;nx&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;generateJavaCode&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(){&lt;/span&gt;
-    &lt;span class=&#34;nx&#34;&gt;StringBuilder&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;StringBuilder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
-    &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;package &amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;mPackageName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;;\n\n&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;import com.zhy.ioc.*;\n&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;public class &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mProxyClassName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34; implements &amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;SUFFIX&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;&amp;lt;&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;mTypeElement&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;getQualifiedName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;&amp;gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;\n{\n&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;nx&#34;&gt;generateMethod&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;\n}\n&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toString&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;span class=&#34;nx&#34;&gt;private&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;generateMethod&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;StringBuilder&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
-     &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;public void inject(&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mTypeElement&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;getQualifiedName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34; host , Object object )&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;\n{\n&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;id&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;mInjectElements&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;keySet&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()){&lt;/span&gt;
-        &lt;span class=&#34;nx&#34;&gt;VariableElement&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;variableElement&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;mInjectElements&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;get&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;id&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-        &lt;span class=&#34;nx&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;variableElement&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;getSimpleName&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;().&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toString&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
-        &lt;span class=&#34;nx&#34;&gt;String&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;variableElement&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;asType&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;().&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;toString&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-
-        &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34; if(object instanceof android.app.Activity)&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-        &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;\n{\n&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-        &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;host.&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34; = &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-        &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;(&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;)(((android.app.Activity)object).findViewById(&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;id&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;));&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-        &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;\n}\n&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;else&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;\n{\n&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-        &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;host.&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34; = &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-        &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;(&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;)(((android.view.View)object).findViewById(&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;id&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;));&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-        &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;\n}\n&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-    &lt;span class=&#34;nx&#34;&gt;builder&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;append&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;\n}\n&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;这里主要就是靠收集到的信息，拼接完成的代理类对象了，看起来会比较头疼，不过我给出一个生成后的代码，对比着看会很多。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;kn&#34;&gt;package&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;com&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;zhy&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ioc_sample&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;com&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;zhy&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ioc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;span class=&#34;nx&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;MainActivity&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;$$&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ViewInjector&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;implements&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ViewInjector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;com&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;zhy&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ioc_sample&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;MainActivity&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;gt;{&lt;/span&gt;
-    &lt;span class=&#34;err&#34;&gt;@&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Override&lt;/span&gt;
-    &lt;span class=&#34;nx&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;inject&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;com&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;zhy&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;sample&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;MainActivity&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;host&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Object&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;object&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
-        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;object&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;instanceof&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;android&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Activity&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;){&lt;/span&gt;
-            &lt;span class=&#34;nx&#34;&gt;host&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mTv&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;android&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;widget&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;TextView&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)(((&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;android&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;app&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Activity&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;object&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;findViewById&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2131492945&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
-        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-        &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
-            &lt;span class=&#34;nx&#34;&gt;host&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mTv&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;android&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;widget&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;TextView&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)(((&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;android&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;view&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;View&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;object&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;).&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;findViewById&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2131492945&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
-        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
-&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;这样对着上面代码看会好很多，其实就死根据收集到的成员变量（通过&lt;code&gt;@BindView&lt;/code&gt;声明的），然后根据我们具体要实现的需求去生成java代码。&lt;/p&gt;
-
-&lt;p&gt;这里注意下，生成的代码实现了一个接口&lt;code&gt;ViewInjector&amp;lt;T&amp;gt;&lt;/code&gt;，该接口是为了统一所有的代理类对象的类型，到时候我们需要强转代理类对象为该接口类型，调用其方法；接口是泛型，主要就是传入实际类对象，例如&lt;code&gt;MainActivity&lt;/code&gt;，因为我们在生成代理类中的代码，实际上就是&lt;code&gt;实际类.成员变量&lt;/code&gt;的方式进行访问，所以，使用编译时注解的成员变量一般都不允许&lt;code&gt;private&lt;/code&gt;修饰符修饰（有的允许，但是需要提供getter,setter访问方法）。&lt;/p&gt;
-
-&lt;p&gt;这里采用了完全拼接的方式编写Java代码，你也可以使用一些开源库，来通过Java api的方式来生成代码，例如：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/square/javapoet&#34;&gt;javapoet&lt;/a&gt;.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;A Java API for generating .java source files.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;到这里我们就完成了代理类的生成，这里任何的注解处理器的编写方式基本都遵循着收集信息、生成代理类的步骤。&lt;/p&gt;
-
-&lt;h2 id=&#34;五-api模块的实现&#34;&gt;五、API模块的实现&lt;/h2&gt;
-
-&lt;p&gt;有了代理类之后，我们一般还会提供API供用户去访问，例如本例的访问入口是&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt; //Activity中
- Ioc.inject(Activity);
- //Fragment中，获取ViewHolder中
- Ioc.inject(this, view);&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;模仿了butterknife，第一个参数为宿主对象，第二个参数为实际调用&lt;code&gt;findViewById&lt;/code&gt;的对象；当然在Actiivty中，两个参数就一样了。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;API一般如何编写呢？&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;其实很简单，只要你了解了其原理，这个API就干两件事：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;根据传入的host寻找我们生成的代理类：例如&lt;code&gt;MainActivity-&amp;gt;MainActity$$ViewInjector&lt;/code&gt;。&lt;/li&gt;
-&lt;li&gt;强转为统一的接口，调用接口提供的方法。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这两件事应该不复杂，第一件事是拼接代理类名，然后反射生成对象，第二件事强转调用。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;public class Ioc{
-    public static void inject(Activity activity){
-        inject(activity , activity);
-    }
-    public static void inject(Object host , Object root){
-        Class&amp;lt;?&amp;gt; clazz = host.getClass();
-        String proxyClassFullName = clazz.getName()+&amp;#34;$$ViewInjector&amp;#34;;
-       //省略try,catch相关代码 
-        Class&amp;lt;?&amp;gt; proxyClazz = Class.forName(proxyClassFullName);
-        ViewInjector viewInjector = (com.zhy.ioc.ViewInjector) proxyClazz.newInstance();
-        viewInjector.inject(host,root);
-    }
-}
-public interface ViewInjector&amp;lt;T&amp;gt;{
-    void inject(T t , Object object);
-}&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;代码很简单，拼接代理类的全路径，然后通过&lt;code&gt;newInstance&lt;/code&gt;生成实例，然后强转，调用代理类的inject方法。&lt;/p&gt;
-
-&lt;p&gt;这里一般情况会对生成的代理类做一下缓存处理，比如使用&lt;code&gt;Map&lt;/code&gt;存储下，没有再生成，这里我们就不去做了。&lt;/p&gt;
-
-&lt;p&gt;这样我们就完成了一个编译时注解框架的编写。&lt;/p&gt;
-
-&lt;h2 id=&#34;六-总结&#34;&gt;六、总结&lt;/h2&gt;
-
-&lt;p&gt;本文通过具体的实例来描述了如何编写一个基于编译时注解的项目，主要步骤为：项目结构的划分、注解模块的实现、注解处理器的编写以及对外公布的API模块的编写。通过文本的学习应该能够了解基于编译时注解这类框架运行的原理，以及自己如何去编写这样一类框架。&lt;/p&gt;
-
-&lt;p&gt;*源码地址: &lt;a href=&#34;https://github.com/hymanAndroid/ioc-apt-sample&#34;&gt;https://github.com/hymanAndroid/ioc-apt-sample&lt;/a&gt;&lt;/p&gt;
 </description>
       
     </item>

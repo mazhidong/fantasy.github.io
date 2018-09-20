@@ -6,10 +6,19 @@
     <description>Recent content in Android on Fantasy Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 12 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 20 Sep 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mazhidong.github.io/categories/android/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>VS-RK3399 and VS-RK3288 Audio 开发指南</title>
+      <link>https://mazhidong.github.io/post/aosp/2018-09-20-vs-rk3399-and-vs-rk3288-audio-%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/</link>
+      <pubDate>Thu, 20 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/aosp/2018-09-20-vs-rk3399-and-vs-rk3288-audio-%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/</guid>
+      <description>1.1 概述 本章主要描述Audio的相关的概念、代码结构。 1.2 概念 CPU DAI:主控端的Audio Data Interface，比如I2S,Spdif,Pdm,</description>
+    </item>
     
     <item>
       <title>onActivityResult执行时机</title>

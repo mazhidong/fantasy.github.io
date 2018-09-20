@@ -23,7 +23,7 @@
     <item>
       <title>Android</title>
       <link>https://mazhidong.github.io/tags/android/</link>
-      <pubDate>Wed, 12 Sep 2018 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 20 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>https://mazhidong.github.io/tags/android/</guid>
       <description></description>
@@ -35,6 +35,15 @@
       <pubDate>Fri, 22 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>https://mazhidong.github.io/tags/aosp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Audio</title>
+      <link>https://mazhidong.github.io/tags/audio/</link>
+      <pubDate>Thu, 20 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/tags/audio/</guid>
       <description></description>
     </item>
     
@@ -111,6 +120,15 @@
     </item>
     
     <item>
+      <title>Kernel</title>
+      <link>https://mazhidong.github.io/tags/kernel/</link>
+      <pubDate>Thu, 20 Sep 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/tags/kernel/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Linux</title>
       <link>https://mazhidong.github.io/tags/linux/</link>
       <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
@@ -170,24 +188,6 @@
       <pubDate>Fri, 15 Jun 2018 00:00:00 +0000</pubDate>
       
       <guid>https://mazhidong.github.io/tags/uart/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Usb权限</title>
-      <link>https://mazhidong.github.io/tags/usb%E6%9D%83%E9%99%90/</link>
-      <pubDate>Tue, 07 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/tags/usb%E6%9D%83%E9%99%90/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Widget</title>
-      <link>https://mazhidong.github.io/tags/widget/</link>
-      <pubDate>Tue, 11 Sep 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/tags/widget/</guid>
       <description></description>
     </item>
     

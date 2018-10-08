@@ -10,6 +10,13 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/post/jni/2018-10-08-android.mk%E6%96%87%E4%BB%B6%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/</loc>
+    <lastmod>2018-10-08T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/post/jni/2018-10-08-string-%E8%BD%ACchar-argv/</loc>
     <lastmod>2018-10-08T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>

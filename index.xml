@@ -24,6 +24,366 @@
     </item>
     
     <item>
+      <title>Android.mk 文件语法详解</title>
+      <link>https://mazhidong.github.io/post/jni/2018-10-08-android.mk%E6%96%87%E4%BB%B6%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/jni/2018-10-08-android.mk%E6%96%87%E4%BB%B6%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/</guid>
+      
+        <description>
+
+&lt;h2 id=&#34;0-android-mk简介&#34;&gt;0. Android.mk简介：&lt;/h2&gt;
+
+&lt;p&gt;Android.mk文件用来告知NDK Build 系统关于Source的信息。 Android.mk将是GNU Makefile的一部分，且将被Build System解析一次或多次。&lt;/p&gt;
+
+&lt;p&gt;所以，请尽量少的在Android.mk中声明变量，也不要假定任何东西不会在解析过程中定义。&lt;/p&gt;
+
+&lt;p&gt;Android.mk文件语法允许我们将Source打包成一个&amp;rdquo;modules&amp;rdquo;. modules可以是：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;静态库&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;动态库。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;只有动态库可以被 install/copy到应用程序包(APK). 静态库则可以被链接入动态库。&lt;/p&gt;
+
+&lt;p&gt;可以在一个Android.mk中定义一个或多个modules. 也可以将同一份source 加进多个modules.&lt;/p&gt;
+
+&lt;p&gt;Build System帮我们处理了很多细节而不需要我们再关心。例如：你不需要在Android.mk中列出头文件和外部依赖文件。&lt;/p&gt;
+
+&lt;p&gt;NDK Build System自动帮我们提供这些信息。这也意味着，当用户升级NDK后，你将可以受益于新的toolchain/platform而不必再去修改Android.mk.&lt;/p&gt;
+
+&lt;h2 id=&#34;1-android-mk语法&#34;&gt;1. Android.mk语法：&lt;/h2&gt;
+
+&lt;p&gt;首先看一个最简单的Android.mk的例子：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;LOCAL_PATH := $(call my-dir)
+ 
+include $(CLEAR_VARS)
+ 
+LOCAL_MODULE    := hello-jni
+LOCAL_SRC_FILES := hello-jni.c
+ 
+include $(BUILD_SHARED_LIBRARY)&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;讲解如下：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;LOCAL_PATH := $(call my-dir)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;每个Android.mk文件必须以定义LOCAL_PATH为开始。它用于在开发tree中查找源文件。&lt;/p&gt;
+
+&lt;p&gt;宏my-dir 则由Build System提供。返回包含Android.mk的目录路径。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;include $(CLEAR_VARS)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;CLEAR_VARS 变量由Build System提供。并指向一个指定的GNU Makefile，由它负责清理很多LOCAL_xxx.&lt;/p&gt;
+
+&lt;p&gt;例如：LOCAL_MODULE, LOCAL_SRC_FILES, LOCAL_STATIC_LIBRARIES等等。但不清理LOCAL_PATH.&lt;/p&gt;
+
+&lt;p&gt;这个清理动作是必须的，因为所有的编译控制文件由同一个GNU Make解析和执行，其变量是全局的。所以清理后才能避免相互影响。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;LOCAL_MODULE    := hello-jni&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;LOCAL_MODULE模块必须定义，以表示Android.mk中的每一个模块。名字必须唯一且不包含空格。&lt;/p&gt;
+
+&lt;p&gt;Build System会自动添加适当的前缀和后缀。例如，foo，要产生动态库，则生成libfoo.so. 但请注意：如果模块名被定为：libfoo.则生成libfoo.so. 不再加前缀。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;LOCAL_SRC_FILES := hello-jni.c&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;LOCAL_SRC_FILES变量必须包含将要打包如模块的C/C++ 源码。&lt;/p&gt;
+
+&lt;p&gt;不必列出头文件，build System 会自动帮我们找出依赖文件。&lt;/p&gt;
+
+&lt;p&gt;缺省的C++源码的扩展名为.cpp. 也可以修改，通过LOCAL_CPP_EXTENSION。&lt;/p&gt;
+
+&lt;p&gt;include $(BUILD_SHARED_LIBRARY)&lt;/p&gt;
+
+&lt;p&gt;BUILD_SHARED_LIBRARY：是Build System提供的一个变量，指向一个GNU Makefile Script。&lt;/p&gt;
+
+&lt;p&gt;它负责收集自从上次调用 include $(CLEAR_VARS)  后的所有LOCAL_XXX信息。并决定编译为什么。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;BUILD_STATIC_LIBRARY：编译为静态库。&lt;/li&gt;
+&lt;li&gt;BUILD_SHARED_LIBRARY ：编译为动态库&lt;/li&gt;
+&lt;li&gt;BUILD_EXECUTABLE：编译为Native C可执行程序&lt;br /&gt;
+&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;2-ndk-build-system变量&#34;&gt;2. NDK Build System变量：&lt;/h2&gt;
+
+&lt;p&gt;NDK Build System 保留以下变量名：&lt;/p&gt;
+
+&lt;p&gt;以LOCAL_  为开头的&lt;/p&gt;
+
+&lt;p&gt;以PRIVATE_ ,NDK_ 或者APP_ 开头的名字。&lt;/p&gt;
+
+&lt;p&gt;小写字母名字：如my-dir&lt;/p&gt;
+
+&lt;p&gt;如果想要定义自己在Android.mk中使用的变量名，建议添加 ＭＹ＿　前缀。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-1-ndk提供的变量&#34;&gt;2.1: NDK提供的变量：&lt;/h3&gt;
+
+&lt;p&gt;此类GNU Make变量是NDK Build System在解析Android.mk之前就定义好了的。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-1-1-clear-vars&#34;&gt;2.1.1：CLEAR_VARS：&lt;/h3&gt;
+
+&lt;p&gt;指向一个编译脚本。必须在新模块前包含之。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;include $(CLEAR_VARS)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;2-1-2-build-shared-library&#34;&gt;2.1.2：BUILD_SHARED_LIBRARY：&lt;/h3&gt;
+
+&lt;p&gt;指向一个编译脚本，它收集自从上次调用 include $(CLEAR_VARS)  后的所有LOCAL_XXX信息。&lt;/p&gt;
+
+&lt;p&gt;并决定如何将你列出的Source编译成一个动态库。 注意，在包含此文件前，至少应该包含：LOCAL_MODULE and LOCAL_SRC_FILES 例如：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;include $(BUILD_SHARED_LIBRARY)&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;2-1-3-build-static-library&#34;&gt;2.1.3：BUILD_STATIC_LIBRARY：&lt;/h3&gt;
+
+&lt;p&gt;与前面类似，它也指向一个编译脚本，&lt;/p&gt;
+
+&lt;p&gt;收集自从上次调用 include $(CLEAR_VARS)  后的所有LOCAL_XXX信息。&lt;/p&gt;
+
+&lt;p&gt;并决定如何将你列出的Source编译成一个静态库。 静态库不能够加入到Project 或者APK中。但它可以用来生成动态库。&lt;/p&gt;
+
+&lt;p&gt;LOCAL_STATIC_LIBRARIES and LOCAL_WHOLE_STATIC_LIBRARIES将描述之。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;include $(BUILD_STATIC_LIBRARY)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;2-1-4-build-executable&#34;&gt;2.1.4: BUILD_EXECUTABLE:&lt;/h3&gt;
+
+&lt;p&gt;与前面类似，它也指向一个编译脚本，收集自从上次调用 include $(CLEAR_VARS)  后的所有LOCAL_XXX信息。
+并决定如何将你列出的Source编译成一个可执行Native程序。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;include $(BUILD_EXECUTABLE)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;2-1-5-prebuilt-shared-library&#34;&gt;2.1.5：PREBUILT_SHARED_LIBRARY：&lt;/h3&gt;
+
+&lt;p&gt;把这个共享库声明为 “一个” 独立的模块。&lt;/p&gt;
+
+&lt;p&gt;指向一个build 脚本，用来指定一个预先编译好多动态库。 与BUILD_SHARED_LIBRARY and BUILD_STATIC_LIBRARY不同，&lt;/p&gt;
+
+&lt;p&gt;此时模块的LOCAL_SRC_FILES应该被指定为一个预先编译好的动态库，而非source file.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;LOCAL_PATH := $(call my-dir)
+    
+include $(CLEAR_VARS)
+LOCAL_MODULE := foo-prebuilt     # 模块名
+LOCAL_SRC_FILES := libfoo.so     # 模块的文件路径（相对于 LOCAL_PATH）
+    
+include $(PREBUILT_SHARED_LIBRARY) # 注意这里不是 BUILD_SHARED_LIBRARY&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;这个共享库将被拷贝到 $PROJECT/obj/local 和 $PROJECT/libs/&lt;abi&gt; (stripped)  主要是用在将已经编译好的第三方库&lt;/p&gt;
+
+&lt;p&gt;使用在本Android Project中。为什么不直接将其COPY到libs/armabi目录呢？因为这样做缺陷很多。下一节再详细说明。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-1-6-prebuilt-static-library-预先编译的静态库-同上&#34;&gt;2.1.6: PREBUILT_STATIC_LIBRARY: 预先编译的静态库。 同上。&lt;/h3&gt;
+
+&lt;h3 id=&#34;2-1-7-target-arch-目标ｃｐｕ架构名-如果为-arm-则声称arm兼容的指令-与cpu架构版本无关&#34;&gt;2.1.7: TARGET_ARCH: 目标ＣＰＵ架构名。如果为　“arm” 则声称ARM兼容的指令。与CPU架构版本无关。&lt;/h3&gt;
+
+&lt;h3 id=&#34;2-1-8-target-platform-目标平台的名字&#34;&gt;2.1.8: TARGET_PLATFORM:  目标平台的名字。&lt;/h3&gt;
+
+&lt;h3 id=&#34;2-1-9-target-arch-abi&#34;&gt;2.1.9：TARGET_ARCH_ABI&lt;/h3&gt;
+
+&lt;p&gt;Name of the target CPU+ABI&lt;/p&gt;
+
+&lt;p&gt;armeabi For ARMv5TE  armeabi-v7a&lt;/p&gt;
+
+&lt;h3 id=&#34;2-1-10-target-abi&#34;&gt;2.1.10：TARGET_ABI&lt;/h3&gt;
+
+&lt;h2 id=&#34;2-2-ndk提供的功能宏&#34;&gt;2.2: NDK提供的功能宏：&lt;/h2&gt;
+
+&lt;p&gt;GNU　Make 提供的功能宏，只有通过类似： $(call function)   的方式来得到其值，它将返回文本化的信息。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-1-my-dir-call-my-dir&#34;&gt;2.2.1: my-dir: $(call my-dir):&lt;/h3&gt;
+
+&lt;p&gt;返回最近一次include的Makefile的路径。通常返回Android.mk所在的路径。它用来作为Android.mk的开头来定义LOCAL_PATH.&lt;/p&gt;
+
+&lt;p&gt;LOCAL_PATH := $(call my-dir)&lt;/p&gt;
+
+&lt;p&gt;请注意：返回的是最近一次include的Makefile的路径。所以在Include其它Makefile后，再调用$(call my-dir)会返回其它Android.mk 所在路径。   例如：&lt;/p&gt;
+
+&lt;p&gt;LOCAL_PATH := $(call my-dir)   &amp;hellip; declare one module   include $(LOCAL_PATH)/foo/Android.mk   LOCAL_PATH := $(call my-dir)   &amp;hellip; declare another module&lt;/p&gt;
+
+&lt;p&gt;则第二次返回的LOCAL_PATH　为：$PATH/foo。 而非$PATH.&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-2-all-subdir-makefiles&#34;&gt;2.2.2: all-subdir-makefiles:&lt;/h3&gt;
+
+&lt;p&gt;返回一个列表，包含&amp;rsquo;my-dir&amp;rsquo;中所有子目录中的Android.mk。&lt;br /&gt;
+例如： 结构如下：&lt;/p&gt;
+
+&lt;p&gt;sources/foo/Android.mk   sources/foo/lib1/Android.mk   sources/foo/lib2/Android.mk&lt;/p&gt;
+
+&lt;p&gt;在If sources/foo/Android.mk 中， include $(call all-subdir-makefiles)  那则自动include 了sources/foo/lib1/Android.mk and sources/foo/lib2/Android.mk。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-3-this-makefile&#34;&gt;2.2.3：this-makefile：&lt;/h3&gt;
+
+&lt;p&gt;当前Makefile的路径。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-4-parent-makefile&#34;&gt;2.2.4：parent-makefile：&lt;/h3&gt;
+
+&lt;p&gt;返回include tree中父Makefile 路径。 也就是include 当前Makefile的Makefile Path。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-5-import-module&#34;&gt;2.2.5：import-module：&lt;/h3&gt;
+
+&lt;p&gt;允许寻找并inport其它modules到本Android.mk中来。 它会从NDK_MODULE_PATH寻找指定的模块名。&lt;/p&gt;
+
+&lt;p&gt;$(call import-module,&lt;name&gt;)&lt;/p&gt;
+
+&lt;h2 id=&#34;2-3-模块描述变量&#34;&gt;2.3: 模块描述变量：&lt;/h2&gt;
+
+&lt;p&gt;此类变量用来给Build System描述模块信息。在&amp;rsquo;include $(CLEAR_VARS)&amp;rsquo; 和 &amp;lsquo;include $(BUILD_XXXXX)&amp;lsquo;之间。必须定义此类变量。&lt;/p&gt;
+
+&lt;p&gt;include $(CLEAR_VARS) script用来清空这些变量。&lt;/p&gt;
+
+&lt;p&gt;include $(BUILD_XXXXX)收集和使用这些变量。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-1-local-path&#34;&gt;2.3.1: LOCAL_PATH:&lt;/h3&gt;
+
+&lt;p&gt;这个值用来给定当前目录。必须在Android.mk的开是位置定义之。
+ 例如：  LOCAL_PATH := $(call my-dir)   LOCAL_PATH不会被include $(CLEAR_VARS) 清理。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-2-local-module&#34;&gt;2.3.2: LOCAL_MODULE:&lt;/h3&gt;
+
+&lt;p&gt;modules名。在include $(BUILD_XXXXX)之前，必须定义这个变量。此变量必须唯一且不能有空格。&lt;br /&gt;
+通常，由此变量名决定最终生成的目标文件名。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-3-local-module-filename&#34;&gt;2.3.3: LOCAL_MODULE_FILENAME:&lt;/h3&gt;
+
+&lt;p&gt;可选。用来override LOCAL_MODULE. 即允许用户重新定义最终生成的目标文件名。&lt;/p&gt;
+
+&lt;p&gt;LOCAL_MODULE := foo-version-1  LOCAL_MODULE_FILENAME := libfoo&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-4-local-src-files&#34;&gt;2.3.4：LOCAL_SRC_FILES：&lt;/h3&gt;
+
+&lt;p&gt;为Build Modules而提供的Source 文件列表。不需要列出依赖文件。 注意：文件相对于LOCAL_PATH存放，
+且可以提供相对路径。 例如：&lt;/p&gt;
+
+&lt;p&gt;LOCAL_SRC_FILES := foo.c               \ toto/bar.c&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-5-local-cpp-extension&#34;&gt;2.3.5: LOCAL_CPP_EXTENSION:&lt;/h3&gt;
+
+&lt;p&gt;指出C++ 扩展名。(可选)&lt;/p&gt;
+
+&lt;p&gt;LOCAL_CPP_EXTENSION := .cxx 从NDK R7后，可以写多个：&lt;/p&gt;
+
+&lt;p&gt;LOCAL_CPP_EXTENSION := .cxx .cpp .cc&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-6-local-cpp-features&#34;&gt;2.3.6：LOCAL_CPP_FEATURES：&lt;/h3&gt;
+
+&lt;p&gt;可选。用来指定C++ features。&lt;/p&gt;
+
+&lt;p&gt;LOCAL_CPP_FEATURES := rtti&lt;/p&gt;
+
+&lt;p&gt;LOCAL_CPP_FEATURES := exceptions&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-7-local-c-includes&#34;&gt;2.3.7：LOCAL_C_INCLUDES：&lt;/h3&gt;
+
+&lt;p&gt;一个可选的path列表。相对于NDK ROOT 目录。编译时，将会把这些目录附上。&lt;/p&gt;
+
+&lt;p&gt;LOCAL_C_INCLUDES := sources/foo  LOCAL_C_INCLUDES := $(LOCAL_PATH)/../foo&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-8-local-cflags&#34;&gt;2.3.8: LOCAL_CFLAGS:&lt;/h3&gt;
+
+&lt;p&gt;一个可选的设置，在编译C/C++ source 时添加如Flags。
+用来附加编译选项。 注意：不要尝试在此处修改编译的优化选项和Debug等级。它会通过您Application.mk中的信息自动指定。&lt;br /&gt;
+也可以指定include 目录通过：LOCAL_CFLAGS += -I&lt;path&gt;。 这个方法比使用LOCAL_C_INCLUDES要好。因为这样也可以被ndk-debug使用。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-9-local-cxxflags&#34;&gt;2.3.9: LOCAL_CXXFLAGS:&lt;/h3&gt;
+
+&lt;p&gt;LOCAL_CPPFLAGS的别名。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-10-local-cppflags&#34;&gt;2.3.10: LOCAL_CPPFLAGS:&lt;/h3&gt;
+
+&lt;p&gt;C++ Source 编译时添加的C Flags。这些Flags将出现在LOCAL_CFLAGS flags 的后面。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-11-local-static-libraries&#34;&gt;2.3.11: LOCAL_STATIC_LIBRARIES:&lt;/h3&gt;
+
+&lt;p&gt;要链接到本模块的静态库list。(built with BUILD_STATIC_LIBRARY)&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-12-local-shared-libraries&#34;&gt;2.3.12: LOCAL_SHARED_LIBRARIES:&lt;/h3&gt;
+
+&lt;p&gt;要链接到本模块的动态库。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-13-local-whole-static-libraries&#34;&gt;2.3.13：LOCAL_WHOLE_STATIC_LIBRARIES：&lt;/h3&gt;
+
+&lt;p&gt;静态库全链接。 不同于LOCAL_STATIC_LIBRARIES，类似于使用&amp;ndash;whole-archive&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-14-local-ldlibs&#34;&gt;2.3.14：LOCAL_LDLIBS：&lt;/h3&gt;
+
+&lt;p&gt;linker flags。 可以用它来添加系统库。 如 -lz:&lt;/p&gt;
+
+&lt;p&gt;LOCAL_LDLIBS := -lz&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-15-local-allow-undefined-symbols&#34;&gt;2.3.15: LOCAL_ALLOW_UNDEFINED_SYMBOLS:&lt;/h3&gt;
+
+&lt;h3 id=&#34;2-3-16-local-arm-mode&#34;&gt;2.3.16: LOCAL_ARM_MODE:&lt;/h3&gt;
+
+&lt;p&gt;缺省模式下，ARM目标代码被编译为thumb模式。每个指令16位。如果指定此变量为：arm。 则指令为32位。&lt;/p&gt;
+
+&lt;p&gt;LOCAL_ARM_MODE := arm   其实也可以指定某一个或者某几个文件的ARM指令模式。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-17-local-arm-neon&#34;&gt;2.3.17: LOCAL_ARM_NEON:&lt;/h3&gt;
+
+&lt;p&gt;设置为true时，会讲浮点编译成neon指令。这会极大地加快浮点运算(前提是硬件支持)
+只有targeting 为 &amp;lsquo;armeabi-v7a&amp;rsquo;时才可以。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-18-local-disable-no-execute&#34;&gt;2.3.18：LOCAL_DISABLE_NO_EXECUTE：&lt;/h3&gt;
+
+&lt;h3 id=&#34;2-3-19-local-export-cflags&#34;&gt;2.3.19: LOCAL_EXPORT_CFLAGS:&lt;/h3&gt;
+
+&lt;p&gt;定义这个变量用来记录C/C++编译器标志集合，
+并且会被添加到其他任何以LOCAL_STATIC_LIBRARIES和LOCAL_SHARED_LIBRARIES的模块的LOCAL_CFLAGS定义中&lt;/p&gt;
+
+&lt;p&gt;LOCAL_SRC_FILES := foo.c bar.c.arm&lt;/p&gt;
+
+&lt;p&gt;注意：此处NDK版本为NDK R7C.（不同NDK版本，ndk-build所产生的Makefile并不完全相同）&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>String[] 转char* argv[]</title>
       <link>https://mazhidong.github.io/post/jni/2018-10-08-string-%E8%BD%ACchar-argv/</link>
       <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
@@ -5173,122 +5533,6 @@ ffmpeg -y -i test.mpeg -ac 1 -acodec amr_nb -ar 8000 -s 176x144 -b 128 -r 15 tes
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;code&gt;echo -e &amp;quot;AT\r\n&amp;quot;&amp;gt;/dev/ttyS0&lt;/code&gt;&lt;/p&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title>android adb网络连接方法</title>
-      <link>https://mazhidong.github.io/post/android/2018-06-13-android-android_adb%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E6%96%B9%E6%B3%95/</link>
-      <pubDate>Wed, 13 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/android/2018-06-13-android-android_adb%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E6%96%B9%E6%B3%95/</guid>
-      
-        <description>
-
-&lt;h2 id=&#34;一-概述&#34;&gt;一、概述&lt;/h2&gt;
-
-&lt;p&gt;在android里，adb一般使用USB连接，但是很多时候，可能只有一个设备终端，但是需要多于一个用户连接设备调试，因此使用网络连接将是必要的，下面介绍网络连接的方法：&lt;/p&gt;
-
-&lt;h2 id=&#34;二-正文&#34;&gt;二、正文&lt;/h2&gt;
-
-&lt;ol&gt;
-&lt;li&gt;设备端&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;首先查看设备上的进程列表，是不是adbd进程在运行：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;981 0            0 SW&amp;lt; [rpciod/0]
-1762 0         1996 S    /system/busybox/bin/ash
-1763 1000       796 S    /system/bin/servicemanager
-1764 0          824 S    /system/bin/vold
-1765 0          656 S    /system/bin/debuggerd
-1766 1001      4396 S    /system/bin/rild
-1768 1013     18084 S    /system/bin/mediaserver
-1769 1002      1092 S    /system/bin/dbus-daemon --system --nofork
-1770 0          784 S    /system/bin/installd
-1771 1017      1616 S    /system/bin/keystore /data/misc/keystore
-3798 0         3368 S    /sbin/adbd&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;可以看出adbd已经在运行了，停掉adbd：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;stop adbd&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;然后设置adbd使用的tcp端口：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;/ # setprop service.adb.tcp.port 5555
-/ # start adbd&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;使用netstat -l 查看：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;/ # netstat -l
-Active Internet connections (only servers)
-Proto Recv-Q Send-Q Local Address           Foreign Address         State      
-tcp        0      0 127.0.0.1:5037          0.0.0.0:*               LISTEN     
-tcp        0      0 0.0.0.0:5555            0.0.0.0:*               LISTEN&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;可见adbd在5555端口已经实现监听；&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;host端：&lt;/li&gt;
-&lt;/ol&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;./adb connect 192.168.1.12:5555
-
-connected to 192.168.1.12:5555&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;说明已经连接上设备；然后执行：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;./adb shell&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;就可以使用shell调试设备端的程序了&lt;/p&gt;
 </description>
       
     </item>

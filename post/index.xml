@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>Android.mk 文件语法详解</title>
+      <link>https://mazhidong.github.io/post/jni/2018-10-08-android.mk%E6%96%87%E4%BB%B6%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/jni/2018-10-08-android.mk%E6%96%87%E4%BB%B6%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/</guid>
+      <description>0. Android.mk简介： Android.mk文件用来告知NDK Build 系统关于Source的信息。 Android.mk将是GNU Makefil</description>
+    </item>
+    
+    <item>
       <title>String[] 转char* argv[]</title>
       <link>https://mazhidong.github.io/post/jni/2018-10-08-string-%E8%BD%ACchar-argv/</link>
       <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
@@ -180,15 +189,6 @@
       
       <guid>https://mazhidong.github.io/post/android/2018-06-13-android-android_adb%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E6%96%B9%E6%B3%95/</guid>
       <description>一、概述 在android里，adb一般使用USB连接，但是很多时候，可能只有一个设备终端，但是需要多于一个用户连接设备调试，因此使用网络连接</description>
-    </item>
-    
-    <item>
-      <title>超级详细的android目录说明</title>
-      <link>https://mazhidong.github.io/post/aosp/2018-06-13-%E8%B6%85%E7%BA%A7%E8%AF%A6%E7%BB%86%E7%9A%84android%E7%9B%AE%E5%BD%95%E8%AF%B4%E6%98%8E/</link>
-      <pubDate>Wed, 13 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/aosp/2018-06-13-%E8%B6%85%E7%BA%A7%E8%AF%A6%E7%BB%86%E7%9A%84android%E7%9B%AE%E5%BD%95%E8%AF%B4%E6%98%8E/</guid>
-      <description>Android 2.1 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 |-- Makefile |-- bionic （bionic C库） |-- bootable （启动引导相关代码） |-- build （存放系统编译规则及generic等基础开发包配</description>
     </item>
     
   </channel>

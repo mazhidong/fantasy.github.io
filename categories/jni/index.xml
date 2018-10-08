@@ -12,6 +12,15 @@
     
     
     <item>
+      <title>Android.mk 文件语法详解</title>
+      <link>https://mazhidong.github.io/post/jni/2018-10-08-android.mk%E6%96%87%E4%BB%B6%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/jni/2018-10-08-android.mk%E6%96%87%E4%BB%B6%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3/</guid>
+      <description>0. Android.mk简介： Android.mk文件用来告知NDK Build 系统关于Source的信息。 Android.mk将是GNU Makefil</description>
+    </item>
+    
+    <item>
       <title>String[] 转char* argv[]</title>
       <link>https://mazhidong.github.io/post/jni/2018-10-08-string-%E8%BD%ACchar-argv/</link>
       <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>

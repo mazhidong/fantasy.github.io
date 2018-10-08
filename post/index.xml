@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Fantasy Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 20 Sep 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 08 Oct 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mazhidong.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>String[] 转char* argv[]</title>
+      <link>https://mazhidong.github.io/post/jni/2018-10-08-string-%E8%BD%ACchar-argv/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/jni/2018-10-08-string-%E8%BD%ACchar-argv/</guid>
+      <description>代码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 /* * Class: com_ema_testlib_infrastructure_demo_JNITools * Method: uartTest * Signature: ([Ljava/lang/String;)I */ JNIEXPORT jint JNICALL Java_com_ema_testlib_infrastructure_demo_JNITools_uartTest (JNIEnv *env, jobject, jobjectArray jargv) { int argc = env-&amp;gt;GetArrayLength(jargv); typedef char *pchar; pchar *argv =</description>
+    </item>
     
     <item>
       <title>VS-RK3399 and VS-RK3288 Audio 开发指南</title>
@@ -17,7 +26,7 @@
       <pubDate>Thu, 20 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>https://mazhidong.github.io/post/aosp/2018-09-20-vs-rk3399-and-vs-rk3288-audio-%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/</guid>
-      <description>1.1 概述 本章主要描述Audio的相关的概念、代码结构。 1.2 概念 CPU DAI:主控端的Audio Data Interface，比如I2S,Spdif,Pdm,</description>
+      <description>1 概论 1.1 概述 本章主要描述Audio的相关的概念、代码结构。 1.2 概念 CPU DAI:主控端的Audio Data Interface，比如I2S,Spdif,P</description>
     </item>
     
     <item>
@@ -180,15 +189,6 @@
       
       <guid>https://mazhidong.github.io/post/aosp/2018-06-13-%E8%B6%85%E7%BA%A7%E8%AF%A6%E7%BB%86%E7%9A%84android%E7%9B%AE%E5%BD%95%E8%AF%B4%E6%98%8E/</guid>
       <description>Android 2.1 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 |-- Makefile |-- bionic （bionic C库） |-- bootable （启动引导相关代码） |-- build （存放系统编译规则及generic等基础开发包配</description>
-    </item>
-    
-    <item>
-      <title>Android AbstractProcessor和apt环境配置</title>
-      <link>https://mazhidong.github.io/post/android/2018-05-02-android--abstractprocessor%E5%92%8Capt%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</link>
-      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/android/2018-05-02-android--abstractprocessor%E5%92%8Capt%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</guid>
-      <description>一、AbstractProcessor AbstractProcessor是抽象处理器，开发apt时都必须实现这个类来生成java文件，实现这</description>
     </item>
     
   </channel>

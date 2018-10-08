@@ -17,7 +17,7 @@
       <pubDate>Thu, 20 Sep 2018 00:00:00 +0000</pubDate>
       
       <guid>https://mazhidong.github.io/post/aosp/2018-09-20-vs-rk3399-and-vs-rk3288-audio-%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97/</guid>
-      <description>1.1 概述 本章主要描述Audio的相关的概念、代码结构。 1.2 概念 CPU DAI:主控端的Audio Data Interface，比如I2S,Spdif,Pdm,</description>
+      <description>1 概论 1.1 概述 本章主要描述Audio的相关的概念、代码结构。 1.2 概念 CPU DAI:主控端的Audio Data Interface，比如I2S,Spdif,P</description>
     </item>
     
     <item>

@@ -23,7 +23,7 @@
     <item>
       <title>Android</title>
       <link>https://mazhidong.github.io/tags/android/</link>
-      <pubDate>Thu, 20 Sep 2018 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
       
       <guid>https://mazhidong.github.io/tags/android/</guid>
       <description></description>
@@ -120,6 +120,15 @@
     </item>
     
     <item>
+      <title>Jni</title>
+      <link>https://mazhidong.github.io/tags/jni/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/tags/jni/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Kernel</title>
       <link>https://mazhidong.github.io/tags/kernel/</link>
       <pubDate>Thu, 20 Sep 2018 00:00:00 +0000</pubDate>
@@ -179,15 +188,6 @@
       <pubDate>Fri, 18 Aug 2017 00:00:00 +0000</pubDate>
       
       <guid>https://mazhidong.github.io/tags/sysadmin/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Uart</title>
-      <link>https://mazhidong.github.io/tags/uart/</link>
-      <pubDate>Fri, 15 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/tags/uart/</guid>
       <description></description>
     </item>
     

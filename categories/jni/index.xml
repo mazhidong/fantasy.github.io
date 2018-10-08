@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jni on Fantasy Blogs</title>
+    <link>https://mazhidong.github.io/categories/jni/</link>
+    <description>Recent content in Jni on Fantasy Blogs</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 08 Oct 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://mazhidong.github.io/categories/jni/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>String[] 转char* argv[]</title>
+      <link>https://mazhidong.github.io/post/jni/2018-10-08-string-%E8%BD%ACchar-argv/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/jni/2018-10-08-string-%E8%BD%ACchar-argv/</guid>
+      <description>代码 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 /* * Class: com_ema_testlib_infrastructure_demo_JNITools * Method: uartTest * Signature: ([Ljava/lang/String;)I */ JNIEXPORT jint JNICALL Java_com_ema_testlib_infrastructure_demo_JNITools_uartTest (JNIEnv *env, jobject, jobjectArray jargv) { int argc = env-&amp;gt;GetArrayLength(jargv); typedef char *pchar; pchar *argv =</description>
+    </item>
+    
+  </channel>
+</rss>

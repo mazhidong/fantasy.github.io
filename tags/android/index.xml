@@ -21,6 +21,15 @@
     </item>
     
     <item>
+      <title>CMake 入门实战</title>
+      <link>https://mazhidong.github.io/post/jni/2018-10-08-cmake%E5%85%A5%E9%97%A8%E5%AE%9E%E6%88%98/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/jni/2018-10-08-cmake%E5%85%A5%E9%97%A8%E5%AE%9E%E6%88%98/</guid>
+      <description>什么是 CMake 1 2 All problems in computer science can be solved by another level of indirection. David Wheeler 你或许听过好几种 Make 工具，例如 GNU Make ，QT 的 qmake ，微软的 MS nmake，BSD Make（pmake），Ma</description>
+    </item>
+    
+    <item>
       <title>String[] 转char* argv[]</title>
       <link>https://mazhidong.github.io/post/jni/2018-10-08-string-%E8%BD%ACchar-argv/</link>
       <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>

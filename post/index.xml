@@ -21,6 +21,15 @@
     </item>
     
     <item>
+      <title>CMake 入门实战</title>
+      <link>https://mazhidong.github.io/post/jni/2018-10-08-cmake%E5%85%A5%E9%97%A8%E5%AE%9E%E6%88%98/</link>
+      <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/jni/2018-10-08-cmake%E5%85%A5%E9%97%A8%E5%AE%9E%E6%88%98/</guid>
+      <description>什么是 CMake 1 2 All problems in computer science can be solved by another level of indirection. David Wheeler 你或许听过好几种 Make 工具，例如 GNU Make ，QT 的 qmake ，微软的 MS nmake，BSD Make（pmake），Ma</description>
+    </item>
+    
+    <item>
       <title>String[] 转char* argv[]</title>
       <link>https://mazhidong.github.io/post/jni/2018-10-08-string-%E8%BD%ACchar-argv/</link>
       <pubDate>Mon, 08 Oct 2018 00:00:00 +0000</pubDate>
@@ -180,15 +189,6 @@
       
       <guid>https://mazhidong.github.io/post/aosp/2018-06-15-adb_shell%E8%B0%83%E8%AF%95android%E4%B8%B2%E5%8F%A3/</guid>
       <description>adb shell 调试 Android 串口 Android手机上很多外设是串口连接到AP的，如modem，gps。为了调试这些串口，通常需要将它们飞线接出来，用pc的串口</description>
-    </item>
-    
-    <item>
-      <title>android adb网络连接方法</title>
-      <link>https://mazhidong.github.io/post/android/2018-06-13-android-android_adb%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E6%96%B9%E6%B3%95/</link>
-      <pubDate>Wed, 13 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/android/2018-06-13-android-android_adb%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E6%96%B9%E6%B3%95/</guid>
-      <description>一、概述 在android里，adb一般使用USB连接，但是很多时候，可能只有一个设备终端，但是需要多于一个用户连接设备调试，因此使用网络连接</description>
     </item>
     
   </channel>

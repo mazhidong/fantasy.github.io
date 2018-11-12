@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Fantasy Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 08 Oct 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 12 Nov 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mazhidong.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>系统同步RTC失败</title>
+      <link>https://mazhidong.github.io/post/kernel/2018-11-12_%E7%B3%BB%E7%BB%9F%E5%90%8C%E6%AD%A5rtc%E5%A4%B1%E8%B4%A5/</link>
+      <pubDate>Mon, 12 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/kernel/2018-11-12_%E7%B3%BB%E7%BB%9F%E5%90%8C%E6%AD%A5rtc%E5%A4%B1%E8%B4%A5/</guid>
+      <description>问题描述 开机设置正确时间后，重启机器，时间仍为RTC中原始值，也就是说正确的时间并没有设置到RTC中，而RTC一直走着一个错误的时间，并在开</description>
+    </item>
     
     <item>
       <title>Android.mk 文件语法详解</title>
@@ -180,15 +189,6 @@
       
       <guid>https://mazhidong.github.io/post/linux/2018-06-19-ffmpeg%E4%BD%BF%E7%94%A8%E5%8F%82%E6%95%B0%E7%9A%84%E4%B8%AD%E6%96%87%E8%AF%B4%E6%98%8E/</guid>
       <description>视频数据流量，用-b xxxx的指令则使用固定码率，数字随便改，1500以上没效果；还可以用动态码率如：-qscale 4和-qscale 6，4</description>
-    </item>
-    
-    <item>
-      <title>adb shell 调试 Android 串口</title>
-      <link>https://mazhidong.github.io/post/aosp/2018-06-15-adb_shell%E8%B0%83%E8%AF%95android%E4%B8%B2%E5%8F%A3/</link>
-      <pubDate>Fri, 15 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/aosp/2018-06-15-adb_shell%E8%B0%83%E8%AF%95android%E4%B8%B2%E5%8F%A3/</guid>
-      <description>adb shell 调试 Android 串口 Android手机上很多外设是串口连接到AP的，如modem，gps。为了调试这些串口，通常需要将它们飞线接出来，用pc的串口</description>
     </item>
     
   </channel>

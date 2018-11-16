@@ -24,6 +24,80 @@
     </item>
     
     <item>
+      <title>安卓设备的网络adb调试设置</title>
+      <link>https://mazhidong.github.io/post/android/2018-11-16_%E5%AE%89%E5%8D%93%E8%AE%BE%E5%A4%87%E7%9A%84%E7%BD%91%E7%BB%9Cadb%E8%B0%83%E8%AF%95%E8%AE%BE%E7%BD%AE/</link>
+      <pubDate>Fri, 16 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/android/2018-11-16_%E5%AE%89%E5%8D%93%E8%AE%BE%E5%A4%87%E7%9A%84%E7%BD%91%E7%BB%9Cadb%E8%B0%83%E8%AF%95%E8%AE%BE%E7%BD%AE/</guid>
+      
+        <description>
+
+&lt;h2 id=&#34;1-安卓的adb调试模式有两种&#34;&gt;1. 安卓的adb调试模式有两种：&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;使用usb线&lt;/li&gt;
+&lt;li&gt;使用网络&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;2-使用网络adb模式&#34;&gt;2. 使用网络adb模式：&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;安卓设备跟电脑需处于同一局域网内，可以使用有线网的方式&lt;/li&gt;
+&lt;li&gt;让电脑跟安卓设备连接在同一wifi路由下，亦可通过电脑创建wifi热点让安卓设备连接都可以&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;3-设置网络adb的监听端口-设置的方法有以下几种&#34;&gt;3. 设置网络adb的监听端口，设置的方法有以下几种：&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;方法一：先是使用usb线连接电脑跟安卓设备，打开电脑的cmd窗口，输入命令：adb tcpip 5555 ；该条命令是设置网络adb监听的端口，5555是默认，也可以设置成其它的。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;方法二：该种方法是在系统有root权限下才能使用，依次输入命令：adb shell su -c setprop service.adb.tcp.port 5555&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;方法三：该种方法是在系统有root权限下才能使用，使用文件管理器按照以下路径打开文件：/system/build.prop，在该文件的最后添加以下内容：service.adb.tcp.port=5555&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;方法一在安卓设备重启后会失效，需重新设置才行
+方法二、三在重启后依然有效，但是该两种方法需在系统有root权限下才能做修改
+一、二需先使用usb模式连接电脑设置，三不需要连接电脑&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;4-在设置好端口后就可输入命令连接&#34;&gt;4. 在设置好端口后就可输入命令连接：&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;adb connect &lt;span class=&#34;m&#34;&gt;192&lt;/span&gt;.168.1.1:5555&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;其中192.168.1.1是安卓设备的ip地址，如果设置的端口号是默认的5555，后面的：5555可以不用输入&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;5-断开连接的命令&#34;&gt;5. 断开连接的命令：&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;adb disconnect &lt;span class=&#34;m&#34;&gt;192&lt;/span&gt;.168.1.1&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;6-如图的第一个adb-devices-是使用usb线连接设置调试端口号&#34;&gt;6. 如图的第一个adb devices,是使用usb线连接设置调试端口号&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://raw.githubusercontent.com/mazhidong/Picture/master/Blog/2018-11-16/adb_net_config.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;7-在使用adb-tcpip-5555设置好调试端口号-使用adb-connect-192-168-1-5连接安卓屏-连接成功会显示下面的conenct-to-xxx-xxx-x-xxx-5555&#34;&gt;7. 在使用adb tcpip 5555设置好调试端口号，使用adb connect 192.168.1.5连接安卓屏，连接成功会显示下面的conenct to xxx.xxx.x.xxx:5555&lt;/h2&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;注意：在connect成功后如果kill掉adb.exe后重新打开需要重新使用命令adb connect 192.168.1.1进行连接&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>系统同步RTC失败</title>
       <link>https://mazhidong.github.io/post/kernel/2018-11-12_%E7%B3%BB%E7%BB%9F%E5%90%8C%E6%AD%A5rtc%E5%A4%B1%E8%B4%A5/</link>
       <pubDate>Mon, 12 Nov 2018 00:00:00 +0000</pubDate>
@@ -6385,289 +6459,6 @@ The following image formats are also availables : PGM, PPM, PAM, PGMYUV, JPEG, G
 &lt;p&gt;DVD标准的mpg文件，刻录成DVD光盘之后，文件的后缀名变为VOB，（同时含有BUP ,IFO文件），由于DVD的制作流程不同于前两者，所以即使是DVD标准的mpg文件，都必须通过制作软件再打包一次做成DVD视频文件形式。而不能像VCD和SVCD那样，满足了标准就能直接刻录而不用再进行转换
 取自&amp;rdquo;&lt;/p&gt;
 </description>
-      
-    </item>
-    
-    <item>
-      <title>bootanimation支持播放MP4</title>
-      <link>https://mazhidong.github.io/post/aosp/2018-06-19-bootanimation%E6%94%AF%E6%8C%81%E6%92%AD%E6%94%BEmp4/</link>
-      <pubDate>Tue, 19 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/aosp/2018-06-19-bootanimation%E6%94%AF%E6%8C%81%E6%92%AD%E6%94%BEmp4/</guid>
-      
-        <description>
-
-&lt;h2 id=&#34;系统环境&#34;&gt;系统环境&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Android&lt;/li&gt;
-&lt;li&gt;API 15&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;视频生成&#34;&gt;视频生成&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;ffmpeg -f image2 -r 15 -i %*.png -vcodec mpeg4 bootanimation.mp4&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h2 id=&#34;代码&#34;&gt;代码&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;  1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 20
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 21
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 22
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 23
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 24
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 25
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 26
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 27
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 28
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 29
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 30
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 31
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 32
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 33
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 34
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 35
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 36
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 37
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 38
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 39
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 40
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 41
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 42
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 43
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 44
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 45
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 46
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 47
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 48
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 49
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 50
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 51
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 52
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 53
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 54
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 55
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 56
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 57
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 58
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 59
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 60
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 61
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 62
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 63
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 64
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 65
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 66
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 67
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 68
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 69
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 70
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 71
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 72
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 73
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 74
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 75
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 76
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 77
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 78
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 79
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 80
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 81
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 82
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 83
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 84
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 85
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 86
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 87
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 88
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 89
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 90
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 91
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 92
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 93
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 94
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 95
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 96
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 97
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 98
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 99
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;100
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;101
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;102
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;103
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;104
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;105
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;106
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;107
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;108
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;109
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;110
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;111
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;112
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;113
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;114
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;115
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;116
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;117
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;118
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;119
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;120
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;121
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;122
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;123
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;124
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;commit 88044e119ffb0868bf1bcfbdd840611ca2a9f21d
-Author: fantasy &amp;lt;fantasy@xxx.com&amp;gt;
-Date:   Fri Jun 8 16:41:56 2018 +0800
-
-    support bootanimation.mp4
-
-diff --git a/cmds/bootanimation/Android.mk b/cmds/bootanimation/Android.mk
-index 7d39912..60fd11d 100644
---- a/cmds/bootanimation/Android.mk
-+++ b/cmds/bootanimation/Android.mk
-@@ -15,7 +15,8 @@ LOCAL_SHARED_LIBRARIES := \
- 	libskia \
-     libEGL \
-     libGLESv1_CM \
--    libgui
-+    libgui \
-+    libmedia
- 
- LOCAL_C_INCLUDES := \
- 	$(call include-path-for, corecg graphics)
-diff --git a/cmds/bootanimation/BootAnimation.cpp b/cmds/bootanimation/BootAnimation.cpp
-index 154dbb8..f171191 100644
---- a/cmds/bootanimation/BootAnimation.cpp
-+++ b/cmds/bootanimation/BootAnimation.cpp
-@@ -55,6 +55,9 @@
- #define SYSTEM_BOOTANIMATION_FILE &amp;#34;/system/media/bootanimation.zip&amp;#34;
- #define SYSTEM_ENCRYPTED_BOOTANIMATION_FILE &amp;#34;/system/media/bootanimation-encrypted.zip&amp;#34;
- 
-+#define  BOOTANIMATION_VIDEO  &amp;#34;/system/media/bootanimation.mp4&amp;#34;
-+#include &amp;lt;media/mediaplayer.h&amp;gt;
-+
- namespace android {
- 
- // ---------------------------------------------------------------------------
-@@ -262,6 +265,7 @@ status_t BootAnimation::readyToRun() {
- 
-     mAndroidAnimation = true;
- 
-+    mVideo = false;
-     // If the device has encryption turned on or is in process 
-     // of being encrypted we show the encrypted boot animation.
-     char decrypt[PROPERTY_VALUE_MAX];
-@@ -269,6 +273,10 @@ status_t BootAnimation::readyToRun() {
- 
-     bool encryptedAnimation = atoi(decrypt) != 0 || !strcmp(&amp;#34;trigger_restart_min_framework&amp;#34;, decrypt);
- 
-+    if (access(BOOTANIMATION_VIDEO, R_OK) == 0){
-+       mVideo = true;
-+       }
-+
-     if ((encryptedAnimation &amp;amp;&amp;amp;
-             (access(SYSTEM_ENCRYPTED_BOOTANIMATION_FILE, R_OK) == 0) &amp;amp;&amp;amp;
-             (mZip.open(SYSTEM_ENCRYPTED_BOOTANIMATION_FILE) == NO_ERROR)) ||
-@@ -287,11 +295,16 @@ status_t BootAnimation::readyToRun() {
- bool BootAnimation::threadLoop()
- {
-     bool r;
-+    if (mVideo) {//这里的 mVideo 是一个标志位，表示是否有开机视频
-+        r = video();
-+    }
-+    else {
-     if (mAndroidAnimation) {
-         r = android();
-     } else {
-         r = movie();
-     }
-+    }
- 
-     eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-     eglDestroyContext(mDisplay, mContext);
-@@ -366,6 +379,40 @@ bool BootAnimation::android()
-     return false;
- }
- 
-+bool BootAnimation::video()
-+{
-+    const float MAX_FPS = 60.0f;
-+    const bool LOOP = true;
-+    const float CHECK_DELAY = ns2us(s2ns(1) / MAX_FPS);
-+
-+    eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
-+    eglDestroySurface(mDisplay, mSurface);
-+    #if 0
-+    float asp = 1.0f * mWidth / mHeight;
-+    SurfaceComposerClient::openGlobalTransaction();
-+    mFlingerSurfaceControl-&amp;gt;setPosition(mWidth, 0);
-+    mFlingerSurfaceControl-&amp;gt;setMatrix(0, 1 / asp, -asp, 0);
-+    SurfaceComposerClient::closeGlobalTransaction();
-+    #endif
-+    sp&amp;lt;MediaPlayer&amp;gt; mp = new MediaPlayer();
-+    mp-&amp;gt;reset();
-+    mp-&amp;gt;setDataSource(BOOTANIMATION_VIDEO, NULL); //设置资源
-+    mp-&amp;gt;setLooping(false); //是否循环播放
-+    Parcel*  _parcel = new Parcel;
-+    mp-&amp;gt;setParameter(100, *_parcel);
-+    mp-&amp;gt;setVideoSurfaceTexture(mFlingerSurface-&amp;gt;getSurfaceTexture());
-+    mp-&amp;gt;prepare(); //准备，同步
-+    mp-&amp;gt;start(); //播放
-+    #if 1
-+    while(true) {
-+        if(exitPending())
-+            break;
-+        usleep(CHECK_DELAY);
-+    }
-+    #endif
-+    mp-&amp;gt;stop();
-+    return false;
-+}
- 
- bool BootAnimation::movie()
- {
-diff --git a/cmds/bootanimation/BootAnimation.h b/cmds/bootanimation/BootAnimation.h
-index 8e28bba..013fc30 100644
---- a/cmds/bootanimation/BootAnimation.h
-+++ b/cmds/bootanimation/BootAnimation.h
-@@ -95,6 +95,8 @@ private:
-     sp&amp;lt;Surface&amp;gt; mFlingerSurface;
-     bool        mAndroidAnimation;
-     ZipFileRO   mZip;
-+    bool        mVideo;
-+    bool        video();
- };
- 
- // ---------------------------------------------------------------------------&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;</description>
       
     </item>
     

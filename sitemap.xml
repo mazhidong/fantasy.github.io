@@ -10,6 +10,13 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/post/aosp/2018-12-07_android-5.1-ota%E5%8C%85%E7%BC%96%E8%AF%91%E9%94%99%E8%AF%AF/</loc>
+    <lastmod>2018-12-07T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/post/android/2018-11-16_%E5%AE%89%E5%8D%93%E8%AE%BE%E5%A4%87%E7%9A%84%E7%BD%91%E7%BB%9Cadb%E8%B0%83%E8%AF%95%E8%AE%BE%E7%BD%AE/</loc>
     <lastmod>2018-11-16T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -283,6 +290,13 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/tags/5.1/</loc>
+    <lastmod>2018-12-07T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/tags/adb/</loc>
     <lastmod>2018-11-16T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -291,14 +305,14 @@
   
   <url>
     <loc>https://mazhidong.github.io/categories/android/</loc>
-    <lastmod>2018-11-16T00:00:00+00:00</lastmod>
+    <lastmod>2018-12-07T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://mazhidong.github.io/tags/android/</loc>
-    <lastmod>2018-11-16T00:00:00+00:00</lastmod>
+    <lastmod>2018-12-07T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -333,7 +347,7 @@
   
   <url>
     <loc>https://mazhidong.github.io/categories/</loc>
-    <lastmod>2018-11-16T00:00:00+00:00</lastmod>
+    <lastmod>2018-12-07T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -473,7 +487,14 @@
   
   <url>
     <loc>https://mazhidong.github.io/post/</loc>
-    <lastmod>2018-11-16T00:00:00+00:00</lastmod>
+    <lastmod>2018-12-07T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://mazhidong.github.io/tags/rk3288/</loc>
+    <lastmod>2018-12-07T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -501,7 +522,7 @@
   
   <url>
     <loc>https://mazhidong.github.io/tags/</loc>
-    <lastmod>2018-11-16T00:00:00+00:00</lastmod>
+    <lastmod>2018-12-07T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>

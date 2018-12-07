@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>5.1 on Fantasy Blogs</title>
+    <link>https://mazhidong.github.io/tags/5.1/</link>
+    <description>Recent content in 5.1 on Fantasy Blogs</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 07 Dec 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://mazhidong.github.io/tags/5.1/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Android 5.1 OTA包编译错误</title>
+      <link>https://mazhidong.github.io/post/aosp/2018-12-07_android-5.1-ota%E5%8C%85%E7%BC%96%E8%AF%91%E9%94%99%E8%AF%AF/</link>
+      <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/aosp/2018-12-07_android-5.1-ota%E5%8C%85%E7%BC%96%E8%AF%91%E9%94%99%E8%AF%AF/</guid>
+      <description>最近在RK3288 Android5.1上使用make otapackage命令编译OTA升级包时，出现如下错误： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15</description>
+    </item>
+    
+  </channel>
+</rss>

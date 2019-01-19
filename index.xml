@@ -24,6 +24,1251 @@
     </item>
     
     <item>
+      <title>Android系统init.rc全解析</title>
+      <link>https://mazhidong.github.io/post/aosp/2019-01-18_android%E7%B3%BB%E7%BB%9Finit.rc%E5%85%A8%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Fri, 18 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/aosp/2019-01-18_android%E7%B3%BB%E7%BB%9Finit.rc%E5%85%A8%E8%A7%A3%E6%9E%90/</guid>
+      
+        <description>
+
+&lt;p&gt;这是一篇用心写的博客，也希望大家用心看并帮忙找到文章的改进之处，谢谢；&lt;/p&gt;
+
+&lt;h2 id=&#34;服务启动机制&#34;&gt;服务启动机制&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;system/core/init/init.c文件main函数中parse_config_file(init.rc)读取并解析init.rc文件内容。将service信息放置到system/core/init/init_parser.cpp的service_list中&lt;/li&gt;
+&lt;li&gt;system/core/init/init.c文件main函数继续执行restart_servie_if_needed(…) -&amp;gt; service_start(…) -&amp;gt; Execve(…)建立service进程；&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;为了让大伙看得更明白，上个图先《总体启动框架图》：
+&lt;img src=&#34;https://raw.githubusercontent.com/mazhidong/Picture/master/Blog/2019-01-18/init.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;init-rc-简介&#34;&gt;init.rc 简介&lt;/h2&gt;
+
+&lt;p&gt;目前Linux有很多通讯机制可以在用户空间和内核空间之间交互，例如设备驱动文件（位于/dev目录中）、内存文件（/proc、/sys目录等）。了解Linux的同学都应该知道Linux的重要特征之一就是一切都是以文件的形式存在的，例如，一个设备通常与一个或多个设备文件对应。这些与内核空间交互的文件都在用户空间，所以在Linux内核装载完，需要首先建立这些文件所在的目录。而完成这些工作的程序就是本文要介绍的init。Init是一个命令行程序。其主要工作之一就是建立这些与内核空间交互的文件所在的目录。当Linux内核加载完后，要做的第一件事就是调用init程序，也就是说，init是用户空间执行的第一个程序。&lt;/br&gt;&lt;/p&gt;
+
+&lt;p&gt;尽管init完成的工作不算很多，不过代码还是非常复杂的。&lt;strong&gt;&lt;em&gt;Init程序并不是由一个源代码文件组成的&lt;/em&gt;&lt;/strong&gt;，而是由一组源代码文件的目标文件链接而成的。这些文件位于如下的目录。&lt;/br&gt;&lt;/p&gt;
+
+&lt;p&gt;需要明白的是，这些init.rc只是语法文件，并不是程序，真正的入口则是上面提到的system/core/init/init.c
+因为init.c文件比较大，在文章的第二部分我会简要的通过main函数分析init启动流程；&lt;/br&gt;&lt;/p&gt;
+
+&lt;p&gt;init.rc有两个，分别位于：&lt;/br&gt;
+./system/core/rootdir/init.rc&lt;/br&gt;
+./bootable/recovery/etc/init.rc&lt;/br&gt;
+从目录上大致可以猜测，这两个init.rc使用场景不一样，一个是刷机用到的，也就是进入recorvery模式，一个是正常启动用到的；我们这里重点分析的是上面那个，也是init.c关联的那个；&lt;/p&gt;
+
+&lt;h2 id=&#34;init-rc语法结构解析&#34;&gt;init.rc语法结构解析&lt;/h2&gt;
+
+&lt;p&gt;要了解init.rc是怎么解析的，我们需要先看看说明文档，说明文档在，当然也可以看下热心网友的中文对照版本；&lt;/br&gt;
+init.rc位于/bootable/recovery/etc/init.rc&lt;/p&gt;
+
+&lt;p&gt;Android初始化语言包含了四种类型的声明：&lt;/br&gt;
+Actions（行为）、Commands（命令）、Services（服务）和Options（选项）&lt;/p&gt;
+
+&lt;p&gt;所有这些都是以行为单位的，各种记号由空格来隔开。&lt;/br&gt;
+C语言风格的反斜杠号可用于在记号间插入空格。&lt;/br&gt;
+双引号也可用于防止字符串被空格分割成多个记号。&lt;/br&gt;
+行末的反斜杠用于折行，注释行以井号（#）开头（允许以空格开头）。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;需要注意的是，这个只是一个语法文件，就像一个xml文件一样，没有执行顺序的，解析器通过读这个文件获取想要的数据，包括service，action等&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Actions和Services声明一个新的分组Section。所有的命令或选项都属于最近声明的分组。位于第一个分组之前的命令或选项将会被忽略。
+Actions和Services有唯一的名字。如果有重名的情况，第二个申明的将会被作为错误忽略。&lt;/p&gt;
+
+&lt;h2 id=&#34;actions&#34;&gt;Actions&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Actions（行为）是一系列命令的开始&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Actions代表一些Action.Action代表一组命令(Commands),Actions都有一个trigger（触发器）,该触发器决定了何时执行这个Action,即在什么情况下才能执行该Action中的定义命令.当一些条件满足触发器的条件时,该Action中定义的命令会被添加到要执行命令队列的尾部(如果这组命令已经在队列中,则不会再次添加).&lt;/p&gt;
+
+&lt;p&gt;队列中的每一个action都被依次提取出，而这个action中的每个command（命令）在一个Action从队列移除时,该Action定义的命令会依次被执行.&lt;/p&gt;
+
+&lt;p&gt;Action的格式如下:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span class=&#34;na&#34;&gt;on &amp;lt;trgger&amp;gt; [&amp;amp;&amp;amp; &amp;lt;trigger&amp;gt;]*&lt;/span&gt;
+   &lt;span class=&#34;na&#34;&gt;&amp;lt;command1&amp;gt;&lt;/span&gt;
+   &lt;span class=&#34;na&#34;&gt;&amp;lt;command2&amp;gt;&lt;/span&gt;
+   &lt;span class=&#34;na&#34;&gt;&amp;lt;command3&amp;gt;&lt;/span&gt;
+   &lt;span class=&#34;na&#34;&gt;...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;on后面跟着一个触发器，当trigger被触发时，command1，command2，command3，会依次执行，直到下一个Action或下一个Service。&lt;/br&gt;&lt;/p&gt;
+
+&lt;p&gt;简单来说，Actions就是Android在启动时定义的一个启动脚本，当条件满足时，会执行该脚本，脚本里都是一些命令commands，不同的脚本用on来区分。&lt;/br&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;triggers-触发器&#34;&gt;Triggers（触发器）&lt;/h2&gt;
+
+&lt;p&gt;trigger即我们上面所说的触发器,本质上是一个字符串,能够匹配某种包含该字符串的事件.&lt;/br&gt;
+trigger又被细分为事件触发器(event trigger)和属性触发器(property trigger).&lt;/br&gt;
+Triggers（触发器）是一个用于匹配特定事件类型的字符串，用于使Actions发生。&lt;/br&gt;&lt;/p&gt;
+
+&lt;p&gt;事件触发器可由”trigger”命令或初始化过程中通过QueueEventTrigger()触发,通常是一些事先定义的简单字符串,
+例如:boot,late-init&lt;/br&gt;
+属性触发器是当指定属性的变量值变成指定值时触发,其格式为property:=*&lt;/p&gt;
+
+&lt;p&gt;一个Action可以有多个属性触发器,但是最多有一个事件触发器.下面我们看两个例子:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span class=&#34;na&#34;&gt;on boot &amp;amp;&amp;amp; property:a&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;b&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;该Action只有在boot事件发生时,并且属性a和b相等的情况下才会被触发.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span class=&#34;na&#34;&gt;on property:a&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;b &amp;amp;&amp;amp; property:c=d&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;该Action会在以下三种情况被触发:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在启动时,如果属性a的值等于b并且属性c的值等于d&lt;/li&gt;
+&lt;li&gt;在属性c的值已经是d的情况下,属性a的值被更新为b&lt;/li&gt;
+&lt;li&gt;在属性a的值已经是b的情况下,属性c的值被更新为d&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;当前AIL中常用的有以下几种事件触发器:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span class=&#34;na&#34;&gt;类型                      说明&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;-------------------------------------------------&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;boot                    init.rc被装载后触发&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;device-added-&amp;lt;path&amp;gt;     指定设备被添加时触发&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;device-removed-&amp;lt;path&amp;gt;   指定设备被移除时触发&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service-exited-&amp;lt;name&amp;gt;   在特定服务(service)退出时触发&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;early-init              初始化之前触发&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;late-init               初始化之后触发&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;init                    初始化时触发（在 /init.conf （启动配置文件）被装载之后）&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Init的触发是由init.c里的函数action_for_each_trigger来决定的（在main函数中被调用）。&lt;/p&gt;
+
+&lt;h2 id=&#34;services&#34;&gt;Services&lt;/h2&gt;
+
+&lt;p&gt;Services（服务）是一个程序，以 service开头，由init进程启动，一般运行于另外一个init的子进程，所以启动service前需要判断对应的可执行文件是否存在。init生成的子进程，定义在rc文件，其中每一个service，在启动时会通过fork方式生成子进程。Services（服务）的形式如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span class=&#34;na&#34;&gt;service &amp;lt;name&amp;gt; &amp;lt;pathname&amp;gt; [ &amp;lt;argument&amp;gt; ]*&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;lt;option&amp;gt;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;lt;option&amp;gt;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;其中：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;name:服务名&lt;/li&gt;
+&lt;li&gt;pathname:当前服务对应的程序位置&lt;/li&gt;
+&lt;li&gt;option：当前服务设置的选项&lt;/li&gt;
+&lt;li&gt;argument 可选参数&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;init-rc文件详解&#34;&gt;init.rc文件详解&lt;/h2&gt;
+
+&lt;p&gt;为了方便理解，我把整个init.rc解析一边，便于大家了解整个流程；如果想要了解recovery下的init语法解析，参考这篇文章《recovery下的init.rc语法解析》&lt;/br&gt;
+代码量比较大，如果觉得看起来费劲，可以挑绿色部分看；&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;  1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 38
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 39
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 40
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 41
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 42
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 43
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 44
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 45
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 46
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 47
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 48
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 49
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 50
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 51
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 52
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 53
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 54
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 55
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 56
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 57
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 58
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 59
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 60
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 61
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 62
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 63
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 64
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 65
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 66
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 67
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 68
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 69
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 70
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 71
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 72
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 73
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 74
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 75
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 76
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 77
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 78
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 79
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 80
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 81
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 82
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 83
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 84
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 85
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 86
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 87
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 88
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 89
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 90
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 91
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 92
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 93
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 94
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 95
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 96
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 97
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 98
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 99
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;100
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;101
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;102
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;103
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;104
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;105
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;106
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;107
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;108
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;109
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;110
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;111
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;112
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;113
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;114
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;115
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;116
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;117
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;118
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;119
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;120
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;121
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;122
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;123
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;124
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;125
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;126
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;127
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;128
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;129
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;130
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;131
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;132
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;133
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;134
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;135
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;136
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;137
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;138
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;139
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;140
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;141
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;142
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;143
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;144
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;145
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;146
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;147
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;148
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;149
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;150
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;151
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;152
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;153
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;154
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;155
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;156
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;157
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;158
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;159
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;160
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;161
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;162
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;163
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;164
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;165
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;166
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;167
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;168
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;169
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;170
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;171
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;172
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;173
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;174
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;175
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;176
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;177
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;178
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;179
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;180
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;181
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;182
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;183
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;184
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;185
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;186
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;187
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;188
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;189
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;190
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;191
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;192
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;193
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;194
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;195
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;196
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;197
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;198
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;199
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;200
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;201
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;202
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;203
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;204
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;205
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;206
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;207
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;208
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;209
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;210
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;211
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;212
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;213
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;214
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;215
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;216
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;217
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;218
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;219
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;220
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;221
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;222
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;223
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;224
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;225
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;226
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;227
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;228
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;229
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;230
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;231
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;232
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;233
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;234
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;235
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;236
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;237
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;238
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;239
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;240
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;241
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;242
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;243
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;244
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;245
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;246
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;247
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;248
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;249
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;250
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;251
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;252
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;253
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;254
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;255
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;256
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;257
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;258
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;259
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;260
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;261
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;262
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;263
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;264
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;265
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;266
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;267
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;268
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;269
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;270
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;271
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;272
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;273
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;274
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;275
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;276
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;277
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;278
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;279
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;280
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;281
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;282
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;283
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;284
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;285
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;286
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;287
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;288
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;289
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;290
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;291
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;292
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;293
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;294
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;295
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;296
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;297
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;298
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;299
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;300
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;301
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;302
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;303
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;304
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;305
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;306
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;307
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;308
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;309
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;310
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;311
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;312
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;313
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;314
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;315
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;316
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;317
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;318
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;319
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;320
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;321
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;322
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;323
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;324
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;325
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;326
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;327
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;328
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;329
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;330
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;331
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;332
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;333
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;334
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;335
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;336
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;337
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;338
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;339
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;340
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;341
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;342
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;343
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;344
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;345
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;346
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;347
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;348
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;349
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;350
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;351
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;352
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;353
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;354
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;355
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;356
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;357
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;358
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;359
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;360
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;361
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;362
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;363
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;364
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;365
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;366
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;367
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;368
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;369
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;370
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;371
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;372
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;373
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;374
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;375
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;376
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;377
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;378
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;379
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;380
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;381
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;382
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;383
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;384
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;385
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;386
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;387
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;388
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;389
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;390
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;391
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;392
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;393
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;394
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;395
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;396
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;397
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;398
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;399
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;400
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;401
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;402
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;403
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;404
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;405
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;406
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;407
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;408
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;409
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;410
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;411
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;412
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;413
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;414
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;415
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span class=&#34;na&#34;&gt;代码量比较大，如果觉得看起来费劲，可以挑绿色部分看；&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;# Copyright (C) 2012 The Android Open Source Project&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# IMPORTANT: Do not create world writable files or directories.&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# This is a common source of Android security bugs.&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【import &amp;lt;filename&amp;gt;一个init配置文件，扩展当前配置。】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;import /init.environ.rc&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;import /init.usb.rc&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;import /init.${ro.hardware}.rc&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;import /init.${ro.zygote}.rc&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;import /init.trace.rc&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【触发条件early-init，在early-init阶段调用以下行】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;on early-init&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# Set init and its forked children&amp;#39;s oom_adj.&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;write /proc/1/oom_score_adj -1000&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【打开路径为&amp;lt;path&amp;gt;的一个文件，并写入一个或多个字符串】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# Apply strict SELinux checking of PROT_EXEC on mmap/mprotect calls.&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;write /sys/fs/selinux/checkreqprot 0&lt;/span&gt;
+
+    &lt;span class=&#34;c1&#34;&gt;# Set the security context for the init process.&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# This should occur before anything else (e.g. ueventd) is started.&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【这段脚本的意思是init进程启动之后就马上调用函数setcon将自己的安全上下文设置为“u:r:init:s0”，即将init进程的domain指定为init。】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;setcon u:r:init:s0&lt;/span&gt;
+
+    &lt;span class=&#34;c1&#34;&gt;# Set the security context of /adb_keys if present.&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【恢复指定文件到file_contexts配置中指定的安全上线文环境】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;restorecon /adb_keys&lt;/span&gt;
+
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【执行start ueventd的命令。ueventd是一个service后面有定义】 &amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;start ueventd&lt;/span&gt;
+
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【mkdir &amp;lt;path&amp;gt; [mode] [owner] [group]   //创建一个目录&amp;lt;path&amp;gt;，可以选择性地指定mode、owner以及group。如果没有指定，默认的权限为755，并属于root用户和root组。】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# create mountpoints&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;mkdir /mnt 0775 root system&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on init&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【设置系统时钟的基准,比如0代表GMT,即以格林尼治时间为准】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;sysclktz 0&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【设置kernel日志等级】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;loglevel 6 ####&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;write /proc/bootprof &amp;#34;INIT: on init start&amp;#34; ####&lt;/span&gt;
+
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【symlink &amp;lt;target&amp;gt; &amp;lt;path&amp;gt;    //创建一个指向&amp;lt;path&amp;gt;的软连接&amp;lt;target&amp;gt;。】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# Backward compatibility&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;symlink /system/etc /etc&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;symlink /sys/kernel/debug /d&lt;/span&gt;
+
+    &lt;span class=&#34;c1&#34;&gt;# Right now vendor lives on the same filesystem as system,&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# but someday that may change.&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;symlink /system/vendor /vendor&lt;/span&gt;
+
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【创建一个目录&amp;lt;path&amp;gt;，可以选择性地指定mode、owner以及group。】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# Create cgroup mount point for cpu accounting&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;mkdir /acct&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;mount cgroup none /acct cpuacct&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;mkdir /acct/uid&lt;/span&gt;
+
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【mount &amp;lt;type&amp;gt; &amp;lt;device&amp;gt; &amp;lt;dir&amp;gt; [ &amp;lt;mountoption&amp;gt; ]   //在目录&amp;lt;dir&amp;gt;挂载指定的设备。&amp;lt;device&amp;gt; 可以是以 mtd@name 的形式指定一个mtd块设备。&amp;lt;mountoption&amp;gt;包括 ro、rw、remount、noatime、 ...】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# Create cgroup mount point for memory&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;mount tmpfs none /sys/fs/cgroup mode&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;0750,uid=0,gid=1000
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    mkdir /sys/fs/cgroup/memory 0750 root system
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    mount cgroup none /sys/fs/cgroup/memory memory
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    write /sys/fs/cgroup/memory/memory.move_charge_at_immigrate 1
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    &amp;#34;【chown &amp;lt;owner&amp;gt; &amp;lt;group&amp;gt; &amp;lt;path&amp;gt;   //改变文件的所有者和组。】&amp;#34;&lt;/span&gt;
+
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【后面的一些行因为类似，就省略了】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;.....&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;# Healthd can trigger a full boot from charger mode by signaling this&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# property when the power button is held.&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;on property:sys.boot_from_charger_mode&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    &amp;#34;【停止指定类别服务类下的所有已运行的服务】&amp;#34;
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    class_stop charger
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    &amp;#34;【触发一个事件,将该action排在某个action之后(用于Action排队)】&amp;#34;
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    trigger late-init&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;# Load properties from /system/ + /factory after fs mount.&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;on load_all_props_action&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【从/system，/vendor加载属性。默认包含在init.rc】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;load_all_props&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;# Indicate to fw loaders that the relevant mounts are up.&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;on firmware_mounts_complete&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【删除指定路径下的文件】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;rm /dev/.booting&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;# Mount filesystems and start core system services.&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;on late-init&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【触发一个事件。用于将一个action与另一个 action排列。】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;trigger early-fs&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;trigger fs&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;trigger post-fs&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;trigger post-fs-data&lt;/span&gt;
+
+    &lt;span class=&#34;c1&#34;&gt;# Load properties from /system/ + /factory after fs mount. Place&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# this in another action so that the load will be scheduled after the prior&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# issued fs triggers have completed.&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;trigger load_all_props_action&lt;/span&gt;
+
+    &lt;span class=&#34;c1&#34;&gt;# Remove a file to wake up anything waiting for firmware.&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;trigger firmware_mounts_complete&lt;/span&gt;
+
+    &lt;span class=&#34;na&#34;&gt;trigger early-boot&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;trigger boot&lt;/span&gt;
+
+
+&lt;span class=&#34;na&#34;&gt;on post-fs&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;...&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【一些创造目录，建立链接，更改权限的操作，这里省略】&amp;#34;&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on post-fs-data&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;...&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【一些创造目录，建立链接，更改权限的操作，这里省略】&amp;#34;&lt;/span&gt;
+
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【恢复指定文件到file_contexts配置中指定的安全上线文环境】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;restorecon /data/mediaserver&lt;/span&gt;
+
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【将系统属性&amp;lt;name&amp;gt;的值设置为&amp;lt;value&amp;gt;,即以键值对的方式设置系统属性】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# Reload policy from /data/security if present.&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;setprop selinux.reload_policy 1&lt;/span&gt;
+
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【以递归的方式恢复指定目录到file_contexts配置中指定的安全上下文中】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# Set SELinux security contexts on upgrade or policy update.&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;restorecon_recursive /data&lt;/span&gt;
+
+    &lt;span class=&#34;c1&#34;&gt;# If there is no fs-post-data action in the init.&amp;lt;device&amp;gt;.rc file, you&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# must uncomment this line, otherwise encrypted filesystems&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# won&amp;#39;t work.&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# Set indication (checked by vold) that we have finished this action&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;#setprop vold.post_fs_data_done 1&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on boot&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【初始化网络】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# basic network init&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;ifup lo&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【设置主机名为localhost】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;hostname localhost&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【设置域名localdomain】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;domainname localdomain&lt;/span&gt;
+
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【设置资源限制】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# set RLIMIT_NICE to allow priorities from 19 to -20&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;setrlimit 13 40 40&lt;/span&gt;
+
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【这里省略了一些chmod,chown,等操作，不多解释】&amp;#34;&lt;/span&gt;
+   &lt;span class=&#34;na&#34;&gt;...&lt;/span&gt;
+
+
+    &lt;span class=&#34;c1&#34;&gt;# Define default initial receive window size in segments.&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;setprop net.tcp.default_init_rwnd 60&lt;/span&gt;
+
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【重启core服务】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class_start core&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on nonencrypted&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class_start main&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class_start late_start&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on property:vold.decrypt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;trigger_default_encryption
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    start defaultcrypto&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on property:vold.decrypt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;trigger_encryption
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    start surfaceflinger
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    start encrypt&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on property:sys.init_log_level&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;*
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    loglevel ${sys.init_log_level}&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on charger&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class_start charger&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on property:vold.decrypt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;trigger_reset_main
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    class_reset main&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on property:vold.decrypt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;trigger_load_persist_props
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    load_persist_props&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on property:vold.decrypt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;trigger_post_fs_data
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    trigger post-fs-data&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on property:vold.decrypt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;trigger_restart_min_framework
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    class_start main&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on property:vold.decrypt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;trigger_restart_framework
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    class_start main
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    class_start late_start&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on property:vold.decrypt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;trigger_shutdown_framework
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    class_reset late_start
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    class_reset main&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on property:sys.powerctl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;*
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    powerctl ${sys.powerctl}&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;# system server cannot write to /proc/sys files,&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# and chown/chmod does not work for /proc/sys/ entries.&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# So proxy writes through init.&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;on property:sys.sysctl.extra_free_kbytes&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;*
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    write /proc/sys/vm/extra_free_kbytes ${sys.sysctl.extra_free_kbytes}&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;# &amp;#34;tcp_default_init_rwnd&amp;#34; Is too long!&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;on property:sys.sysctl.tcp_def_init_rwnd&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;*
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    write /proc/sys/net/ipv4/tcp_default_init_rwnd ${sys.sysctl.tcp_def_init_rwnd}&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【守护进程】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;## Daemon processes to be run by init.&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;##&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service ueventd /sbin/ueventd&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class core&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;critical&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;seclabel u:r:ueventd:s0&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【日志服务进程】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service logd /system/bin/logd&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class core&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;socket logd stream 0666 logd logd&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;socket logdr seqpacket 0666 logd logd&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;socket logdw dgram 0222 logd logd&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;seclabel u:r:logd:s0&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【Healthd是android4.4之后提出来的一种中介模型，该模型向下监听来自底层的电池事件，向上传递电池数据信息给Framework层的BatteryService用以计算电池电量相关状态信息】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service healthd /sbin/healthd&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class core&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;critical&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;seclabel u:r:healthd:s0&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【控制台进程】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service console /system/bin/sh&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【为当前service设定一个类别.相同类别的服务将会同时启动或者停止,默认类名是default】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class core&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【服务需要一个控制台】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;console&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【服务不会自动启动,必须通过服务名显式启动】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;disabled&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【在执行此服务之前切换用户名,当前默认的是root.自Android M开始,即使它要求linux capabilities,也应该使用该选项.很明显,为了获得该功能,进程需要以root用户运行】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;user shell&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;seclabel u:r🐚s0&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;on property:ro.debuggable&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    start console&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;# adbd is controlled via property triggers in init.&amp;lt;platform&amp;gt;.usb.rc&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service adbd /sbin/adbd --root_seclabel&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;u:r:su:s0
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    class core
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    &amp;#34;【创建一个unix域下的socket,其被命名/dev/socket/&amp;lt;name&amp;gt;. 并将其文件描述符fd返回给服务进程.其中,type必须为dgram,stream或者seqpacke,user和group默认是0.seclabel是该socket的SELLinux的安全上下文环境,默认是当前service的上下文环境,通过seclabel指定】&amp;#34;
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    socket adbd stream 660 system system
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    disabled
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    seclabel u:r:adbd:s0&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;# adbd on at boot in emulator&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;on property:ro.kernel.qemu&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    start adbd&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【内存管理服务，内存不够释放内存】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service lmkd /system/bin/lmkd&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class core&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;critical&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;socket lmkd seqpacket 0660 system system&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【ServiceManager是一个守护进程，它维护着系统服务和客户端的binder通信。&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;在Android系统中用到最多的通信机制就是Binder，Binder主要由Client、Server、ServiceManager和Binder驱动程序组成。其中Client、Service和ServiceManager运行在用户空间，而Binder驱动程序运行在内核空间。核心组件就是Binder驱动程序了，而ServiceManager提供辅助管理的功能，无论是Client还是Service进行通信前首先要和ServiceManager取得联系。而ServiceManager是一个守护进程，负责管理Server并向Client提供查询Server的功能。】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service servicemanager /system/bin/servicemanager&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class core&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;user system&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;group system&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;critical&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;onrestart restart healthd&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【servicemanager 服务启动时会重启zygote服务】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;onrestart restart zygote&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;onrestart restart media&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;onrestart restart surfaceflinger&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;onrestart restart drm&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【Vold是Volume Daemon的缩写,它是Android平台中外部存储系统的管控中心,是管理和控制Android平台外部存储设备的后台进程】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service vold /system/bin/vold&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class core&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;socket vold stream 0660 root mount&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;ioprio be 2&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【Netd是Android系统中专门负责网络管理和控制的后台daemon程序】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service netd /system/bin/netd&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class main&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;socket netd stream 0660 root system&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;socket dnsproxyd stream 0660 root inet&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;socket mdns stream 0660 root system&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;socket fwmarkd stream 0660 root inet&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【debuggerd是一个daemon进程，在系统启动时随着init进程启动。主要负责将进程运行时的信息dump到文件或者控制台中】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service debuggerd /system/bin/debuggerd&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class main&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;service debuggerd64 /system/bin/debuggerd64&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class main&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【Android RIL (Radio Interface Layer)提供了Telephony服务和Radio硬件之间的抽象层】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# for using TK init.modem.rc rild-daemon setting&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#service ril-daemon /system/bin/rild&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#    class main&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#    socket rild stream 660 root radio&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#    socket rild-debug stream 660 radio system&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#    user root&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#    group radio cache inet misc audio log&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【提供系统 范围内的surface composer功能，它能够将各种应用 程序的2D、3D surface进行组合。】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service surfaceflinger /system/bin/surfaceflinger&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class core&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;user system&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;group graphics drmrpc&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;onrestart restart zygote&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【DRM可以直接访问DRM clients的硬件。DRM驱动用来处理DMA，内存管理，资源锁以及安全硬件访问。为了同时支持多个3D应用，3D图形卡硬件必须作为一个共享资源，因此需要锁来提供互斥访问。DMA传输和AGP接口用来发送图形操作的buffers到显卡硬件，因此要防止客户端越权访问显卡硬件。】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#make sure drm server has rights to read and write sdcard ####&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service drm /system/bin/drmserver&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class main&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;user drm&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# group drm system inet drmrpc ####&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;group drm system inet drmrpc sdcard_r ####&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【媒体服务，无需多说】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service media /system/bin/mediaserver&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class main&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;user root ####&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#   google default ####&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#   user media    ####&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;group audio camera inet net_bt net_bt_admin net_bw_acct drmrpc mediadrm media sdcard_r system net_bt_stack ####&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#   google default ####&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#   group audio camera inet net_bt net_bt_admin net_bw_acct drmrpc mediadrm ####&lt;/span&gt;
+
+    &lt;span class=&#34;na&#34;&gt;ioprio rt 4&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【设备加密相关服务】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# One shot invocation to deal with encrypted volume.&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service defaultcrypto /system/bin/vdc --wait cryptfs mountdefaultencrypted&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;disabled&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【当服务退出时,不重启该服务】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;oneshot&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# vold will set vold.decrypt to trigger_restart_framework (default&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# encryption) or trigger_restart_min_framework (other encryption)&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;# One shot invocation to encrypt unencrypted volumes&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service encrypt /system/bin/vdc --wait cryptfs enablecrypto inplace default&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;disabled&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;oneshot&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# vold will set vold.decrypt to trigger_restart_framework (default&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# encryption)&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【开机动画服务】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service bootanim /system/bin/bootanimation&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class core&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;user graphics&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;#    group graphics audio ####&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;group graphics media audio ####&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;disabled&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;oneshot&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【在Android系统中，PackageManagerService用于管理系统中的所有安装包信息及应用程序的安装卸载，但是应用程序的安装与卸载并非PackageManagerService来完成，而是通过PackageManagerService来访问installd服务来执行程序包的安装与卸载的。】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service installd /system/bin/installd&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class main&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;socket installd stream 600 system system&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;service flash_recovery /system/bin/install-recovery.sh&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class main&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;seclabel u:r:install_recovery:s0&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;oneshot&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【vpn相关的服务】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service racoon /system/bin/racoon&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class main&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;socket racoon stream 600 system system&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;# IKE uses UDP port 500. Racoon will setuid to vpn after binding the port.&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;group vpn net_admin inet&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;disabled&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;oneshot&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【android中有mtpd命令可以连接vpn】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service mtpd /system/bin/mtpd&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class main&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;socket mtpd stream 600 system system&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;user vpn&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;group vpn net_admin inet net_raw&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;disabled&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;oneshot&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;service keystore /system/bin/keystore /data/misc/keystore&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class main&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;user keystore&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;group keystore drmrpc&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【可以用dumpstate 获取设备的各种信息】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service dumpstate /system/bin/dumpstate -s&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class main&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;socket dumpstate stream 0660 shell log&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;disabled&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;oneshot&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【mdnsd 是多播 DNS 和 DNS 服务发现的守护程序。】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service mdnsd /system/bin/mdnsd&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class main&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;user mdnsr&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;group inet net_raw&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;socket mdnsd stream 0660 mdnsr inet&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;disabled&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;oneshot&lt;/span&gt;
+
+&lt;span class=&#34;na&#34;&gt;&amp;#34;【触发关机流程继续往下走】&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;na&#34;&gt;service pre-recovery /system/bin/uncrypt&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;class main&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;disabled&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;&amp;#34;【当服务退出时,不重启该服务】&amp;#34;&lt;/span&gt;
+    &lt;span class=&#34;na&#34;&gt;oneshot&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;init-c全解析&#34;&gt;init.c全解析&lt;/h2&gt;
+
+&lt;p&gt;接下来我们具体分析以下这个main函数的执行过程；可能比较长，大家耐心看一下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;  1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 38
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 39
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 40
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 41
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 42
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 43
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 44
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 45
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 46
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 47
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 48
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 49
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 50
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 51
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 52
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 53
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 54
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 55
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 56
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 57
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 58
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 59
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 60
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 61
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 62
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 63
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 64
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 65
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 66
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 67
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 68
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 69
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 70
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 71
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 72
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 73
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 74
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 75
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 76
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 77
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 78
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 79
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 80
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 81
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 82
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 83
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 84
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 85
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 86
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 87
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 88
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 89
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 90
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 91
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 92
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 93
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 94
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 95
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 96
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 97
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 98
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 99
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;100
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;101
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;102
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;103
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;104
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;105
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;106
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;107
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;108
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;109
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;110
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;111
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;argc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;**&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;argv&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;cp&#34;&gt;#创 建一些linux根文件系统中的目录
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;mkdir&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;/dev&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mo&#34;&gt;0755&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;mkdir&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;/proc&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mo&#34;&gt;0755&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;mkdir&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;/sys&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mo&#34;&gt;0755&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+
+    &lt;span class=&#34;n&#34;&gt;mount&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;tmpfs&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;/dev&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;tmpfs&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;mode=0755&amp;#34;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;mkdir&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;/dev/pts&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mo&#34;&gt;0755&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;mkdir&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;/dev/socket&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mo&#34;&gt;0755&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;mount&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;devpts&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;/dev/pts&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;devpts&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;NULL&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;mount&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;proc&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;/proc&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;proc&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;NULL&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;mount&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;sysfs&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;/sys&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;sysfs&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;NULL&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;cp&#34;&gt;#init的 标准输入，标准输出，标准错误文件描述符定向到__null__，意味着没有输入和输出，它的输入和输出全部写入到Log中
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;open_devnull_stdio&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+    &lt;span class=&#34;cp&#34;&gt;#初始化 log 写入init进 信息
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;log_init&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+    &lt;span class=&#34;cp&#34;&gt;#读取并 且解析init.rc文件（这个文件在根目录下）
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;parse_config_file&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;/init.rc&amp;#34;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;cp&#34;&gt;#取得硬件 为打印我们的设备名fs100
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;get_hardware_name&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;snprintf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;tmp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;sizeof&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tmp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;/init.%s.rc&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;hardware&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;cp&#34;&gt;#读取并 且解析硬件相关的init脚本文件,
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;parse_config_file&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;tmp&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;cp&#34;&gt;#触发在init脚本文件中名字为early-init的action，并且执行其commands，其实是: on early-init
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;action_for_each_trigger&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;early-init&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;action_add_queue_tail&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;drain_action_queue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+    &lt;span class=&#34;cp&#34;&gt;#初始化动态设备管理，设备文件有变化时反应给内核，后面具体解释
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;device_fd&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;device_init&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt; &lt;span class=&#34;cp&#34;&gt;# 初 始 化 设 备 管 理 务
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;cp&#34;&gt;#加载启动动画，如果动画打开失败，则在屏幕上打印： A N D R O I D字样。
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;load_565rle_image&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;INIT_IMAGE_FILE&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;fd&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;open&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;/dev/tty0&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;O_WRONLY&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fd&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+            &lt;span class=&#34;k&#34;&gt;const&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;msg&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+            &lt;span class=&#34;n&#34;&gt;msg&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;
+                  &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;
+                  &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;
+                  &lt;span class=&#34;mi&#34;&gt;879&lt;/span&gt;         &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;
+                  &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;
+                  &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;
+                  &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span class=&#34;cm&#34;&gt;/* console is 40 cols x 30 lines */&lt;/span&gt;
+                  &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;
+                  &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;
+                  &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;
+                  &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;
+                  &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;
+                  &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;
+                  &lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\n&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;
+                  &lt;span class=&#34;cm&#34;&gt;/* &amp;#34;             A N D R O I D &amp;#34;;开机动画 */&lt;/span&gt;
+                  &lt;span class=&#34;n&#34;&gt;write&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fd&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;msg&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;strlen&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;msg&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+            &lt;span class=&#34;n&#34;&gt;close&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fd&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+    &lt;span class=&#34;cp&#34;&gt;#触发 在init脚本文件中名字为init的action，并且执行其commands，其实是：on init
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;action_for_each_trigger&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;init&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;action_add_queue_tail&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;drain_action_queue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+    &lt;span class=&#34;cp&#34;&gt;#启动系统属性服务： system property service
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;property_set_fd&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;start_property_service&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+    &lt;span class=&#34;cp&#34;&gt;#创建socket用来处理孤儿进程信号
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;socketpair&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;AF_UNIX&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SOCK_STREAM&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;s&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;signal_fd&lt;/span&gt;   &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;signal_recv_fd&lt;/span&gt;  &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;fcntl&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;F_SETFD&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;FD_CLOEXEC&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;fcntl&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;F_SETFL&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;O_NONBLOCK&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;fcntl&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;F_SETFD&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;FD_CLOEXEC&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;fcntl&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;F_SETFL&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;O_NONBLOCK&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+    &lt;span class=&#34;cp&#34;&gt;#触发 在init脚本文件中名字为early-boot和boot的action，并且执行其commands，其实是：on early-boot和on boot
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;action_for_each_trigger&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;early-boot&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;action_add_queue_tail&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;action_for_each_trigger&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;boot&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;action_add_queue_tail&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;drain_action_queue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+    &lt;span class=&#34;cp&#34;&gt;#启动所有属性变化触发命令，其实是： on property:ro.xx.xx=xx
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;queue_all_property_triggers&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;drain_action_queue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+    &lt;span class=&#34;cp&#34;&gt;#进入 死循环（）
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(;;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;cp&#34;&gt;#启 动所有init脚本中声明的service，
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;cp&#34;&gt;#如 ：266 service servicemanager /system/bin/servicemanager
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;cp&#34;&gt;#user system
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;cp&#34;&gt;#critical
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;cp&#34;&gt;#onrestart restart zygote
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;cp&#34;&gt;#onrestart restart media
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;n&#34;&gt;restart_processes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt;
+    &lt;span class=&#34;cp&#34;&gt;#多路监听设备管理，子进程运行状态，属性服务
+&lt;/span&gt;&lt;span class=&#34;cp&#34;&gt;&lt;/span&gt;        &lt;span class=&#34;n&#34;&gt;nr&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;poll&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ufds&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;fd_count&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;timeout&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nr&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+            &lt;span class=&#34;k&#34;&gt;continue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ufds&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;].&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;revents&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;POLLIN&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+            &lt;span class=&#34;n&#34;&gt;read&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;signal_recv_fd&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;tmp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;sizeof&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tmp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+            &lt;span class=&#34;k&#34;&gt;while&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;wait_for_one_process&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+                &lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+            &lt;span class=&#34;k&#34;&gt;continue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ufds&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;].&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;revents&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;POLLIN&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+            &lt;span class=&#34;n&#34;&gt;handle_device_fd&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;device_fd&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+
+        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ufds&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;].&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;revents&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;POLLIN&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+            &lt;span class=&#34;n&#34;&gt;handle_property_set_fd&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;property_set_fd&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ufds&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;].&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;revents&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;POLLIN&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+            &lt;span class=&#34;n&#34;&gt;handle_keychord&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;keychord_fd&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;</description>
+      
+    </item>
+    
+    <item>
       <title>Android 5.1 OTA包编译错误</title>
       <link>https://mazhidong.github.io/post/aosp/2018-12-07_android-5.1-ota%E5%8C%85%E7%BC%96%E8%AF%91%E9%94%99%E8%AF%AF/</link>
       <pubDate>Fri, 07 Dec 2018 00:00:00 +0000</pubDate>
@@ -5478,475 +6723,6 @@ m.invoke(null， new Object[]{new String[]{“A”,”B”}});&lt;/pre&gt;&lt;/t
 &lt;li&gt;dhcpcd wlan0 #提示 /system/etc/dhcpcd/dhcpcd-run-hooks: Permission denied&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-      
-    </item>
-    
-    <item>
-      <title>使用Docker编译Android系统源码</title>
-      <link>https://mazhidong.github.io/post/docker/2018-06-22-%E4%BD%BF%E7%94%A8docker%E7%BC%96%E8%AF%91android%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81/</link>
-      <pubDate>Fri, 22 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/docker/2018-06-22-%E4%BD%BF%E7%94%A8docker%E7%BC%96%E8%AF%91android%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81/</guid>
-      
-        <description>
-
-&lt;h1 id=&#34;引言&#34;&gt;引言：&lt;/h1&gt;
-
-&lt;p&gt;最近公司业务转型，开始倒腾起安卓系统，做了几个月的安卓APP开发，最近又需要做系统定制，所以撸起袖子搞起…
-首先干嘛？部署开发环境，开发环境一直是让人头疼的问题，何况我们不只需要一套环境，这样整来整去很容易就把系统玩废了，一旦出了问题就等着崩溃吧。所以借着这几年火起来的docker布置一个我们的开发环境。
-其实环境配置大同小异，我们只是需要把编译环境配置在docker中就可以了，在这里只做记录，过程仅供参考。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;我的系统环境： Ubuntu 16.04 LTS - x64&lt;/li&gt;
-&lt;li&gt;需要编译的系统： Android 5.1 Lollipop&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;安装docker&#34;&gt;安装Docker&lt;/h2&gt;
-
-&lt;p&gt;首先进入docker官网（&lt;a href=&#34;https://www.docker.com/products/overview），按照里面的提示进行安装即可，我直接下载的.deb包进行安装的，下载地址（https://apt.dockerproject.org/repo/pool/main/d/docker-engine/）。&#34;&gt;https://www.docker.com/products/overview），按照里面的提示进行安装即可，我直接下载的.deb包进行安装的，下载地址（https://apt.dockerproject.org/repo/pool/main/d/docker-engine/）。&lt;/a&gt;
-安装完成后执行以下命令检查docker版本：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;$ sudo docker --version &lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h2 id=&#34;配置docker&#34;&gt;配置Docker&lt;/h2&gt;
-
-&lt;p&gt;&amp;lt; 此步骤可以跳过 &amp;gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;使用docker加速器&#34;&gt;使用Docker加速器&lt;/h2&gt;
-
-&lt;p&gt;由于官网在国外，速度不是很理想，因此国内有推出加速服务，使用加速器真的快很多。在这里我使用的是阿里云的加速，其他家的执行搜索。阿里云容器HUB地址（&lt;a href=&#34;https://dev.aliyun.com/search.html），登录阿里平台之后进入“管理中心”，之后在左侧会有一个“加速器”选项，点击之后按照提示进行操作即可。&#34;&gt;https://dev.aliyun.com/search.html），登录阿里平台之后进入“管理中心”，之后在左侧会有一个“加速器”选项，点击之后按照提示进行操作即可。&lt;/a&gt;
-由于我的docker版本大于1.10，所以可以通过修改daemon配置文件/etc/docker/daemon.json来使用加速器，执行以下命令：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;$ sudo mkdir -p /etc/docker
-# 请根据阿里云中的提示，修改下面的 xxxxxx 部分。
-$ sudo tee /etc/docker/daemon.json &amp;lt;&amp;lt;-&amp;#39;EOF&amp;#39;
-{
-  &amp;#34;registry-mirrors&amp;#34;: [&amp;#34;https://xxxxxx.mirror.aliyuncs.com&amp;#34;]
-}
-EOF
-$ sudo systemctl daemon-reload
-$ sudo systemctl restart docker&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h2 id=&#34;避免输入sudo&#34;&gt;避免输入sudo&lt;/h2&gt;
-
-&lt;p&gt;用过docker的人知道，我们再执行docker命令的时候需要使用sudo权限，命令输的多了还是挺麻烦的，因此避免输入sudo的方法如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;$ sudo groupadd docker
-$ sudo gpasswd -a ${USER} docker
-$ sudo systemctl restart docker
-# 若提示 /var/run/docker.sock 无权限，执行以下命令：
-$ sudo chmod a+rw /var/run/docker.sock&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;说明：为了统一，下面的命令都会带 sudo 执行。&lt;/p&gt;
-
-&lt;h2 id=&#34;安装基础镜像&#34;&gt;安装基础镜像&lt;/h2&gt;
-
-&lt;p&gt;由于我们编译的是Android 5.1系统，推荐使用Ubuntu 14.04 x64系统去编译，可以省去很多麻烦（比如：编译器版本、构建套件版本、依赖库版本等不兼容的问题），这也是我们使用docker的原因。
-执行以下命令获取镜像：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;$ sudo docker pull ubuntu:14.04    # docker默认都是64位系统&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h2 id=&#34;镜像系统基础配置&#34;&gt;镜像系统基础配置&lt;/h2&gt;
-
-&lt;p&gt;&amp;lt; 此步骤可以跳过 &amp;gt;&lt;/p&gt;
-
-&lt;p&gt;在安装完基础镜像之后，我们可以对镜像系统做一些基础性的修改，可以方便我们进一步的使用。&lt;/p&gt;
-
-&lt;h2 id=&#34;简单的docker操作&#34;&gt;简单的docker操作&lt;/h2&gt;
-
-&lt;p&gt;在配置之前有必要说以下docker的简单命令：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# 查询本地已有的镜像（注意 镜像编号-IMAGE ID）
-$ sudo docker images   
-# 输出如下：
-REPOSITORY  TAG       IMAGE ID       CREATED       SIZE
-ubuntu      14.04     b969ab9f929b   5 weeks ago   188 MB&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# 查看本地所有的容器（注意 容器编号-CONTAINER ID）
-$ sudo docker ps -a    
-# 输出如下：
-CONTAINER ID   IMAGE         COMMAND      CREATED       STATUS                  PORTS   NAMES
-820fe6f58817   ubuntu:14.04  &amp;#34;/bin/bash&amp;#34;  42 hours ago  Exited (0) 25 hours ago         epic_bell&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# 启动镜像，并获取一个伪终端
-# 注意：实际启动的是容器，启动镜像时会自动创建新容器并启动。
-$ sudo docker run -it &amp;lt;REPOSITORY:TAG&amp;gt; /bin/bash   # 使用  仓库名+标签 启动
-$ sudo docker run -it &amp;lt;IMAGE ID&amp;gt; /bin/bash     # 使用 IMAGE ID 启动
-# 退出镜像
-&amp;gt;&amp;gt; $ exit   # 或使用快捷键 Ctrl + D&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;说明&#34;&gt;说明：&lt;/h3&gt;
-
-&lt;ol&gt;
-&lt;li&gt;这里使用 &amp;gt;&amp;gt; 符号，表示命令在docker的伪终端中执行。&lt;/li&gt;
-&lt;li&gt;在docker的伪终端中使用 # 符号，我们使用 $ 替代。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# 启动容器
-$ sudo docker start &amp;lt;CONTAINER ID&amp;gt; # 使用 CONTAINER ID 启动
-# 链接到容器，并获取一个伪终端：
-$ sudo docker exec -it &amp;lt;CONTAINER ID&amp;gt; 
-# 退出容器
-$ sudo docker stop &amp;lt;CONTAINER ID&amp;gt;  # 停止
-$ sudo docker kill &amp;lt;CONTAINER ID&amp;gt;  # 杀死运行的容器&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;其他有关docker的更多命令以及用法就需要大家自己去学习了。&lt;/p&gt;
-
-&lt;h2 id=&#34;添加中文语言支持&#34;&gt;添加中文语言支持&lt;/h2&gt;
-
-&lt;p&gt;启动指定容器后执行操作：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&amp;gt;&amp;gt; $ locale       #查询当前语言
-&amp;gt;&amp;gt; $ locale -a    #查询支持的语言
-# 若不支持UTF-8，则添加UTF-8语言支持
-&amp;gt;&amp;gt; $ apt-get install language-pack-zh-hant language-pack-zh-hans # 中文
-&amp;gt;&amp;gt; $ language-pack-en # 英文
-# 修改 /etc/profile 文件，添加：
-export LANG=zh_CN.UTF-8
-export LANGUAGE=zh_CN:zh
-# 重新加载资源
-&amp;gt;&amp;gt; $ source /etc/profile&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h2 id=&#34;更正时区时间&#34;&gt;更正时区时间&lt;/h2&gt;
-
-&lt;p&gt;启动指定容器后执行操作：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&amp;gt;&amp;gt; $ date  # 查看当前时间
-&amp;gt;&amp;gt; $ cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-&amp;gt;&amp;gt; $ echo &amp;#39;Asia/Shanghai&amp;#39; &amp;gt;/etc/timezone&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h2 id=&#34;更换系统源&#34;&gt;更换系统源&lt;/h2&gt;
-
-&lt;p&gt;使用Ubuntu系统的童鞋就轻车熟路了，这里我使用的是阿里的源。
-启动指定容器后执行操作：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&amp;gt;&amp;gt; # cp /etc/apt/sources.list /etc/apt/sources.list.bak
-&amp;gt;&amp;gt; # echo &amp;#34;xxx&amp;#34; &amp;gt; /etc/apt/sources.list  // 使用源替换 xxx
-&amp;gt;&amp;gt; # apt-get update
-&amp;gt;&amp;gt; # exit&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;Ubuntu 14.04 阿里云的源如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;deb http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h1 id=&#34;配置编译专用镜像&#34;&gt;配置编译专用镜像&lt;/h1&gt;
-
-&lt;h2 id=&#34;准备容器&#34;&gt;准备容器&lt;/h2&gt;
-
-&lt;p&gt;使用以下命令创建一个容器，并挂载 ~/share 目录到容器中的 /home/share 目录：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;$ docker run -it -v ~/share:/home/share ubuntu:14.04 /bin/bash&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;说明：此处挂载一个目录到容器中方便以后操作。&lt;/p&gt;
-
-&lt;h2 id=&#34;添加64位系统对32位的支持&#34;&gt;添加64位系统对32位的支持&lt;/h2&gt;
-
-&lt;h3 id=&#34;1-检查是否已经支持&#34;&gt;1&amp;gt; 检查是否已经支持&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&amp;gt;&amp;gt; $ dpkg --print-architecture     # 若支持，输出 amd64
-&amp;gt;&amp;gt; $ dpkg --print-foreign-architectures    # 若支持，输出 i386&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;2-手动开启支持&#34;&gt;2&amp;gt; 手动开启支持&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&amp;gt;&amp;gt; $ sudo dpkg --add-architecture i386
-&amp;gt;&amp;gt; $ sudo apt-get update&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;3&amp;gt; 安装其他需要的库&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&amp;gt;&amp;gt; $ sudo apt-get install libesd0-dev libsdl1.2-dev libwxgtk2.8-dev libswitch-perl 
-&amp;gt;&amp;gt; $ sudo apt-get install libssl1.0.0 libssl-dev lib32readline-gplv2-dev libncurses5-dev&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;附-命令说明&#34;&gt;附：命令说明&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;bc           命令行计算器
-lzop             快速压缩工具
-flex             词法分析器生成器
-curl             基于URL的文件传输工具
-gperf            哈希函数生成器
-bison            语法分析器生成器
-xsltproc         快速XSLT引擎,可以通过XSL文件把XML转为HTML,XHTML,PDF...
-schedtool        查询或设置CPU状态
-squashfs-tools       linux内核压缩工具，只读式压缩文件系统Image
-pngcrush         批量压缩PNG图片
-libxml2 libxml2-utils    操作XML文档工具&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h2 id=&#34;安装jdk&#34;&gt;安装JDK&lt;/h2&gt;
-
-&lt;p&gt;编译Android 5.1需要安装Java开发环境，我们使用Jdk-7的版本。这里我们使用oracle jdk 1.7，我们使用手动安装的方式，可以从官网下载对应版本的安装包（&lt;a href=&#34;http://www.oracle.com/technetwork/java/javase/archive-139210.html）。&#34;&gt;http://www.oracle.com/technetwork/java/javase/archive-139210.html）。&lt;/a&gt;
-我们下载的是 jdk-7u79-linux-x64.tar.gz 的版本，把下载下来的安装包拷贝到~/share目录下，由于之前做了目录挂载，我们可以在容器的 /home/share 目录下找到此安装包，接下来进行安装：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# 解压到当前目录下
-&amp;gt;&amp;gt; $ tar -xvf ./jdk-7u79-linux-x64.tar.gz 
-# 创建目标目录
-&amp;gt;&amp;gt; $ sudo mkdir -p /usr/lib/jvm/jdk1.7.0/ 
-# 移动文件到目标目录
-&amp;gt;&amp;gt; $ sudo mv jdk1.7.0_79/* /usr/lib/jvm/jdk1.7.0/
-# 添加环境变量
-修改 /etc/profile 文件，添加如下内容：
-------------------------------------------------
-export JAVA_HOME=/usr/lib/jvm/jdk1.7.0
-export JAVA_BIN=$JAVA_HOME/bin
-export JAVA_LIB=$JAVA_HOME/lib
-export CLASSPATH=.:$JAVA_LIB/tools.jar:$JAVA_LIB/dt.jar
-export PATH=$JAVA_BIN:$PATH
-------------------------------------------------
-# 配置完成后，执行如下命令使其立即生效：
-&amp;gt;&amp;gt; $ source /etc/profile&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;我们可以输入以下命令检查 JDK 环境是否安装成功：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&amp;gt;&amp;gt; $ java --version&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h2 id=&#34;提交容器保存为镜像&#34;&gt;提交容器保存为镜像&lt;/h2&gt;
-
-&lt;p&gt;配置好环境之后，保存此容器为一个镜像：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;$ sudo docker commit -m &amp;#34;xxx&amp;#34; &amp;lt;CONTAINER ID&amp;gt; &amp;lt;TEPO:TAG&amp;gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;例如，使用$ docker ps -a指令查询刚才的容器编号为1a61adfb1953，我们保存为一个本地镜像，则可执行：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;$ sudo docker commit -m &amp;#34;android-build&amp;#34; 1a61adfb1953 local:v1.0&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;使用$ docker images可以查看刚生成的镜像：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;# 输出
-REPOSITORY       TAG      IMAGE ID      CREATED         SIZE
-build-android    v1.0     49df00985bd1  2 hours ago      971 MB
-ubuntu           14.04    b969ab9f929b  5 weeks ago      188 MB&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h2 id=&#34;使用镜像编译android系统源码&#34;&gt;使用镜像编译Android系统源码&lt;/h2&gt;
-
-&lt;h3 id=&#34;1-准备系统源码&#34;&gt;1&amp;gt; 准备系统源码&lt;/h3&gt;
-
-&lt;p&gt;在宿主机上，创建源码目录，如 /home/android 目录，并放入Android系统源码。&lt;/p&gt;
-
-&lt;h3 id=&#34;2-挂载源码目录到docker容器中&#34;&gt;2&amp;gt; 挂载源码目录到docker容器中&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;$ docker run -it -v /home/android:/home/android 49df00985bd1 /bin/bash&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;3-开始编译源码&#34;&gt;3&amp;gt; 开始编译源码&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&amp;gt;&amp;gt; $ cd /home/android
-&amp;gt;&amp;gt; $ ./build.sh
-&amp;gt;&amp;gt; $ make -j8&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;</description>
       
     </item>
     

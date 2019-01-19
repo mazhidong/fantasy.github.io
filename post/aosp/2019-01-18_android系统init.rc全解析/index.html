@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Android系统init.rc全解析 - Fantasy Blogs</title>
+  
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="author" content="Fantasy" />
+  <meta name="description" content="这是一篇用心写的博客，也希望大家用心看并帮忙找到文章的改进之处，谢谢； 服务启动机制 system/core/init/init.c文件main" />
+
+  <meta name="keywords" content="mzd, fantasy, blogs" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.40" />
+
+
+<link rel="canonical" href="https://mazhidong.github.io/post/aosp/2019-01-18_android%E7%B3%BB%E7%BB%9Finit.rc%E5%85%A8%E8%A7%A3%E6%9E%90/" />
+
+
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+<link href="/dist/jane.min.css?v=2.7.0" rel="stylesheet">
+
+
+
+
+<meta property="og:title" content="Android系统init.rc全解析" />
+<meta property="og:description" content="这是一篇用心写的博客，也希望大家用心看并帮忙找到文章的改进之处，谢谢； 服务启动机制 system/core/init/init.c文件main" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mazhidong.github.io/post/aosp/2019-01-18_android%E7%B3%BB%E7%BB%9Finit.rc%E5%85%A8%E8%A7%A3%E6%9E%90/" />
+
+
+
+<meta property="article:published_time" content="2019-01-18T00:00:00&#43;00:00"/>
+
+<meta property="article:modified_time" content="2019-01-18T00:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Android系统init.rc全解析">
+<meta itemprop="description" content="这是一篇用心写的博客，也希望大家用心看并帮忙找到文章的改进之处，谢谢； 服务启动机制 system/core/init/init.c文件main">
+
+
+<meta itemprop="datePublished" content="2019-01-18T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-01-18T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="8452">
+
+
+
+<meta itemprop="keywords" content="android," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Android系统init.rc全解析"/>
+<meta name="twitter:description" content="这是一篇用心写的博客，也希望大家用心看并帮忙找到文章的改进之处，谢谢； 服务启动机制 system/core/init/init.c文件main"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Fantasy</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/">Home</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/post/">Archives</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/tags/">Tags</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/categories/">Categories</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/about/">About</a>
+          
+        
+      </li>
+    
+  </ul>
+</nav>
+
+
+  
+    
+
+
+
+
+
+
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css" />
+  <link rel="stylesheet" href="/lib/photoswipe/default-skin/default-skin.min.css" />
+
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+  
+
+  
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">
+    
+      Fantasy
+    
+  </a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/">Home</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/post/">Archives</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/tags/">Tags</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/categories/">Categories</a>
+          
+
+        
+
+      </li>
+    
+      <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://mazhidong.github.io/about/">About</a>
+          
+
+        
+
+      </li>
+    
+    
+  </ul>
+</nav>
+
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">Android系统init.rc全解析</h1>
+      
+      <div class="post-meta">
+        <span class="post-time"> 2019-01-18 </span>
+        <div class="post-category">
+            <a href="https://mazhidong.github.io/categories/android/"> android </a>
+            
+          </div>
+        <span class="more-meta"> 约 8452 字 </span>
+        <span class="more-meta"> 预计阅读 17 分钟 </span>
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#服务启动机制">服务启动机制</a></li>
+<li><a href="#init-rc-简介">init.rc 简介</a></li>
+<li><a href="#init-rc语法结构解析">init.rc语法结构解析</a></li>
+<li><a href="#actions">Actions</a></li>
+<li><a href="#triggers-触发器">Triggers（触发器）</a></li>
+<li><a href="#services">Services</a></li>
+<li><a href="#init-rc文件详解">init.rc文件详解</a></li>
+<li><a href="#init-c全解析">init.c全解析</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<p>这是一篇用心写的博客，也希望大家用心看并帮忙找到文章的改进之处，谢谢；</p>
+
+<h2 id="服务启动机制">服务启动机制</h2>
+
+<ol>
+<li>system/core/init/init.c文件main函数中parse_config_file(init.rc)读取并解析init.rc文件内容。将service信息放置到system/core/init/init_parser.cpp的service_list中</li>
+<li>system/core/init/init.c文件main函数继续执行restart_servie_if_needed(…) -&gt; service_start(…) -&gt; Execve(…)建立service进程；</li>
+</ol>
+
+<p>为了让大伙看得更明白，上个图先《总体启动框架图》：
+<img src="https://raw.githubusercontent.com/mazhidong/Picture/master/Blog/2019-01-18/init.png" alt="" /></p>
+
+<h2 id="init-rc-简介">init.rc 简介</h2>
+
+<p>目前Linux有很多通讯机制可以在用户空间和内核空间之间交互，例如设备驱动文件（位于/dev目录中）、内存文件（/proc、/sys目录等）。了解Linux的同学都应该知道Linux的重要特征之一就是一切都是以文件的形式存在的，例如，一个设备通常与一个或多个设备文件对应。这些与内核空间交互的文件都在用户空间，所以在Linux内核装载完，需要首先建立这些文件所在的目录。而完成这些工作的程序就是本文要介绍的init。Init是一个命令行程序。其主要工作之一就是建立这些与内核空间交互的文件所在的目录。当Linux内核加载完后，要做的第一件事就是调用init程序，也就是说，init是用户空间执行的第一个程序。</br></p>
+
+<p>尽管init完成的工作不算很多，不过代码还是非常复杂的。<strong><em>Init程序并不是由一个源代码文件组成的</em></strong>，而是由一组源代码文件的目标文件链接而成的。这些文件位于如下的目录。</br></p>
+
+<p>需要明白的是，这些init.rc只是语法文件，并不是程序，真正的入口则是上面提到的system/core/init/init.c
+因为init.c文件比较大，在文章的第二部分我会简要的通过main函数分析init启动流程；</br></p>
+
+<p>init.rc有两个，分别位于：</br>
+./system/core/rootdir/init.rc</br>
+./bootable/recovery/etc/init.rc</br>
+从目录上大致可以猜测，这两个init.rc使用场景不一样，一个是刷机用到的，也就是进入recorvery模式，一个是正常启动用到的；我们这里重点分析的是上面那个，也是init.c关联的那个；</p>
+
+<h2 id="init-rc语法结构解析">init.rc语法结构解析</h2>
+
+<p>要了解init.rc是怎么解析的，我们需要先看看说明文档，说明文档在，当然也可以看下热心网友的中文对照版本；</br>
+init.rc位于/bootable/recovery/etc/init.rc</p>
+
+<p>Android初始化语言包含了四种类型的声明：</br>
+Actions（行为）、Commands（命令）、Services（服务）和Options（选项）</p>
+
+<p>所有这些都是以行为单位的，各种记号由空格来隔开。</br>
+C语言风格的反斜杠号可用于在记号间插入空格。</br>
+双引号也可用于防止字符串被空格分割成多个记号。</br>
+行末的反斜杠用于折行，注释行以井号（#）开头（允许以空格开头）。</p>
+
+<p><strong>需要注意的是，这个只是一个语法文件，就像一个xml文件一样，没有执行顺序的，解析器通过读这个文件获取想要的数据，包括service，action等</strong></p>
+
+<p>Actions和Services声明一个新的分组Section。所有的命令或选项都属于最近声明的分组。位于第一个分组之前的命令或选项将会被忽略。
+Actions和Services有唯一的名字。如果有重名的情况，第二个申明的将会被作为错误忽略。</p>
+
+<h2 id="actions">Actions</h2>
+
+<p><strong>Actions（行为）是一系列命令的开始</strong></p>
+
+<p>Actions代表一些Action.Action代表一组命令(Commands),Actions都有一个trigger（触发器）,该触发器决定了何时执行这个Action,即在什么情况下才能执行该Action中的定义命令.当一些条件满足触发器的条件时,该Action中定义的命令会被添加到要执行命令队列的尾部(如果这组命令已经在队列中,则不会再次添加).</p>
+
+<p>队列中的每一个action都被依次提取出，而这个action中的每个command（命令）在一个Action从队列移除时,该Action定义的命令会依次被执行.</p>
+
+<p>Action的格式如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-ini" data-lang="ini"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-ini" data-lang="ini"><span class="na">on &lt;trgger&gt; [&amp;&amp; &lt;trigger&gt;]*</span>
+   <span class="na">&lt;command1&gt;</span>
+   <span class="na">&lt;command2&gt;</span>
+   <span class="na">&lt;command3&gt;</span>
+   <span class="na">...</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>on后面跟着一个触发器，当trigger被触发时，command1，command2，command3，会依次执行，直到下一个Action或下一个Service。</br></p>
+
+<p>简单来说，Actions就是Android在启动时定义的一个启动脚本，当条件满足时，会执行该脚本，脚本里都是一些命令commands，不同的脚本用on来区分。</br></p>
+
+<h2 id="triggers-触发器">Triggers（触发器）</h2>
+
+<p>trigger即我们上面所说的触发器,本质上是一个字符串,能够匹配某种包含该字符串的事件.</br>
+trigger又被细分为事件触发器(event trigger)和属性触发器(property trigger).</br>
+Triggers（触发器）是一个用于匹配特定事件类型的字符串，用于使Actions发生。</br></p>
+
+<p>事件触发器可由”trigger”命令或初始化过程中通过QueueEventTrigger()触发,通常是一些事先定义的简单字符串,
+例如:boot,late-init</br>
+属性触发器是当指定属性的变量值变成指定值时触发,其格式为property:=*</p>
+
+<p>一个Action可以有多个属性触发器,但是最多有一个事件触发器.下面我们看两个例子:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-ini" data-lang="ini"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-ini" data-lang="ini"><span class="na">on boot &amp;&amp; property:a</span><span class="o">=</span><span class="s">b</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>该Action只有在boot事件发生时,并且属性a和b相等的情况下才会被触发.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-ini" data-lang="ini"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-ini" data-lang="ini"><span class="na">on property:a</span><span class="o">=</span><span class="s">b &amp;&amp; property:c=d</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>该Action会在以下三种情况被触发:</p>
+
+<ul>
+<li>在启动时,如果属性a的值等于b并且属性c的值等于d</li>
+<li>在属性c的值已经是d的情况下,属性a的值被更新为b</li>
+<li>在属性a的值已经是b的情况下,属性c的值被更新为d</li>
+</ul>
+
+<p>当前AIL中常用的有以下几种事件触发器:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-ini" data-lang="ini"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-ini" data-lang="ini"><span class="na">类型                      说明</span>
+<span class="na">-------------------------------------------------</span>
+<span class="na">boot                    init.rc被装载后触发</span>
+<span class="na">device-added-&lt;path&gt;     指定设备被添加时触发</span>
+<span class="na">device-removed-&lt;path&gt;   指定设备被移除时触发</span>
+<span class="na">service-exited-&lt;name&gt;   在特定服务(service)退出时触发</span>
+<span class="na">early-init              初始化之前触发</span>
+<span class="na">late-init               初始化之后触发</span>
+<span class="na">init                    初始化时触发（在 /init.conf （启动配置文件）被装载之后）</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>Init的触发是由init.c里的函数action_for_each_trigger来决定的（在main函数中被调用）。</p>
+
+<h2 id="services">Services</h2>
+
+<p>Services（服务）是一个程序，以 service开头，由init进程启动，一般运行于另外一个init的子进程，所以启动service前需要判断对应的可执行文件是否存在。init生成的子进程，定义在rc文件，其中每一个service，在启动时会通过fork方式生成子进程。Services（服务）的形式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-ini" data-lang="ini"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-ini" data-lang="ini"><span class="na">service &lt;name&gt; &lt;pathname&gt; [ &lt;argument&gt; ]*</span>
+    <span class="na">&lt;option&gt;</span>
+    <span class="na">&lt;option&gt;</span>
+    <span class="na">...</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>其中：</p>
+
+<ul>
+<li>name:服务名</li>
+<li>pathname:当前服务对应的程序位置</li>
+<li>option：当前服务设置的选项</li>
+<li>argument 可选参数</li>
+</ul>
+
+<h2 id="init-rc文件详解">init.rc文件详解</h2>
+
+<p>为了方便理解，我把整个init.rc解析一边，便于大家了解整个流程；如果想要了解recovery下的init语法解析，参考这篇文章《recovery下的init.rc语法解析》</br>
+代码量比较大，如果觉得看起来费劲，可以挑绿色部分看；</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-ini" data-lang="ini"><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span><span class="lnt">182
+</span><span class="lnt">183
+</span><span class="lnt">184
+</span><span class="lnt">185
+</span><span class="lnt">186
+</span><span class="lnt">187
+</span><span class="lnt">188
+</span><span class="lnt">189
+</span><span class="lnt">190
+</span><span class="lnt">191
+</span><span class="lnt">192
+</span><span class="lnt">193
+</span><span class="lnt">194
+</span><span class="lnt">195
+</span><span class="lnt">196
+</span><span class="lnt">197
+</span><span class="lnt">198
+</span><span class="lnt">199
+</span><span class="lnt">200
+</span><span class="lnt">201
+</span><span class="lnt">202
+</span><span class="lnt">203
+</span><span class="lnt">204
+</span><span class="lnt">205
+</span><span class="lnt">206
+</span><span class="lnt">207
+</span><span class="lnt">208
+</span><span class="lnt">209
+</span><span class="lnt">210
+</span><span class="lnt">211
+</span><span class="lnt">212
+</span><span class="lnt">213
+</span><span class="lnt">214
+</span><span class="lnt">215
+</span><span class="lnt">216
+</span><span class="lnt">217
+</span><span class="lnt">218
+</span><span class="lnt">219
+</span><span class="lnt">220
+</span><span class="lnt">221
+</span><span class="lnt">222
+</span><span class="lnt">223
+</span><span class="lnt">224
+</span><span class="lnt">225
+</span><span class="lnt">226
+</span><span class="lnt">227
+</span><span class="lnt">228
+</span><span class="lnt">229
+</span><span class="lnt">230
+</span><span class="lnt">231
+</span><span class="lnt">232
+</span><span class="lnt">233
+</span><span class="lnt">234
+</span><span class="lnt">235
+</span><span class="lnt">236
+</span><span class="lnt">237
+</span><span class="lnt">238
+</span><span class="lnt">239
+</span><span class="lnt">240
+</span><span class="lnt">241
+</span><span class="lnt">242
+</span><span class="lnt">243
+</span><span class="lnt">244
+</span><span class="lnt">245
+</span><span class="lnt">246
+</span><span class="lnt">247
+</span><span class="lnt">248
+</span><span class="lnt">249
+</span><span class="lnt">250
+</span><span class="lnt">251
+</span><span class="lnt">252
+</span><span class="lnt">253
+</span><span class="lnt">254
+</span><span class="lnt">255
+</span><span class="lnt">256
+</span><span class="lnt">257
+</span><span class="lnt">258
+</span><span class="lnt">259
+</span><span class="lnt">260
+</span><span class="lnt">261
+</span><span class="lnt">262
+</span><span class="lnt">263
+</span><span class="lnt">264
+</span><span class="lnt">265
+</span><span class="lnt">266
+</span><span class="lnt">267
+</span><span class="lnt">268
+</span><span class="lnt">269
+</span><span class="lnt">270
+</span><span class="lnt">271
+</span><span class="lnt">272
+</span><span class="lnt">273
+</span><span class="lnt">274
+</span><span class="lnt">275
+</span><span class="lnt">276
+</span><span class="lnt">277
+</span><span class="lnt">278
+</span><span class="lnt">279
+</span><span class="lnt">280
+</span><span class="lnt">281
+</span><span class="lnt">282
+</span><span class="lnt">283
+</span><span class="lnt">284
+</span><span class="lnt">285
+</span><span class="lnt">286
+</span><span class="lnt">287
+</span><span class="lnt">288
+</span><span class="lnt">289
+</span><span class="lnt">290
+</span><span class="lnt">291
+</span><span class="lnt">292
+</span><span class="lnt">293
+</span><span class="lnt">294
+</span><span class="lnt">295
+</span><span class="lnt">296
+</span><span class="lnt">297
+</span><span class="lnt">298
+</span><span class="lnt">299
+</span><span class="lnt">300
+</span><span class="lnt">301
+</span><span class="lnt">302
+</span><span class="lnt">303
+</span><span class="lnt">304
+</span><span class="lnt">305
+</span><span class="lnt">306
+</span><span class="lnt">307
+</span><span class="lnt">308
+</span><span class="lnt">309
+</span><span class="lnt">310
+</span><span class="lnt">311
+</span><span class="lnt">312
+</span><span class="lnt">313
+</span><span class="lnt">314
+</span><span class="lnt">315
+</span><span class="lnt">316
+</span><span class="lnt">317
+</span><span class="lnt">318
+</span><span class="lnt">319
+</span><span class="lnt">320
+</span><span class="lnt">321
+</span><span class="lnt">322
+</span><span class="lnt">323
+</span><span class="lnt">324
+</span><span class="lnt">325
+</span><span class="lnt">326
+</span><span class="lnt">327
+</span><span class="lnt">328
+</span><span class="lnt">329
+</span><span class="lnt">330
+</span><span class="lnt">331
+</span><span class="lnt">332
+</span><span class="lnt">333
+</span><span class="lnt">334
+</span><span class="lnt">335
+</span><span class="lnt">336
+</span><span class="lnt">337
+</span><span class="lnt">338
+</span><span class="lnt">339
+</span><span class="lnt">340
+</span><span class="lnt">341
+</span><span class="lnt">342
+</span><span class="lnt">343
+</span><span class="lnt">344
+</span><span class="lnt">345
+</span><span class="lnt">346
+</span><span class="lnt">347
+</span><span class="lnt">348
+</span><span class="lnt">349
+</span><span class="lnt">350
+</span><span class="lnt">351
+</span><span class="lnt">352
+</span><span class="lnt">353
+</span><span class="lnt">354
+</span><span class="lnt">355
+</span><span class="lnt">356
+</span><span class="lnt">357
+</span><span class="lnt">358
+</span><span class="lnt">359
+</span><span class="lnt">360
+</span><span class="lnt">361
+</span><span class="lnt">362
+</span><span class="lnt">363
+</span><span class="lnt">364
+</span><span class="lnt">365
+</span><span class="lnt">366
+</span><span class="lnt">367
+</span><span class="lnt">368
+</span><span class="lnt">369
+</span><span class="lnt">370
+</span><span class="lnt">371
+</span><span class="lnt">372
+</span><span class="lnt">373
+</span><span class="lnt">374
+</span><span class="lnt">375
+</span><span class="lnt">376
+</span><span class="lnt">377
+</span><span class="lnt">378
+</span><span class="lnt">379
+</span><span class="lnt">380
+</span><span class="lnt">381
+</span><span class="lnt">382
+</span><span class="lnt">383
+</span><span class="lnt">384
+</span><span class="lnt">385
+</span><span class="lnt">386
+</span><span class="lnt">387
+</span><span class="lnt">388
+</span><span class="lnt">389
+</span><span class="lnt">390
+</span><span class="lnt">391
+</span><span class="lnt">392
+</span><span class="lnt">393
+</span><span class="lnt">394
+</span><span class="lnt">395
+</span><span class="lnt">396
+</span><span class="lnt">397
+</span><span class="lnt">398
+</span><span class="lnt">399
+</span><span class="lnt">400
+</span><span class="lnt">401
+</span><span class="lnt">402
+</span><span class="lnt">403
+</span><span class="lnt">404
+</span><span class="lnt">405
+</span><span class="lnt">406
+</span><span class="lnt">407
+</span><span class="lnt">408
+</span><span class="lnt">409
+</span><span class="lnt">410
+</span><span class="lnt">411
+</span><span class="lnt">412
+</span><span class="lnt">413
+</span><span class="lnt">414
+</span><span class="lnt">415
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-ini" data-lang="ini"><span class="na">代码量比较大，如果觉得看起来费劲，可以挑绿色部分看；</span>
+
+<span class="c1"># Copyright (C) 2012 The Android Open Source Project</span>
+<span class="c1">#</span>
+<span class="c1"># IMPORTANT: Do not create world writable files or directories.</span>
+<span class="c1"># This is a common source of Android security bugs.</span>
+<span class="c1">#</span>
+
+<span class="na">&#34;【import &lt;filename&gt;一个init配置文件，扩展当前配置。】&#34;</span>
+<span class="na">import /init.environ.rc</span>
+<span class="na">import /init.usb.rc</span>
+<span class="na">import /init.${ro.hardware}.rc</span>
+<span class="na">import /init.${ro.zygote}.rc</span>
+<span class="na">import /init.trace.rc</span>
+
+<span class="na">&#34;【触发条件early-init，在early-init阶段调用以下行】&#34;</span>
+<span class="na">on early-init</span>
+    <span class="c1"># Set init and its forked children&#39;s oom_adj.</span>
+    <span class="na">write /proc/1/oom_score_adj -1000</span>
+    <span class="na">&#34;【打开路径为&lt;path&gt;的一个文件，并写入一个或多个字符串】&#34;</span>
+    <span class="c1"># Apply strict SELinux checking of PROT_EXEC on mmap/mprotect calls.</span>
+    <span class="na">write /sys/fs/selinux/checkreqprot 0</span>
+
+    <span class="c1"># Set the security context for the init process.</span>
+    <span class="c1"># This should occur before anything else (e.g. ueventd) is started.</span>
+    <span class="na">&#34;【这段脚本的意思是init进程启动之后就马上调用函数setcon将自己的安全上下文设置为“u:r:init:s0”，即将init进程的domain指定为init。】&#34;</span>
+    <span class="na">setcon u:r:init:s0</span>
+
+    <span class="c1"># Set the security context of /adb_keys if present.</span>
+    <span class="na">&#34;【恢复指定文件到file_contexts配置中指定的安全上线文环境】&#34;</span>
+    <span class="na">restorecon /adb_keys</span>
+
+    <span class="na">&#34;【执行start ueventd的命令。ueventd是一个service后面有定义】 &#34;</span>
+    <span class="na">start ueventd</span>
+
+    <span class="na">&#34;【mkdir &lt;path&gt; [mode] [owner] [group]   //创建一个目录&lt;path&gt;，可以选择性地指定mode、owner以及group。如果没有指定，默认的权限为755，并属于root用户和root组。】&#34;</span>
+    <span class="c1"># create mountpoints</span>
+    <span class="na">mkdir /mnt 0775 root system</span>
+
+<span class="na">on init</span>
+    <span class="na">&#34;【设置系统时钟的基准,比如0代表GMT,即以格林尼治时间为准】&#34;</span>
+    <span class="na">sysclktz 0</span>
+
+<span class="na">&#34;【设置kernel日志等级】&#34;</span>
+<span class="na">loglevel 6 ####</span>
+    <span class="na">write /proc/bootprof &#34;INIT: on init start&#34; ####</span>
+
+    <span class="na">&#34;【symlink &lt;target&gt; &lt;path&gt;    //创建一个指向&lt;path&gt;的软连接&lt;target&gt;。】&#34;</span>
+    <span class="c1"># Backward compatibility</span>
+    <span class="na">symlink /system/etc /etc</span>
+    <span class="na">symlink /sys/kernel/debug /d</span>
+
+    <span class="c1"># Right now vendor lives on the same filesystem as system,</span>
+    <span class="c1"># but someday that may change.</span>
+    <span class="na">symlink /system/vendor /vendor</span>
+
+    <span class="na">&#34;【创建一个目录&lt;path&gt;，可以选择性地指定mode、owner以及group。】&#34;</span>
+    <span class="c1"># Create cgroup mount point for cpu accounting</span>
+    <span class="na">mkdir /acct</span>
+    <span class="na">mount cgroup none /acct cpuacct</span>
+    <span class="na">mkdir /acct/uid</span>
+
+    <span class="na">&#34;【mount &lt;type&gt; &lt;device&gt; &lt;dir&gt; [ &lt;mountoption&gt; ]   //在目录&lt;dir&gt;挂载指定的设备。&lt;device&gt; 可以是以 mtd@name 的形式指定一个mtd块设备。&lt;mountoption&gt;包括 ro、rw、remount、noatime、 ...】&#34;</span>
+    <span class="c1"># Create cgroup mount point for memory</span>
+    <span class="na">mount tmpfs none /sys/fs/cgroup mode</span><span class="o">=</span><span class="s">0750,uid=0,gid=1000
+</span><span class="s">    mkdir /sys/fs/cgroup/memory 0750 root system
+</span><span class="s">    mount cgroup none /sys/fs/cgroup/memory memory
+</span><span class="s">    write /sys/fs/cgroup/memory/memory.move_charge_at_immigrate 1
+</span><span class="s">    &#34;【chown &lt;owner&gt; &lt;group&gt; &lt;path&gt;   //改变文件的所有者和组。】&#34;</span>
+
+    <span class="na">&#34;【后面的一些行因为类似，就省略了】&#34;</span>
+    <span class="na">.....</span>
+
+<span class="c1"># Healthd can trigger a full boot from charger mode by signaling this</span>
+<span class="c1"># property when the power button is held.</span>
+<span class="na">on property:sys.boot_from_charger_mode</span><span class="o">=</span><span class="s">1
+</span><span class="s">    &#34;【停止指定类别服务类下的所有已运行的服务】&#34;
+</span><span class="s">    class_stop charger
+</span><span class="s">    &#34;【触发一个事件,将该action排在某个action之后(用于Action排队)】&#34;
+</span><span class="s">    trigger late-init</span>
+
+<span class="c1"># Load properties from /system/ + /factory after fs mount.</span>
+<span class="na">on load_all_props_action</span>
+    <span class="na">&#34;【从/system，/vendor加载属性。默认包含在init.rc】&#34;</span>
+    <span class="na">load_all_props</span>
+
+<span class="c1"># Indicate to fw loaders that the relevant mounts are up.</span>
+<span class="na">on firmware_mounts_complete</span>
+    <span class="na">&#34;【删除指定路径下的文件】&#34;</span>
+    <span class="na">rm /dev/.booting</span>
+
+<span class="c1"># Mount filesystems and start core system services.</span>
+<span class="na">on late-init</span>
+    <span class="na">&#34;【触发一个事件。用于将一个action与另一个 action排列。】&#34;</span>
+    <span class="na">trigger early-fs</span>
+    <span class="na">trigger fs</span>
+    <span class="na">trigger post-fs</span>
+    <span class="na">trigger post-fs-data</span>
+
+    <span class="c1"># Load properties from /system/ + /factory after fs mount. Place</span>
+    <span class="c1"># this in another action so that the load will be scheduled after the prior</span>
+    <span class="c1"># issued fs triggers have completed.</span>
+    <span class="na">trigger load_all_props_action</span>
+
+    <span class="c1"># Remove a file to wake up anything waiting for firmware.</span>
+    <span class="na">trigger firmware_mounts_complete</span>
+
+    <span class="na">trigger early-boot</span>
+    <span class="na">trigger boot</span>
+
+
+<span class="na">on post-fs</span>
+    <span class="na">...</span>
+    <span class="na">&#34;【一些创造目录，建立链接，更改权限的操作，这里省略】&#34;</span>
+
+<span class="na">on post-fs-data</span>
+    <span class="na">...</span>
+    <span class="na">&#34;【一些创造目录，建立链接，更改权限的操作，这里省略】&#34;</span>
+
+    <span class="na">&#34;【恢复指定文件到file_contexts配置中指定的安全上线文环境】&#34;</span>
+    <span class="na">restorecon /data/mediaserver</span>
+
+    <span class="na">&#34;【将系统属性&lt;name&gt;的值设置为&lt;value&gt;,即以键值对的方式设置系统属性】&#34;</span>
+    <span class="c1"># Reload policy from /data/security if present.</span>
+    <span class="na">setprop selinux.reload_policy 1</span>
+
+    <span class="na">&#34;【以递归的方式恢复指定目录到file_contexts配置中指定的安全上下文中】&#34;</span>
+    <span class="c1"># Set SELinux security contexts on upgrade or policy update.</span>
+    <span class="na">restorecon_recursive /data</span>
+
+    <span class="c1"># If there is no fs-post-data action in the init.&lt;device&gt;.rc file, you</span>
+    <span class="c1"># must uncomment this line, otherwise encrypted filesystems</span>
+    <span class="c1"># won&#39;t work.</span>
+    <span class="c1"># Set indication (checked by vold) that we have finished this action</span>
+    <span class="c1">#setprop vold.post_fs_data_done 1</span>
+
+<span class="na">on boot</span>
+    <span class="na">&#34;【初始化网络】&#34;</span>
+    <span class="c1"># basic network init</span>
+    <span class="na">ifup lo</span>
+    <span class="na">&#34;【设置主机名为localhost】&#34;</span>
+    <span class="na">hostname localhost</span>
+    <span class="na">&#34;【设置域名localdomain】&#34;</span>
+    <span class="na">domainname localdomain</span>
+
+    <span class="na">&#34;【设置资源限制】&#34;</span>
+    <span class="c1"># set RLIMIT_NICE to allow priorities from 19 to -20</span>
+    <span class="na">setrlimit 13 40 40</span>
+
+    <span class="na">&#34;【这里省略了一些chmod,chown,等操作，不多解释】&#34;</span>
+   <span class="na">...</span>
+
+
+    <span class="c1"># Define default initial receive window size in segments.</span>
+    <span class="na">setprop net.tcp.default_init_rwnd 60</span>
+
+    <span class="na">&#34;【重启core服务】&#34;</span>
+    <span class="na">class_start core</span>
+
+<span class="na">on nonencrypted</span>
+    <span class="na">class_start main</span>
+    <span class="na">class_start late_start</span>
+
+<span class="na">on property:vold.decrypt</span><span class="o">=</span><span class="s">trigger_default_encryption
+</span><span class="s">    start defaultcrypto</span>
+
+<span class="na">on property:vold.decrypt</span><span class="o">=</span><span class="s">trigger_encryption
+</span><span class="s">    start surfaceflinger
+</span><span class="s">    start encrypt</span>
+
+<span class="na">on property:sys.init_log_level</span><span class="o">=</span><span class="s">*
+</span><span class="s">    loglevel ${sys.init_log_level}</span>
+
+<span class="na">on charger</span>
+    <span class="na">class_start charger</span>
+
+<span class="na">on property:vold.decrypt</span><span class="o">=</span><span class="s">trigger_reset_main
+</span><span class="s">    class_reset main</span>
+
+<span class="na">on property:vold.decrypt</span><span class="o">=</span><span class="s">trigger_load_persist_props
+</span><span class="s">    load_persist_props</span>
+
+<span class="na">on property:vold.decrypt</span><span class="o">=</span><span class="s">trigger_post_fs_data
+</span><span class="s">    trigger post-fs-data</span>
+
+<span class="na">on property:vold.decrypt</span><span class="o">=</span><span class="s">trigger_restart_min_framework
+</span><span class="s">    class_start main</span>
+
+<span class="na">on property:vold.decrypt</span><span class="o">=</span><span class="s">trigger_restart_framework
+</span><span class="s">    class_start main
+</span><span class="s">    class_start late_start</span>
+
+<span class="na">on property:vold.decrypt</span><span class="o">=</span><span class="s">trigger_shutdown_framework
+</span><span class="s">    class_reset late_start
+</span><span class="s">    class_reset main</span>
+
+<span class="na">on property:sys.powerctl</span><span class="o">=</span><span class="s">*
+</span><span class="s">    powerctl ${sys.powerctl}</span>
+
+<span class="c1"># system server cannot write to /proc/sys files,</span>
+<span class="c1"># and chown/chmod does not work for /proc/sys/ entries.</span>
+<span class="c1"># So proxy writes through init.</span>
+<span class="na">on property:sys.sysctl.extra_free_kbytes</span><span class="o">=</span><span class="s">*
+</span><span class="s">    write /proc/sys/vm/extra_free_kbytes ${sys.sysctl.extra_free_kbytes}</span>
+
+<span class="c1"># &#34;tcp_default_init_rwnd&#34; Is too long!</span>
+<span class="na">on property:sys.sysctl.tcp_def_init_rwnd</span><span class="o">=</span><span class="s">*
+</span><span class="s">    write /proc/sys/net/ipv4/tcp_default_init_rwnd ${sys.sysctl.tcp_def_init_rwnd}</span>
+
+<span class="na">&#34;【守护进程】&#34;</span>
+<span class="c1">## Daemon processes to be run by init.</span>
+<span class="c1">##</span>
+<span class="na">service ueventd /sbin/ueventd</span>
+    <span class="na">class core</span>
+    <span class="na">critical</span>
+    <span class="na">seclabel u:r:ueventd:s0</span>
+
+<span class="na">&#34;【日志服务进程】&#34;</span>
+<span class="na">service logd /system/bin/logd</span>
+    <span class="na">class core</span>
+    <span class="na">socket logd stream 0666 logd logd</span>
+    <span class="na">socket logdr seqpacket 0666 logd logd</span>
+    <span class="na">socket logdw dgram 0222 logd logd</span>
+    <span class="na">seclabel u:r:logd:s0</span>
+
+<span class="na">&#34;【Healthd是android4.4之后提出来的一种中介模型，该模型向下监听来自底层的电池事件，向上传递电池数据信息给Framework层的BatteryService用以计算电池电量相关状态信息】&#34;</span>
+<span class="na">service healthd /sbin/healthd</span>
+    <span class="na">class core</span>
+    <span class="na">critical</span>
+    <span class="na">seclabel u:r:healthd:s0</span>
+
+<span class="na">&#34;【控制台进程】&#34;</span>
+<span class="na">service console /system/bin/sh</span>
+    <span class="na">&#34;【为当前service设定一个类别.相同类别的服务将会同时启动或者停止,默认类名是default】&#34;</span>
+    <span class="na">class core</span>
+    <span class="na">&#34;【服务需要一个控制台】&#34;</span>
+    <span class="na">console</span>
+    <span class="na">&#34;【服务不会自动启动,必须通过服务名显式启动】&#34;</span>
+    <span class="na">disabled</span>
+    <span class="na">&#34;【在执行此服务之前切换用户名,当前默认的是root.自Android M开始,即使它要求linux capabilities,也应该使用该选项.很明显,为了获得该功能,进程需要以root用户运行】&#34;</span>
+    <span class="na">user shell</span>
+    <span class="na">seclabel u:r🐚s0</span>
+
+<span class="na">on property:ro.debuggable</span><span class="o">=</span><span class="s">1
+</span><span class="s">    start console</span>
+
+<span class="c1"># adbd is controlled via property triggers in init.&lt;platform&gt;.usb.rc</span>
+<span class="na">service adbd /sbin/adbd --root_seclabel</span><span class="o">=</span><span class="s">u:r:su:s0
+</span><span class="s">    class core
+</span><span class="s">    &#34;【创建一个unix域下的socket,其被命名/dev/socket/&lt;name&gt;. 并将其文件描述符fd返回给服务进程.其中,type必须为dgram,stream或者seqpacke,user和group默认是0.seclabel是该socket的SELLinux的安全上下文环境,默认是当前service的上下文环境,通过seclabel指定】&#34;
+</span><span class="s">    socket adbd stream 660 system system
+</span><span class="s">    disabled
+</span><span class="s">    seclabel u:r:adbd:s0</span>
+
+<span class="c1"># adbd on at boot in emulator</span>
+<span class="na">on property:ro.kernel.qemu</span><span class="o">=</span><span class="s">1
+</span><span class="s">    start adbd</span>
+
+<span class="na">&#34;【内存管理服务，内存不够释放内存】&#34;</span>
+<span class="na">service lmkd /system/bin/lmkd</span>
+    <span class="na">class core</span>
+    <span class="na">critical</span>
+    <span class="na">socket lmkd seqpacket 0660 system system</span>
+
+<span class="na">&#34;【ServiceManager是一个守护进程，它维护着系统服务和客户端的binder通信。</span>
+<span class="na">在Android系统中用到最多的通信机制就是Binder，Binder主要由Client、Server、ServiceManager和Binder驱动程序组成。其中Client、Service和ServiceManager运行在用户空间，而Binder驱动程序运行在内核空间。核心组件就是Binder驱动程序了，而ServiceManager提供辅助管理的功能，无论是Client还是Service进行通信前首先要和ServiceManager取得联系。而ServiceManager是一个守护进程，负责管理Server并向Client提供查询Server的功能。】&#34;</span>
+<span class="na">service servicemanager /system/bin/servicemanager</span>
+    <span class="na">class core</span>
+    <span class="na">user system</span>
+    <span class="na">group system</span>
+    <span class="na">critical</span>
+    <span class="na">onrestart restart healthd</span>
+    <span class="na">&#34;【servicemanager 服务启动时会重启zygote服务】&#34;</span>
+    <span class="na">onrestart restart zygote</span>
+    <span class="na">onrestart restart media</span>
+    <span class="na">onrestart restart surfaceflinger</span>
+    <span class="na">onrestart restart drm</span>
+
+<span class="na">&#34;【Vold是Volume Daemon的缩写,它是Android平台中外部存储系统的管控中心,是管理和控制Android平台外部存储设备的后台进程】&#34;</span>
+<span class="na">service vold /system/bin/vold</span>
+    <span class="na">class core</span>
+    <span class="na">socket vold stream 0660 root mount</span>
+    <span class="na">ioprio be 2</span>
+
+<span class="na">&#34;【Netd是Android系统中专门负责网络管理和控制的后台daemon程序】&#34;</span>
+<span class="na">service netd /system/bin/netd</span>
+    <span class="na">class main</span>
+    <span class="na">socket netd stream 0660 root system</span>
+    <span class="na">socket dnsproxyd stream 0660 root inet</span>
+    <span class="na">socket mdns stream 0660 root system</span>
+    <span class="na">socket fwmarkd stream 0660 root inet</span>
+
+<span class="na">&#34;【debuggerd是一个daemon进程，在系统启动时随着init进程启动。主要负责将进程运行时的信息dump到文件或者控制台中】&#34;</span>
+<span class="na">service debuggerd /system/bin/debuggerd</span>
+    <span class="na">class main</span>
+
+<span class="na">service debuggerd64 /system/bin/debuggerd64</span>
+    <span class="na">class main</span>
+
+<span class="na">&#34;【Android RIL (Radio Interface Layer)提供了Telephony服务和Radio硬件之间的抽象层】&#34;</span>
+<span class="c1"># for using TK init.modem.rc rild-daemon setting</span>
+<span class="c1">#service ril-daemon /system/bin/rild</span>
+<span class="c1">#    class main</span>
+<span class="c1">#    socket rild stream 660 root radio</span>
+<span class="c1">#    socket rild-debug stream 660 radio system</span>
+<span class="c1">#    user root</span>
+<span class="c1">#    group radio cache inet misc audio log</span>
+
+<span class="na">&#34;【提供系统 范围内的surface composer功能，它能够将各种应用 程序的2D、3D surface进行组合。】&#34;</span>
+<span class="na">service surfaceflinger /system/bin/surfaceflinger</span>
+    <span class="na">class core</span>
+    <span class="na">user system</span>
+    <span class="na">group graphics drmrpc</span>
+    <span class="na">onrestart restart zygote</span>
+
+<span class="na">&#34;【DRM可以直接访问DRM clients的硬件。DRM驱动用来处理DMA，内存管理，资源锁以及安全硬件访问。为了同时支持多个3D应用，3D图形卡硬件必须作为一个共享资源，因此需要锁来提供互斥访问。DMA传输和AGP接口用来发送图形操作的buffers到显卡硬件，因此要防止客户端越权访问显卡硬件。】&#34;</span>
+<span class="c1">#make sure drm server has rights to read and write sdcard ####</span>
+<span class="na">service drm /system/bin/drmserver</span>
+    <span class="na">class main</span>
+    <span class="na">user drm</span>
+    <span class="c1"># group drm system inet drmrpc ####</span>
+    <span class="na">group drm system inet drmrpc sdcard_r ####</span>
+
+<span class="na">&#34;【媒体服务，无需多说】&#34;</span>
+<span class="na">service media /system/bin/mediaserver</span>
+    <span class="na">class main</span>
+    <span class="na">user root ####</span>
+<span class="c1">#   google default ####</span>
+<span class="c1">#   user media    ####</span>
+    <span class="na">group audio camera inet net_bt net_bt_admin net_bw_acct drmrpc mediadrm media sdcard_r system net_bt_stack ####</span>
+<span class="c1">#   google default ####</span>
+<span class="c1">#   group audio camera inet net_bt net_bt_admin net_bw_acct drmrpc mediadrm ####</span>
+
+    <span class="na">ioprio rt 4</span>
+
+<span class="na">&#34;【设备加密相关服务】&#34;</span>
+<span class="c1"># One shot invocation to deal with encrypted volume.</span>
+<span class="na">service defaultcrypto /system/bin/vdc --wait cryptfs mountdefaultencrypted</span>
+    <span class="na">disabled</span>
+    <span class="na">&#34;【当服务退出时,不重启该服务】&#34;</span>
+    <span class="na">oneshot</span>
+    <span class="c1"># vold will set vold.decrypt to trigger_restart_framework (default</span>
+    <span class="c1"># encryption) or trigger_restart_min_framework (other encryption)</span>
+
+<span class="c1"># One shot invocation to encrypt unencrypted volumes</span>
+<span class="na">service encrypt /system/bin/vdc --wait cryptfs enablecrypto inplace default</span>
+    <span class="na">disabled</span>
+    <span class="na">oneshot</span>
+    <span class="c1"># vold will set vold.decrypt to trigger_restart_framework (default</span>
+    <span class="c1"># encryption)</span>
+
+<span class="na">&#34;【开机动画服务】&#34;</span>
+<span class="na">service bootanim /system/bin/bootanimation</span>
+    <span class="na">class core</span>
+    <span class="na">user graphics</span>
+<span class="c1">#    group graphics audio ####</span>
+    <span class="na">group graphics media audio ####</span>
+    <span class="na">disabled</span>
+    <span class="na">oneshot</span>
+
+<span class="na">&#34;【在Android系统中，PackageManagerService用于管理系统中的所有安装包信息及应用程序的安装卸载，但是应用程序的安装与卸载并非PackageManagerService来完成，而是通过PackageManagerService来访问installd服务来执行程序包的安装与卸载的。】&#34;</span>
+<span class="na">service installd /system/bin/installd</span>
+    <span class="na">class main</span>
+    <span class="na">socket installd stream 600 system system</span>
+
+<span class="na">service flash_recovery /system/bin/install-recovery.sh</span>
+    <span class="na">class main</span>
+    <span class="na">seclabel u:r:install_recovery:s0</span>
+    <span class="na">oneshot</span>
+
+<span class="na">&#34;【vpn相关的服务】&#34;</span>
+<span class="na">service racoon /system/bin/racoon</span>
+    <span class="na">class main</span>
+    <span class="na">socket racoon stream 600 system system</span>
+    <span class="c1"># IKE uses UDP port 500. Racoon will setuid to vpn after binding the port.</span>
+    <span class="na">group vpn net_admin inet</span>
+    <span class="na">disabled</span>
+    <span class="na">oneshot</span>
+
+<span class="na">&#34;【android中有mtpd命令可以连接vpn】&#34;</span>
+<span class="na">service mtpd /system/bin/mtpd</span>
+    <span class="na">class main</span>
+    <span class="na">socket mtpd stream 600 system system</span>
+    <span class="na">user vpn</span>
+    <span class="na">group vpn net_admin inet net_raw</span>
+    <span class="na">disabled</span>
+    <span class="na">oneshot</span>
+
+<span class="na">service keystore /system/bin/keystore /data/misc/keystore</span>
+    <span class="na">class main</span>
+    <span class="na">user keystore</span>
+    <span class="na">group keystore drmrpc</span>
+
+<span class="na">&#34;【可以用dumpstate 获取设备的各种信息】&#34;</span>
+<span class="na">service dumpstate /system/bin/dumpstate -s</span>
+    <span class="na">class main</span>
+    <span class="na">socket dumpstate stream 0660 shell log</span>
+    <span class="na">disabled</span>
+    <span class="na">oneshot</span>
+
+<span class="na">&#34;【mdnsd 是多播 DNS 和 DNS 服务发现的守护程序。】&#34;</span>
+<span class="na">service mdnsd /system/bin/mdnsd</span>
+    <span class="na">class main</span>
+    <span class="na">user mdnsr</span>
+    <span class="na">group inet net_raw</span>
+    <span class="na">socket mdnsd stream 0660 mdnsr inet</span>
+    <span class="na">disabled</span>
+    <span class="na">oneshot</span>
+
+<span class="na">&#34;【触发关机流程继续往下走】&#34;</span>
+<span class="na">service pre-recovery /system/bin/uncrypt</span>
+    <span class="na">class main</span>
+    <span class="na">disabled</span>
+    <span class="na">&#34;【当服务退出时,不重启该服务】&#34;</span>
+    <span class="na">oneshot</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="init-c全解析">init.c全解析</h2>
+
+<p>接下来我们具体分析以下这个main函数的执行过程；可能比较长，大家耐心看一下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="cp">#创 建一些linux根文件系统中的目录
+</span><span class="cp"></span>    <span class="n">mkdir</span><span class="p">(</span> <span class="s">&#34;/dev&#34;</span><span class="p">,</span> <span class="mo">0755</span> <span class="p">);</span>
+    <span class="n">mkdir</span><span class="p">(</span> <span class="s">&#34;/proc&#34;</span><span class="p">,</span> <span class="mo">0755</span> <span class="p">);</span>
+    <span class="n">mkdir</span><span class="p">(</span> <span class="s">&#34;/sys&#34;</span><span class="p">,</span> <span class="mo">0755</span> <span class="p">);</span>
+
+    <span class="n">mount</span><span class="p">(</span> <span class="s">&#34;tmpfs&#34;</span><span class="p">,</span> <span class="s">&#34;/dev&#34;</span><span class="p">,</span> <span class="s">&#34;tmpfs&#34;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&#34;mode=0755&#34;</span> <span class="p">);</span>
+    <span class="n">mkdir</span><span class="p">(</span> <span class="s">&#34;/dev/pts&#34;</span><span class="p">,</span> <span class="mo">0755</span> <span class="p">);</span>
+    <span class="n">mkdir</span><span class="p">(</span> <span class="s">&#34;/dev/socket&#34;</span><span class="p">,</span> <span class="mo">0755</span> <span class="p">);</span>
+    <span class="n">mount</span><span class="p">(</span> <span class="s">&#34;devpts&#34;</span><span class="p">,</span> <span class="s">&#34;/dev/pts&#34;</span><span class="p">,</span> <span class="s">&#34;devpts&#34;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">);</span>
+    <span class="n">mount</span><span class="p">(</span> <span class="s">&#34;proc&#34;</span><span class="p">,</span> <span class="s">&#34;/proc&#34;</span><span class="p">,</span> <span class="s">&#34;proc&#34;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">);</span>
+    <span class="n">mount</span><span class="p">(</span> <span class="s">&#34;sysfs&#34;</span><span class="p">,</span> <span class="s">&#34;/sys&#34;</span><span class="p">,</span> <span class="s">&#34;sysfs&#34;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">);</span>
+    <span class="cp">#init的 标准输入，标准输出，标准错误文件描述符定向到__null__，意味着没有输入和输出，它的输入和输出全部写入到Log中
+</span><span class="cp"></span>    <span class="n">open_devnull_stdio</span><span class="p">();</span>
+    <span class="cp">#初始化 log 写入init进 信息
+</span><span class="cp"></span>    <span class="n">log_init</span><span class="p">();</span>
+    <span class="cp">#读取并 且解析init.rc文件（这个文件在根目录下）
+</span><span class="cp"></span>    <span class="n">parse_config_file</span><span class="p">(</span> <span class="s">&#34;/init.rc&#34;</span> <span class="p">);</span>
+    <span class="cp">#取得硬件 为打印我们的设备名fs100
+</span><span class="cp"></span>    <span class="n">get_hardware_name</span><span class="p">();</span>
+    <span class="n">snprintf</span><span class="p">(</span> <span class="n">tmp</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">tmp</span><span class="p">),</span> <span class="s">&#34;/init.%s.rc&#34;</span><span class="p">,</span> <span class="n">hardware</span> <span class="p">);</span>
+    <span class="cp">#读取并 且解析硬件相关的init脚本文件,
+</span><span class="cp"></span>    <span class="n">parse_config_file</span><span class="p">(</span> <span class="n">tmp</span> <span class="p">);</span>
+    <span class="cp">#触发在init脚本文件中名字为early-init的action，并且执行其commands，其实是: on early-init
+</span><span class="cp"></span>    <span class="n">action_for_each_trigger</span><span class="p">(</span> <span class="s">&#34;early-init&#34;</span><span class="p">,</span> <span class="n">action_add_queue_tail</span> <span class="p">);</span>
+    <span class="n">drain_action_queue</span><span class="p">();</span>
+    <span class="cp">#初始化动态设备管理，设备文件有变化时反应给内核，后面具体解释
+</span><span class="cp"></span>    <span class="n">device_fd</span> <span class="o">=</span> <span class="n">device_init</span><span class="p">();</span> <span class="cp"># 初 始 化 设 备 管 理 务
+</span><span class="cp"></span>    <span class="cp">#加载启动动画，如果动画打开失败，则在屏幕上打印： A N D R O I D字样。
+</span><span class="cp"></span>    <span class="k">if</span> <span class="p">(</span> <span class="n">load_565rle_image</span><span class="p">(</span> <span class="n">INIT_IMAGE_FILE</span> <span class="p">)</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">fd</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span> <span class="s">&#34;/dev/tty0&#34;</span><span class="p">,</span> <span class="n">O_WRONLY</span> <span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="n">fd</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">msg</span><span class="p">;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span>
+                  <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span>
+                  <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span>
+                  <span class="mi">879</span>         <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span>
+                  <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span>
+                  <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span>
+                  <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span> <span class="cm">/* console is 40 cols x 30 lines */</span>
+                  <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span>
+                  <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span>
+                  <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span>
+                  <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span>
+                  <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span>
+                  <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span>
+                  <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span>
+                  <span class="cm">/* &#34;             A N D R O I D &#34;;开机动画 */</span>
+                  <span class="n">write</span><span class="p">(</span> <span class="n">fd</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">strlen</span><span class="p">(</span> <span class="n">msg</span> <span class="p">)</span> <span class="p">);</span>
+            <span class="n">close</span><span class="p">(</span> <span class="n">fd</span> <span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="cp">#触发 在init脚本文件中名字为init的action，并且执行其commands，其实是：on init
+</span><span class="cp"></span>    <span class="n">action_for_each_trigger</span><span class="p">(</span> <span class="s">&#34;init&#34;</span><span class="p">,</span> <span class="n">action_add_queue_tail</span> <span class="p">);</span>
+    <span class="n">drain_action_queue</span><span class="p">();</span>
+    <span class="cp">#启动系统属性服务： system property service
+</span><span class="cp"></span>    <span class="n">property_set_fd</span> <span class="o">=</span> <span class="n">start_property_service</span><span class="p">();</span>
+    <span class="cp">#创建socket用来处理孤儿进程信号
+</span><span class="cp"></span>    <span class="k">if</span> <span class="p">(</span> <span class="n">socketpair</span><span class="p">(</span> <span class="n">AF_UNIX</span><span class="p">,</span> <span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s</span> <span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">signal_fd</span>   <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">signal_recv_fd</span>  <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="n">fcntl</span><span class="p">(</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">F_SETFD</span><span class="p">,</span> <span class="n">FD_CLOEXEC</span> <span class="p">);</span>
+        <span class="n">fcntl</span><span class="p">(</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">O_NONBLOCK</span> <span class="p">);</span>
+        <span class="n">fcntl</span><span class="p">(</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">F_SETFD</span><span class="p">,</span> <span class="n">FD_CLOEXEC</span> <span class="p">);</span>
+        <span class="n">fcntl</span><span class="p">(</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">F_SETFL</span><span class="p">,</span> <span class="n">O_NONBLOCK</span> <span class="p">);</span>
+    <span class="p">}</span>
+    <span class="cp">#触发 在init脚本文件中名字为early-boot和boot的action，并且执行其commands，其实是：on early-boot和on boot
+</span><span class="cp"></span>    <span class="n">action_for_each_trigger</span><span class="p">(</span> <span class="s">&#34;early-boot&#34;</span><span class="p">,</span> <span class="n">action_add_queue_tail</span> <span class="p">);</span>
+    <span class="n">action_for_each_trigger</span><span class="p">(</span> <span class="s">&#34;boot&#34;</span><span class="p">,</span> <span class="n">action_add_queue_tail</span> <span class="p">);</span>
+    <span class="n">drain_action_queue</span><span class="p">();</span>
+    <span class="cp">#启动所有属性变化触发命令，其实是： on property:ro.xx.xx=xx
+</span><span class="cp"></span>    <span class="n">queue_all_property_triggers</span><span class="p">();</span>
+    <span class="n">drain_action_queue</span><span class="p">();</span>
+    <span class="cp">#进入 死循环（）
+</span><span class="cp"></span>    <span class="k">for</span> <span class="p">(;;</span> <span class="p">)</span>
+    <span class="p">{</span>
+    <span class="cp">#启 动所有init脚本中声明的service，
+</span><span class="cp"></span>    <span class="cp">#如 ：266 service servicemanager /system/bin/servicemanager
+</span><span class="cp"></span>    <span class="cp">#user system
+</span><span class="cp"></span>    <span class="cp">#critical
+</span><span class="cp"></span>    <span class="cp">#onrestart restart zygote
+</span><span class="cp"></span>    <span class="cp">#onrestart restart media
+</span><span class="cp"></span>    <span class="n">restart_processes</span><span class="p">();</span>
+    <span class="cp">#多路监听设备管理，子进程运行状态，属性服务
+</span><span class="cp"></span>        <span class="n">nr</span> <span class="o">=</span> <span class="n">poll</span><span class="p">(</span> <span class="n">ufds</span><span class="p">,</span> <span class="n">fd_count</span><span class="p">,</span> <span class="n">timeout</span> <span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="n">nr</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">)</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="n">ufds</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="n">revents</span> <span class="o">==</span> <span class="n">POLLIN</span> <span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">read</span><span class="p">(</span> <span class="n">signal_recv_fd</span><span class="p">,</span> <span class="n">tmp</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="p">);</span>
+            <span class="k">while</span> <span class="p">(</span> <span class="o">!</span><span class="n">wait_for_one_process</span><span class="p">(</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">)</span>
+                <span class="p">;</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span> <span class="n">ufds</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">revents</span> <span class="o">==</span> <span class="n">POLLIN</span> <span class="p">)</span>
+            <span class="n">handle_device_fd</span><span class="p">(</span> <span class="n">device_fd</span> <span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span> <span class="n">ufds</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">revents</span> <span class="o">==</span> <span class="n">POLLIN</span> <span class="p">)</span>
+            <span class="n">handle_property_set_fd</span><span class="p">(</span> <span class="n">property_set_fd</span> <span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="n">ufds</span><span class="p">[</span><span class="mi">3</span><span class="p">].</span><span class="n">revents</span> <span class="o">==</span> <span class="n">POLLIN</span> <span class="p">)</span>
+            <span class="n">handle_keychord</span><span class="p">(</span> <span class="n">keychord_fd</span> <span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Fantasy</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2019-01-18</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://mazhidong.github.io/tags/android/">android</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+        
+          <a class="next" href="/post/aosp/2018-12-07_android-5.1-ota%E5%8C%85%E7%BC%96%E8%AF%91%E9%94%99%E8%AF%AF/">
+            <span class="next-text nav-default">Android 5.1 OTA包编译错误</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+
+  
+  
+
+  
+  
+
+  
+
+  <div class="post bg-white">
+      <div id="comments-gitment"></div>
+      <link rel="stylesheet" href="/lib/gitment/gitment-0.0.3.min.css">
+        <script src="/lib/gitment/gitment-0.0.3.min.js"></script>
+      <script type="text/javascript">
+      const gitment = new Gitment({
+        id: '2019-01-18_Android系统init.rc全解析.md',
+        title: 'Android系统init.rc全解析',
+        link: decodeURI(location.href),
+        desc: '这是一篇用心写的博客，也希望大家用心看并帮忙找到文章的改进之处，谢谢； 服务启动机制 system\/core\/init\/init.c文件main',
+        owner: 'mazhidong',
+        repo: 'comments',
+        oauth: {
+          client_id: 'a7ad9d79ce4e98eabdc8',
+          client_secret: '13ffc9363807f8929fe31ce5a7022fb8676dab45'
+        }
+      })
+      gitment.render('comments-gitment')
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/imsun/gitment">comments powered by gitment.</a></noscript>
+    </div>
+
+  
+
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:591888356@qq.com" rel="me noopener" class="iconfont icon-email"
+        title="email" target="_blank">
+      </a>
+      <a href="https://github.com/mazhidong" rel="me noopener" class="iconfont icon-github"
+        title="github" target="_blank">
+      </a>
+  <a href="https://mazhidong.github.io/index.xml" rel="noopener alternate" type="application/rss" class="iconfont icon-rss"
+    title="rss" target="_blank">
+  </a>
+  </div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+      2018 -
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span><span class="author">Fantasy</span></span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+<script type="text/javascript" src="/dist/jane.min.js?v=2.7.0"></script>
+
+
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+
+</body>
+</html>

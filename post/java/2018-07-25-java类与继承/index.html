@@ -375,7 +375,7 @@
 <h2 id="看下面这个例子就明白了">看下面这个例子就明白了：</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -392,25 +392,25 @@
 </span><span class="lnt">15
 </span><span class="lnt">16
 </span><span class="lnt">17
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">public class Test {
-    public static void main(String[] args) throws ClassNotFoundException {
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ClassNotFoundException</span> <span class="o">{</span>
          
-        Bread bread1 = new Bread();
-        Bread bread2 = new Bread();
-    }
-}
+        <span class="n">Bread</span> <span class="n">bread1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Bread</span><span class="o">();</span>
+        <span class="n">Bread</span> <span class="n">bread2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Bread</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
  
  
-class Bread {
-    static{
-        System.out.println(&#34;Bread is loaded&#34;);
-    }
-    public Bread() {
-        System.out.println(&#34;bread&#34;);
-    }
-}</pre></td></tr></table>
+<span class="kd">class</span> <span class="nc">Bread</span> <span class="o">{</span>
+    <span class="kd">static</span><span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;Bread is loaded&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="nf">Bread</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;bread&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
 </div>
 </div>
 <h3 id="运行这段代码就会发现-bread-is-loaded-只会被打印一次">运行这段代码就会发现&rdquo;Bread is loaded&rdquo;只会被打印一次。</h3>
@@ -419,7 +419,7 @@ class Bread {
 　　</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -438,27 +438,27 @@ class Bread {
 </span><span class="lnt">17
 </span><span class="lnt">18
 </span><span class="lnt">19
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">public class Test {
-    public static void main(String[] args)  {
-        new Meal();
-    }
-}
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>  <span class="o">{</span>
+        <span class="k">new</span> <span class="n">Meal</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-class Meal {
-    public Meal() {
-        System.out.println(&#34;meal&#34;);
-    }
+<span class="kd">class</span> <span class="nc">Meal</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nf">Meal</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;meal&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
      
-    Bread bread = new Bread();
-} 
+    <span class="n">Bread</span> <span class="n">bread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Bread</span><span class="o">();</span>
+<span class="o">}</span> 
 
-class Bread {
-    public Bread() {
-        System.out.println(&#34;bread&#34;);
-    }
-}</pre></td></tr></table>
+<span class="kd">class</span> <span class="nc">Bread</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nf">Bread</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;bread&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
 </div>
 </div>
 <h3 id="输出结果为">输出结果为：</h3>
@@ -471,7 +471,7 @@ meal</p>
 <p>　　继承是所有OOP语言不可缺少的部分，在java中使用extends关键字来表示继承关系。当创建一个类时，总是在继承，如果没有明确指出要继承的类，就总是隐式地从根类Object进行继承。比如下面这段代码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -482,19 +482,19 @@ meal</p>
 </span><span class="lnt"> 9
 </span><span class="lnt">10
 </span><span class="lnt">11
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">class Person {
-    public Person() {
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nf">Person</span><span class="o">()</span> <span class="o">{</span>
          
-    }
-}
+    <span class="o">}</span>
+<span class="o">}</span>
  
-class Man extends Person {
-    public Man() {
+<span class="kd">class</span> <span class="nc">Man</span> <span class="kd">extends</span> <span class="n">Person</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nf">Man</span><span class="o">()</span> <span class="o">{</span>
          
-    }
-}</pre></td></tr></table>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
 </div>
 </div>
 <p>　　类Man继承于Person类，这样一来的话，Person类称为父类（基类），Man类称为子类（导出类）。如果两个类存在继承关系，则子类会自动继承父类的方法和变量，在子类中可以调用父类的方法和变量。在java中，只允许单继承，也就是说 一个类最多只能显示地继承于一个父类。但是一个类却可以被多个类继承，也就是说一个类可以拥有多个子类。
@@ -526,7 +526,7 @@ class Man extends Person {
 <p>　　子类是不能够继承父类的构造器，但是要注意的是，如果父类的构造器都是带有参数的，则必须在子类的构造器中显示地通过super关键字调用父类的构造器并配以适当的参数列表。如果父类有无参构造器，则在子类的构造器中用super关键字调用父类构造器不是必须的，如果没有使用super关键字，系统会自动调用父类的无参构造器。看下面这个例子就清楚了：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -556,38 +556,38 @@ class Man extends Person {
 </span><span class="lnt">28
 </span><span class="lnt">29
 </span><span class="lnt">30
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">class Shape {
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Shape</span> <span class="o">{</span>
      
-    protected String name;
+    <span class="kd">protected</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
      
-    public Shape(){
-        name = &#34;shape&#34;;
-    }
+    <span class="kd">public</span> <span class="nf">Shape</span><span class="o">(){</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&#34;shape&#34;</span><span class="o">;</span>
+    <span class="o">}</span>
      
-    public Shape(String name) {
-        this.name = name;
-    }
-}
+    <span class="kd">public</span> <span class="nf">Shape</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
  
-class Circle extends Shape {
+<span class="kd">class</span> <span class="nc">Circle</span> <span class="kd">extends</span> <span class="n">Shape</span> <span class="o">{</span>
      
-    private double radius;
+    <span class="kd">private</span> <span class="kt">double</span> <span class="n">radius</span><span class="o">;</span>
      
-    public Circle() {
-        radius = 0;
-    }
+    <span class="kd">public</span> <span class="nf">Circle</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+    <span class="o">}</span>
      
-    public Circle(double radius) {
-        this.radius = radius;
-    }
+    <span class="kd">public</span> <span class="nf">Circle</span><span class="o">(</span><span class="kt">double</span> <span class="n">radius</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">radius</span> <span class="o">=</span> <span class="n">radius</span><span class="o">;</span>
+    <span class="o">}</span>
      
-    public Circle(double radius,String name) {
-        this.radius = radius;
-        this.name = name;
-    }
-}</pre></td></tr></table>
+    <span class="kd">public</span> <span class="nf">Circle</span><span class="o">(</span><span class="kt">double</span> <span class="n">radius</span><span class="o">,</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">radius</span> <span class="o">=</span> <span class="n">radius</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
 </div>
 </div>
 <p>　　这样的代码是没有问题的，如果把父类的无参构造器去掉，则下面的代码必然会出错：</p>
@@ -611,7 +611,7 @@ class Circle extends Shape {
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -638,48 +638,48 @@ class Circle extends Shape {
 </span><span class="lnt">25
 </span><span class="lnt">26
 </span><span class="lnt">27
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">public class Test {
-    public static void main(String[] args)  {
-        new Circle();
-    }
-}
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>  <span class="o">{</span>
+        <span class="k">new</span> <span class="n">Circle</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-class Draw {
+<span class="kd">class</span> <span class="nc">Draw</span> <span class="o">{</span>
      
-    public Draw(String type) {
-        System.out.println(type+&#34; draw constructor&#34;);
-    }
-}
+    <span class="kd">public</span> <span class="nf">Draw</span><span class="o">(</span><span class="n">String</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">type</span><span class="o">+</span><span class="s">&#34; draw constructor&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-class Shape {
-    private Draw draw = new Draw(&#34;shape&#34;);
+<span class="kd">class</span> <span class="nc">Shape</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Draw</span> <span class="n">draw</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Draw</span><span class="o">(</span><span class="s">&#34;shape&#34;</span><span class="o">);</span>
      
-    public Shape(){
-        System.out.println(&#34;shape constructor&#34;);
-    }
-}
+    <span class="kd">public</span> <span class="nf">Shape</span><span class="o">(){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;shape constructor&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-class Circle extends Shape {
-    private Draw draw = new Draw(&#34;circle&#34;);
-    public Circle() {
-        System.out.println(&#34;circle constructor&#34;);
-    }
-}</pre></td></tr></table>
+<span class="kd">class</span> <span class="nc">Circle</span> <span class="kd">extends</span> <span class="n">Shape</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Draw</span> <span class="n">draw</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Draw</span><span class="o">(</span><span class="s">&#34;circle&#34;</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="nf">Circle</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;circle constructor&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">shape draw constructor
-shape constructor
-circle draw constructor
-circle constructor</pre></td></tr></table>
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">shape</span> <span class="n">draw</span> <span class="n">constructor</span>
+<span class="n">shape</span> <span class="n">constructor</span>
+<span class="n">circle</span> <span class="n">draw</span> <span class="n">constructor</span>
+<span class="n">circle</span> <span class="n">constructor</span></code></pre></td></tr></table>
 </div>
 </div>
 <p>　　这道题目主要考察的是类继承时构造器的调用顺序和初始化顺序。要记住一点：父类的构造器调用以及初始化过程一定在子类的前面。由于Circle类的父类是Shape类，所以Shape类先进行初始化，然后再执行Shape类的构造器。接着才是对子类Circle进行初始化，最后执行Circle的构造器。</p>
@@ -689,7 +689,7 @@ circle constructor</pre></td></tr></table>
 </ol>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -729,63 +729,63 @@ circle constructor</pre></td></tr></table>
 </span><span class="lnt">38
 </span><span class="lnt">39
 </span><span class="lnt">40
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">public class Test {
-    public static void main(String[] args)  {
-        Shape shape = new Circle();
-        System.out.println(shape.name);
-        shape.printType();
-        shape.printName();
-    }
-}
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>  <span class="o">{</span>
+        <span class="n">Shape</span> <span class="n">shape</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Circle</span><span class="o">();</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">shape</span><span class="o">.</span><span class="na">name</span><span class="o">);</span>
+        <span class="n">shape</span><span class="o">.</span><span class="na">printType</span><span class="o">();</span>
+        <span class="n">shape</span><span class="o">.</span><span class="na">printName</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-class Shape {
-    public String name = &#34;shape&#34;;
+<span class="kd">class</span> <span class="nc">Shape</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&#34;shape&#34;</span><span class="o">;</span>
     
-    public Shape(){
-        System.out.println(&#34;shape constructor&#34;);
-    }
+    <span class="kd">public</span> <span class="nf">Shape</span><span class="o">(){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;shape constructor&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
      
-    public void printType() {
-        System.out.println(&#34;this is shape&#34;);
-    }
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">printType</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;this is shape&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
      
-    public static void printName() {
-        System.out.println(&#34;shape&#34;);
-    }
-}
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">printName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;shape&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-class Circle extends Shape {
-    public String name = &#34;circle&#34;;
+<span class="kd">class</span> <span class="nc">Circle</span> <span class="kd">extends</span> <span class="n">Shape</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&#34;circle&#34;</span><span class="o">;</span>
      
-    public Circle() {
-        System.out.println(&#34;circle constructor&#34;);
-    }
+    <span class="kd">public</span> <span class="nf">Circle</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;circle constructor&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
      
-    public void printType() {
-        System.out.println(&#34;this is circle&#34;);
-    }
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">printType</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;this is circle&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
      
-    public static void printName() {
-        System.out.println(&#34;circle&#34;);
-    }
-}</pre></td></tr></table>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">printName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;circle&#34;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">shape constructor
-circle constructor
-shape
-this is circle
-shape</pre></td></tr></table>
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">shape</span> <span class="n">constructor</span>
+<span class="n">circle</span> <span class="n">constructor</span>
+<span class="n">shape</span>
+<span class="k">this</span> <span class="n">is</span> <span class="n">circle</span>
+<span class="n">shape</span></code></pre></td></tr></table>
 </div>
 </div>
     </div>

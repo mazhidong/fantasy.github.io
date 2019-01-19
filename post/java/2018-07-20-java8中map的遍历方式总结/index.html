@@ -324,7 +324,7 @@
     <div class="post-content">
       <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -407,91 +407,91 @@
 </span><span class="lnt">81
 </span><span class="lnt">82
 </span><span class="lnt">83
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">public class LambdaMap {
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LambdaMap</span> <span class="o">{</span>
 
-    private Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();
+    <span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
 
-    @Before
-    public void initData() {
-        map.put(&#34;key1&#34;, &#34;value1&#34;);
-        map.put(&#34;key2&#34;, &#34;value2&#34;);
-        map.put(&#34;key3&#34;, &#34;value3&#34;);
-        map.put(&#34;key4&#34;, 4);
-        map.put(&#34;key5&#34;, 5);
-        map.put(&#34;key5&#34;, &#39;h&#39;);
-    }
+    <span class="nd">@Before</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">initData</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;key1&#34;</span><span class="o">,</span> <span class="s">&#34;value1&#34;</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;key2&#34;</span><span class="o">,</span> <span class="s">&#34;value2&#34;</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;key3&#34;</span><span class="o">,</span> <span class="s">&#34;value3&#34;</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;key4&#34;</span><span class="o">,</span> <span class="n">4</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;key5&#34;</span><span class="o">,</span> <span class="n">5</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;key5&#34;</span><span class="o">,</span> <span class="sc">&#39;h&#39;</span><span class="o">);</span>
+    <span class="o">}</span>
 
 
-    /**
-     * 遍历Map的方式一
-     * 通过Map.keySet遍历key和value
-     */
-    @Test
-    public void testErgodicWayOne() {
-        System.out.println(&#34;---------------------Before JAVA8 ------------------------------&#34;);
-        for (String key : map.keySet()) {
-            System.out.println(&#34;map.get(&#34; + key + &#34;) = &#34; + map.get(key));
-        }
-        System.out.println(&#34;---------------------JAVA8 ------------------------------&#34;);
-        map.keySet().forEach(key -&gt; System.out.println(&#34;map.get(&#34; + key + &#34;) = &#34; + map.get(key)));
-    }
+    <span class="cm">/**
+</span><span class="cm">     * 遍历Map的方式一
+</span><span class="cm">     * 通过Map.keySet遍历key和value
+</span><span class="cm">     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testErgodicWayOne</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;---------------------Before JAVA8 ------------------------------&#34;</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">key</span> <span class="o">:</span> <span class="n">map</span><span class="o">.</span><span class="na">keySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;map.get(&#34;</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s">&#34;) = &#34;</span> <span class="o">+</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;---------------------JAVA8 ------------------------------&#34;</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">keySet</span><span class="o">().</span><span class="na">forEach</span><span class="o">(</span><span class="n">key</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;map.get(&#34;</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s">&#34;) = &#34;</span> <span class="o">+</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">)));</span>
+    <span class="o">}</span>
 
-    /**
-     * 遍历Map第二种
-     * 通过Map.entrySet使用Iterator遍历key和value
-     */
-    @Test
-    public void testErgodicWayTwo() {
-        System.out.println(&#34;---------------------Before JAVA8 ------------------------------&#34;);
-        Iterator&lt;Map.Entry&lt;String, Object&gt;&gt; iterator = map.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry&lt;String, Object&gt; entry = iterator.next();
-            System.out.println(&#34;key:value = &#34; + entry.getKey() + &#34;:&#34; + entry.getValue());
-        }
-        System.out.println(&#34;---------------------JAVA8 ------------------------------&#34;);
-        map.entrySet().iterator().forEachRemaining(item -&gt; System.out.println(&#34;key:value=&#34; + item.getKey() + &#34;:&#34; + item.getValue()));
-    }
+    <span class="cm">/**
+</span><span class="cm">     * 遍历Map第二种
+</span><span class="cm">     * 通过Map.entrySet使用Iterator遍历key和value
+</span><span class="cm">     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testErgodicWayTwo</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;---------------------Before JAVA8 ------------------------------&#34;</span><span class="o">);</span>
+        <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;&gt;</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">map</span><span class="o">.</span><span class="na">entrySet</span><span class="o">().</span><span class="na">iterator</span><span class="o">();</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;key:value = &#34;</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">()</span> <span class="o">+</span> <span class="s">&#34;:&#34;</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;---------------------JAVA8 ------------------------------&#34;</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">entrySet</span><span class="o">().</span><span class="na">iterator</span><span class="o">().</span><span class="na">forEachRemaining</span><span class="o">(</span><span class="n">item</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;key:value=&#34;</span> <span class="o">+</span> <span class="n">item</span><span class="o">.</span><span class="na">getKey</span><span class="o">()</span> <span class="o">+</span> <span class="s">&#34;:&#34;</span> <span class="o">+</span> <span class="n">item</span><span class="o">.</span><span class="na">getValue</span><span class="o">()));</span>
+    <span class="o">}</span>
 
-    /**
-     * 遍历Map第三种
-     * 通过Map.entrySet遍历key和value，在大容量时推荐使用
-     */
-    @Test
-    public void testErgodicWayThree() {
-        System.out.println(&#34;---------------------Before JAVA8 ------------------------------&#34;);
-        for (Map.Entry&lt;String, Object&gt; entry : map.entrySet()) {
-            System.out.println(&#34;key:value = &#34; + entry.getKey() + &#34;:&#34; + entry.getValue());
-        }
-        System.out.println(&#34;---------------------JAVA8 ------------------------------&#34;);
-        map.entrySet().forEach(entry -&gt; System.out.println(&#34;key:value = &#34; + entry.getKey() + &#34;:&#34; + entry.getValue()));
-    }
+    <span class="cm">/**
+</span><span class="cm">     * 遍历Map第三种
+</span><span class="cm">     * 通过Map.entrySet遍历key和value，在大容量时推荐使用
+</span><span class="cm">     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testErgodicWayThree</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;---------------------Before JAVA8 ------------------------------&#34;</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">map</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;key:value = &#34;</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">()</span> <span class="o">+</span> <span class="s">&#34;:&#34;</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;---------------------JAVA8 ------------------------------&#34;</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">entrySet</span><span class="o">().</span><span class="na">forEach</span><span class="o">(</span><span class="n">entry</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;key:value = &#34;</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">()</span> <span class="o">+</span> <span class="s">&#34;:&#34;</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">()));</span>
+    <span class="o">}</span>
 
-    /**
-     * 遍历Map第四种
-     * 通过Map.values()遍历所有的value，但不能遍历key
-     */
-    @Test
-    public void testErgodicWayFour() {
-        System.out.println(&#34;---------------------Before JAVA8 ------------------------------&#34;);
-        for (Object value : map.values()) {
-            System.out.println(&#34;map.value = &#34; + value);
-        }
-        System.out.println(&#34;---------------------JAVA8 ------------------------------&#34;);
-        map.values().forEach(System.out::println); // 等价于map.values().forEach(value -&gt; System.out.println(value));
-    }
+    <span class="cm">/**
+</span><span class="cm">     * 遍历Map第四种
+</span><span class="cm">     * 通过Map.values()遍历所有的value，但不能遍历key
+</span><span class="cm">     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testErgodicWayFour</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;---------------------Before JAVA8 ------------------------------&#34;</span><span class="o">);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Object</span> <span class="n">value</span> <span class="o">:</span> <span class="n">map</span><span class="o">.</span><span class="na">values</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;map.value = &#34;</span> <span class="o">+</span> <span class="n">value</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;---------------------JAVA8 ------------------------------&#34;</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">values</span><span class="o">().</span><span class="na">forEach</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span> <span class="c1">// 等价于map.values().forEach(value -&gt; System.out.println(value));
+</span><span class="c1"></span>    <span class="o">}</span>
 
-    /**
-     * 遍历Map第五种
-     * 通过k,v遍历，Java8独有的
-     */
-    @Test
-    public void testErgodicWayFive() {
-        System.out.println(&#34;---------------------Only JAVA8 ------------------------------&#34;);
-        map.forEach((k, v) -&gt; System.out.println(&#34;key:value = &#34; + k + &#34;:&#34; + v));
-    }
-}</pre></td></tr></table>
+    <span class="cm">/**
+</span><span class="cm">     * 遍历Map第五种
+</span><span class="cm">     * 通过k,v遍历，Java8独有的
+</span><span class="cm">     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testErgodicWayFive</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;---------------------Only JAVA8 ------------------------------&#34;</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">forEach</span><span class="o">((</span><span class="n">k</span><span class="o">,</span> <span class="n">v</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;key:value = &#34;</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="s">&#34;:&#34;</span> <span class="o">+</span> <span class="n">v</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></td></tr></table>
 </div>
 </div>
     </div>

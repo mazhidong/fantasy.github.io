@@ -334,7 +334,7 @@
 <h2 id="代码">代码</h2>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-JNI" data-lang="JNI"><span class="lnt"> 1
+<pre class="chroma"><code class="language-C" data-lang="C"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -373,43 +373,43 @@
 </span><span class="lnt">37
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-JNI" data-lang="JNI">/*
- * Class:     com_ema_testlib_infrastructure_demo_JNITools
- * Method:    uartTest
- * Signature: ([Ljava/lang/String;)I
- */
-JNIEXPORT jint JNICALL Java_com_ema_testlib_infrastructure_demo_JNITools_uartTest
-        (JNIEnv *env, jobject, jobjectArray jargv) {
+<pre class="chroma"><code class="language-C" data-lang="C"><span class="cm">/*
+</span><span class="cm"> * Class:     com_ema_testlib_infrastructure_demo_JNITools
+</span><span class="cm"> * Method:    uartTest
+</span><span class="cm"> * Signature: ([Ljava/lang/String;)I
+</span><span class="cm"> */</span>
+<span class="n">JNIEXPORT</span> <span class="n">jint</span> <span class="n">JNICALL</span> <span class="nf">Java_com_ema_testlib_infrastructure_demo_JNITools_uartTest</span>
+        <span class="p">(</span><span class="n">JNIEnv</span> <span class="o">*</span><span class="n">env</span><span class="p">,</span> <span class="n">jobject</span><span class="p">,</span> <span class="n">jobjectArray</span> <span class="n">jargv</span><span class="p">)</span> <span class="p">{</span>
 
-    int argc = env-&gt;GetArrayLength(jargv);
-    typedef char *pchar;
-    pchar *argv = new pchar[argc];
-    int i;
-    for(i=0; i&lt;argc; i++)
-    {
-        jobject x= env-&gt;GetObjectArrayElement(jargv, i); //A Java string
-        jstring js = (jstring) x; //A Java string
-        const char *pjc = env-&gt;GetStringUTFChars(js,0); //A pointer to a Java-managed char buffer
-        size_t jslen = strlen(pjc);
-        argv[i] = new char[jslen+1]; //Extra char for the terminating null
-        strcpy(argv[i], pjc); //Copy to *our* buffer. We could omit that, but IMHO this is cleaner. Also, const correctness.
-        env-&gt;ReleaseStringUTFChars(js, pjc);
-    }
+    <span class="kt">int</span> <span class="n">argc</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetArrayLength</span><span class="p">(</span><span class="n">jargv</span><span class="p">);</span>
+    <span class="k">typedef</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pchar</span><span class="p">;</span>
+    <span class="n">pchar</span> <span class="o">*</span><span class="n">argv</span> <span class="o">=</span> <span class="n">new</span> <span class="n">pchar</span><span class="p">[</span><span class="n">argc</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">argc</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">jobject</span> <span class="n">x</span><span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetObjectArrayElement</span><span class="p">(</span><span class="n">jargv</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span> <span class="c1">//A Java string
+</span><span class="c1"></span>        <span class="n">jstring</span> <span class="n">js</span> <span class="o">=</span> <span class="p">(</span><span class="n">jstring</span><span class="p">)</span> <span class="n">x</span><span class="p">;</span> <span class="c1">//A Java string
+</span><span class="c1"></span>        <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">pjc</span> <span class="o">=</span> <span class="n">env</span><span class="o">-&gt;</span><span class="n">GetStringUTFChars</span><span class="p">(</span><span class="n">js</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span> <span class="c1">//A pointer to a Java-managed char buffer
+</span><span class="c1"></span>        <span class="n">size_t</span> <span class="n">jslen</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">pjc</span><span class="p">);</span>
+        <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">jslen</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span> <span class="c1">//Extra char for the terminating null
+</span><span class="c1"></span>        <span class="n">strcpy</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">pjc</span><span class="p">);</span> <span class="c1">//Copy to *our* buffer. We could omit that, but IMHO this is cleaner. Also, const correctness.
+</span><span class="c1"></span>        <span class="n">env</span><span class="o">-&gt;</span><span class="n">ReleaseStringUTFChars</span><span class="p">(</span><span class="n">js</span><span class="p">,</span> <span class="n">pjc</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    for (int i = 0; i &lt; argc; ++i) {
-        LOGD(&#34;%s&#34;,argv[i]);
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">argc</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">LOGD</span><span class="p">(</span><span class="s">&#34;%s&#34;</span><span class="p">,</span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
 
-    //Call main
-    int result=test_main(argc, argv);
+    <span class="c1">//Call main
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">result</span><span class="o">=</span><span class="n">test_main</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">);</span>
 
-    //Now free the array
-    for(i=0;i&lt;argc;i++)
-        delete [] argv[i];
-    delete [] argv;
+    <span class="c1">//Now free the array
+</span><span class="c1"></span>    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">argc</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">delete</span> <span class="p">[]</span> <span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="n">delete</span> <span class="p">[]</span> <span class="n">argv</span><span class="p">;</span>
 
-    return result;
-}</code></pre></td></tr></table>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
     </div>

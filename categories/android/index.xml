@@ -148,10 +148,10 @@
     
     <item>
       <title>Android AbstractProcessor和apt环境配置</title>
-      <link>https://mazhidong.github.io/post/android/2018-05-02-android--abstractprocessor%E5%92%8Capt%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</link>
+      <link>https://mazhidong.github.io/post/android/2018-05-02-android-abstractprocessor%E5%92%8Capt%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</link>
       <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://mazhidong.github.io/post/android/2018-05-02-android--abstractprocessor%E5%92%8Capt%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</guid>
+      <guid>https://mazhidong.github.io/post/android/2018-05-02-android-abstractprocessor%E5%92%8Capt%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</guid>
       <description>一、AbstractProcessor AbstractProcessor是抽象处理器，开发apt时都必须实现这个类来生成java文件，实现这</description>
     </item>
     

@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Fantasy Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 18 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 25 Feb 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mazhidong.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>SerialPort注意事项</title>
+      <link>https://mazhidong.github.io/post/serialport/2019-02-25_serialport%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/</link>
+      <pubDate>Mon, 25 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/serialport/2019-02-25_serialport%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/</guid>
+      <description>现象: 发送16进制数据的时候多出 od 或者 oa 字符 解决方案: 回车 代码：CR ASCII码：\ r ，十六进制，0x0d 回车的作用只是移动光标至该行的起始</description>
+    </item>
     
     <item>
       <title>Android系统init.rc全解析</title>
@@ -180,15 +189,6 @@
       
       <guid>https://mazhidong.github.io/post/aosp/2018-07-03-android_dhcp/</guid>
       <description>系统环境 Android 4.0.3 问题描述 dhcp的时候一直停留在获取ip地址 设置静态IP能正常使用 获取ip地址 一直返回超时 dhcp.wlan0.result = &amp;ldquo;&amp;rdquo; 问题解决 /system/etc/dhcpcd/dhcpcd-run-hooks 需要添加执行权限 chmod 755 /system/etc/dhcpcd/dhcpcd-run-hooks</description>
-    </item>
-    
-    <item>
-      <title>使用Docker编译Android系统源码</title>
-      <link>https://mazhidong.github.io/post/docker/2018-06-22-%E4%BD%BF%E7%94%A8docker%E7%BC%96%E8%AF%91android%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81/</link>
-      <pubDate>Fri, 22 Jun 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/docker/2018-06-22-%E4%BD%BF%E7%94%A8docker%E7%BC%96%E8%AF%91android%E7%B3%BB%E7%BB%9F%E6%BA%90%E7%A0%81/</guid>
-      <description>引言： 最近公司业务转型，开始倒腾起安卓系统，做了几个月的安卓APP开发，最近又需要做系统定制，所以撸起袖子搞起… 首先干嘛？部署开发环境，开发</description>
     </item>
     
   </channel>

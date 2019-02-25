@@ -24,6 +24,39 @@
     </item>
     
     <item>
+      <title>SerialPort注意事项</title>
+      <link>https://mazhidong.github.io/post/serialport/2019-02-25_serialport%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/</link>
+      <pubDate>Mon, 25 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/serialport/2019-02-25_serialport%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/</guid>
+      
+        <description>
+
+&lt;ul&gt;
+&lt;li&gt;现象:
+发送16进制数据的时候多出 od 或者 oa 字符&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;解决方案&#34;&gt;解决方案:&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;回车 代码：CR ASCII码：\ r ，十六进制，0x0d
+
+&lt;ul&gt;
+&lt;li&gt;回车的作用只是移动光标至该行的起始位置；&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;换行 代码：LF ASCII码：\ n ，十六进制，0x0a，
+
+&lt;ul&gt;
+&lt;li&gt;换行至下一行行首起始位置；
+```&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>Android系统init.rc全解析</title>
       <link>https://mazhidong.github.io/post/aosp/2019-01-18_android%E7%B3%BB%E7%BB%9Finit.rc%E5%85%A8%E8%A7%A3%E6%9E%90/</link>
       <pubDate>Fri, 18 Jan 2019 00:00:00 +0000</pubDate>
@@ -6682,47 +6715,6 @@ meal&lt;/p&gt;
 &lt;span class=&#34;n&#34;&gt;此包包含&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;“&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;帮助器&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;”&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;其中包括对引导基于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SAX&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的应用程序的支持&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;</description>
-      
-    </item>
-    
-    <item>
-      <title>android_dhcp</title>
-      <link>https://mazhidong.github.io/post/aosp/2018-07-03-android_dhcp/</link>
-      <pubDate>Tue, 03 Jul 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/aosp/2018-07-03-android_dhcp/</guid>
-      
-        <description>
-
-&lt;h2 id=&#34;系统环境&#34;&gt;系统环境&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Android 4.0.3&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;dhcp的时候一直停留在获取ip地址&lt;/li&gt;
-&lt;li&gt;设置静态IP能正常使用&lt;/li&gt;
-&lt;li&gt;获取ip地址 一直返回超时&lt;/li&gt;
-&lt;li&gt;dhcp.wlan0.result = &amp;ldquo;&amp;rdquo;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;问题解决&#34;&gt;问题解决&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;/system/etc/dhcpcd/dhcpcd-run-hooks 需要添加执行权限&lt;/li&gt;
-&lt;li&gt;chmod 755 /system/etc/dhcpcd/dhcpcd-run-hooks&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;命令相关&#34;&gt;命令相关&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;netcfg wlan0 up dhcp #返回提示dhcp获取ip成功&lt;/li&gt;
-&lt;li&gt;dhcpcd wlan0 #提示 /system/etc/dhcpcd/dhcpcd-run-hooks: Permission denied&lt;/li&gt;
-&lt;/ul&gt;
-</description>
       
     </item>
     

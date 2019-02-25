@@ -10,6 +10,13 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/post/serialport/2019-02-25_serialport%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/</loc>
+    <lastmod>2019-02-25T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/post/aosp/2019-01-18_android%E7%B3%BB%E7%BB%9Finit.rc%E5%85%A8%E8%A7%A3%E6%9E%90/</loc>
     <lastmod>2019-01-18T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -494,7 +501,7 @@
   
   <url>
     <loc>https://mazhidong.github.io/post/</loc>
-    <lastmod>2019-01-18T00:00:00+00:00</lastmod>
+    <lastmod>2019-02-25T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -509,6 +516,20 @@
   <url>
     <loc>https://mazhidong.github.io/tags/sd/</loc>
     <lastmod>2018-08-15T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://mazhidong.github.io/tags/serialport/</loc>
+    <lastmod>2019-02-25T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://mazhidong.github.io/categories/serialport/</loc>
+    <lastmod>2019-02-25T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>

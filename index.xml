@@ -24,6 +24,105 @@
     </item>
     
     <item>
+      <title>linux top命令VIRT,RES,SHR,DATA的含义</title>
+      <link>https://mazhidong.github.io/post/linux/2019-03-08_-linux-top%E5%91%BD%E4%BB%A4virtresshrdata%E7%9A%84%E5%90%AB%E4%B9%89/</link>
+      <pubDate>Fri, 08 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/linux/2019-03-08_-linux-top%E5%91%BD%E4%BB%A4virtresshrdata%E7%9A%84%E5%90%AB%E4%B9%89/</guid>
+      
+        <description>
+
+&lt;h2 id=&#34;virt-virtual-memory-usage-虚拟内存&#34;&gt;VIRT：virtual memory usage 虚拟内存&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;进程“需要的”虚拟内存大小，包括进程使用的库、代码、数据等&lt;/li&gt;
+&lt;li&gt;假如进程申请100m的内存，但实际只使用了10m，那么它会增长100m，而不是实际的使用量&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;res-resident-memory-usage-常驻内存&#34;&gt;RES：resident memory usage 常驻内存&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;进程当前使用的内存大小，但不包括swap out&lt;/li&gt;
+&lt;li&gt;包含其他进程的共享&lt;/li&gt;
+&lt;li&gt;如果申请100m的内存，实际使用10m，它只增长10m，与VIRT相反&lt;/li&gt;
+&lt;li&gt;关于库占用内存的情况，它只统计加载的库文件所占内存大小&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;shr-shared-memory-共享内存&#34;&gt;SHR：shared memory 共享内存&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;除了自身进程的共享内存，也包括其他进程的共享内存&lt;/li&gt;
+&lt;li&gt;虽然进程只使用了几个共享库的函数，但它包含了整个共享库的大小&lt;/li&gt;
+&lt;li&gt;计算某个进程所占的物理内存大小公式：RES – SHR&lt;/li&gt;
+&lt;li&gt;swap out后，它将会降下来&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;data&#34;&gt;DATA&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;数据占用的内存。如果top没有显示，按f键可以显示出来。&lt;/li&gt;
+&lt;li&gt;真正的该程序要求的数据空间，是真正在运行中要使用的。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&#34;top-运行中可以通过-top-的内部命令对进程的显示方式进行控制-内部命令如下&#34;&gt;top 运行中可以通过 top 的内部命令对进程的显示方式进行控制。内部命令如下：&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;s – 改变画面更新频率&lt;/li&gt;
+&lt;li&gt;l – 关闭或开启第一部分第一行 top 信息的表示&lt;/li&gt;
+&lt;li&gt;t – 关闭或开启第一部分第二行 Tasks 和第三行 Cpus 信息的表示&lt;/li&gt;
+&lt;li&gt;m – 关闭或开启第一部分第四行 Mem 和 第五行 Swap 信息的表示&lt;/li&gt;
+&lt;li&gt;N – 以 PID 的大小的顺序排列表示进程列表&lt;/li&gt;
+&lt;li&gt;P – 以 CPU 占用率大小的顺序排列进程列表&lt;/li&gt;
+&lt;li&gt;M – 以内存占用率大小的顺序排列进程列表&lt;/li&gt;
+&lt;li&gt;h – 显示帮助&lt;/li&gt;
+&lt;li&gt;n – 设置在进程列表所显示进程的数量&lt;/li&gt;
+&lt;li&gt;q – 退出 top&lt;/li&gt;
+&lt;li&gt;s – 改变画面更新周期&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&#34;序号-列名-含义&#34;&gt;序号 列名 含义&lt;/h1&gt;
+
+&lt;ul&gt;
+&lt;li&gt;a PID 进程id&lt;/li&gt;
+&lt;li&gt;b PPID 父进程id&lt;/li&gt;
+&lt;li&gt;c RUSER Real user name&lt;/li&gt;
+&lt;li&gt;d UID 进程所有者的用户id&lt;/li&gt;
+&lt;li&gt;e USER 进程所有者的用户名&lt;/li&gt;
+&lt;li&gt;f GROUP 进程所有者的组名&lt;/li&gt;
+&lt;li&gt;g TTY 启动进程的终端名。不是从终端启动的进程则显示为 ?&lt;/li&gt;
+&lt;li&gt;h PR 优先级&lt;/li&gt;
+&lt;li&gt;i NI nice值。负值表示高优先级，正值表示低优先级&lt;/li&gt;
+&lt;li&gt;j P 最后使用的CPU，仅在多CPU环境下有意义&lt;/li&gt;
+&lt;li&gt;k %CPU 上次更新到现在的CPU时间占用百分比&lt;/li&gt;
+&lt;li&gt;l TIME 进程使用的CPU时间总计，单位秒&lt;/li&gt;
+&lt;li&gt;m TIME+ 进程使用的CPU时间总计，单位1/100秒&lt;/li&gt;
+&lt;li&gt;n %MEM 进程使用的物理内存百分比&lt;/li&gt;
+&lt;li&gt;o VIRT 进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RES&lt;/li&gt;
+&lt;li&gt;p SWAP 进程使用的虚拟内存中，被换出的大小，单位kb。&lt;/li&gt;
+&lt;li&gt;q RES 进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATA&lt;/li&gt;
+&lt;li&gt;r CODE 可执行代码占用的物理内存大小，单位kb&lt;/li&gt;
+&lt;li&gt;s DATA 可执行代码以外的部分(数据段+栈)占用的物理内存大小，单位kb&lt;/li&gt;
+&lt;li&gt;t SHR 共享内存大小，单位kb&lt;/li&gt;
+&lt;li&gt;u nFLT 页面错误次数&lt;/li&gt;
+&lt;li&gt;v nDRT 最后一次写入到现在，被修改过的页面数。&lt;/li&gt;
+&lt;li&gt;w S 进程状态。（D=不可中断的睡眠状态，R=运行，S=睡眠，T=跟踪/停止，Z=僵尸进程）&lt;/li&gt;
+&lt;li&gt;x COMMAND 命令名/命令行&lt;/li&gt;
+&lt;li&gt;y WCHAN 若该进程在睡眠，则显示睡眠中的系统函数名&lt;/li&gt;
+&lt;li&gt;z Flags 任务标志，参考 sched.h&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;默认情况下仅显示比较重要的 PID、USER、PR、NI、VIRT、RES、SHR、S、%CPU、%MEM、TIME+、COMMAND 列。可以通过下面的快捷键来更改显示内容。&lt;/p&gt;
+
+&lt;p&gt;通过 f 键可以选择显示的内容。按 f 键之后会显示列的列表，按 a-z 即可显示或隐藏对应的列，最后按回车键确定。
+按 o 键可以改变列的显示顺序。按小写的 a-z 可以将相应的列向右移动，而大写的 A-Z 可以将相应的列向左移动。最后按回车键确定。
+按大写的 F 或 O 键，然后按 a-z 可以将进程按照相应的列进行排序。而大写的 R 键可以将当前的排序倒转。&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>SerialPort注意事项</title>
       <link>https://mazhidong.github.io/post/serialport/2019-02-25_serialport%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/</link>
       <pubDate>Mon, 25 Feb 2019 00:00:00 +0000</pubDate>
@@ -5810,909 +5909,6 @@ meal&lt;/p&gt;
 &lt;span class=&#34;c1&#34;&gt;//方法参数为String类型，且为可变参数或者数组类型,
 &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[]{&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;“&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;”&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;”&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;B&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;”&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;为传递的实际参数&lt;/span&gt;
 &lt;span class=&#34;n&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;invoke&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Object&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[]{&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;String&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[]{&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;“&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;A&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;”&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;”&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;B&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;”&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;}});&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;</description>
-      
-    </item>
-    
-    <item>
-      <title>Java语言中几个常用的包&#34;</title>
-      <link>https://mazhidong.github.io/post/java/2018-07-12-java%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8C%85/</link>
-      <pubDate>Thu, 12 Jul 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/java/2018-07-12-java%E8%AF%AD%E8%A8%80%E4%B8%AD%E5%87%A0%E4%B8%AA%E5%B8%B8%E7%94%A8%E7%9A%84%E5%8C%85/</guid>
-      
-        <description>
-
-&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;
-
-&lt;p&gt;Java采用包结构来组织和管理类和接口文件。本文介绍Java语言类库中几个常用的包，因为这几个包在软件开发与应用中经常需要用到，其中有些包是必要的。若是离开它，还真不能做事情了。&lt;/p&gt;
-
-&lt;h2 id=&#34;第一个包-java-lang包&#34;&gt;第一个包：java.lang包。&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;阿情说：该包提供了Java语言进行程序设计的基础类，它是默认导入的包。该包里面的Runnable接口和Object、Math、String、StringBuffer、System、Thread以及Throwable类需要重点掌握，因为它们应用很广。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;第二个包-java-util包&#34;&gt;第二个包：java.util包。&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;阿情说：该包提供了包含集合框架、遗留的集合类、事件模型、日期和时间实施、国际化和各种实用工具类（字符串标记生成器、随机数生成器和位数组）。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;第三个包-java-io包&#34;&gt;第三个包：java.io包。&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;阿情说：该包通过文件系统、数据流和序列化提供系统的输入与输出。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;第四个包-java-net包&#34;&gt;第四个包：java.net包。&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;阿情说：该包提供实现网络应用与开发的类。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;第五个包-java-sql包&#34;&gt;第五个包：java.sql包。&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;阿情说：该包提供了使用Java语言访问并处理存储在数据源（通常是一个关系型数据库）中的数据API。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;第六个包-java-awt包&#34;&gt;第六个包：java.awt包&lt;/h2&gt;
-
-&lt;h2 id=&#34;第七个包-javax-swing包&#34;&gt;第七个包：javax.swing包。&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;阿情说：这两个包提供了GUI设计与开发的类。java.awt包提供了创建界面和绘制图形图像的所有类，而javax.swing包提供了一组“轻量级”的组件，尽量让这些组件在所有平台上的工作方式相同。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;第八个包-java-text包&#34;&gt;第八个包：java.text包。&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;阿情说：提供了与自然语言无关的方式来处理文本、日期、数字和消息的类和接口。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;关于上述这些包结构，除了第一个包是自动导入外，其余的包都需要使用import语句导入，才可使用其包里面的类与接口。若想深入了解它们，请多阅读JDKAPI文档，同时，多使用这些包里的类与接口来解决问题和满足需求。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&#34;总结&#34;&gt;总结&lt;/h1&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;Java语言采用包结构组织和管理类与接口，避免命名冲突，结构富有条理而清晰。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;关注上述常用包，实则是掌握这些包结构下的类与接口的应用。利用它们，加上创意，设计和造就一个个“产品”。&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&#34;详细说明&#34;&gt;详细说明&lt;/h1&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;  1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;  9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 20
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 21
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 22
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 23
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 24
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 25
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 26
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 27
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 28
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 29
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 30
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 31
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 32
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 33
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 34
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 35
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 36
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 37
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 38
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 39
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 40
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 41
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 42
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 43
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 44
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 45
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 46
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 47
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 48
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 49
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 50
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 51
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 52
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 53
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 54
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 55
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 56
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 57
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 58
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 59
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 60
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 61
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 62
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 63
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 64
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 65
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 66
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 67
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 68
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 69
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 70
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 71
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 72
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 73
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 74
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 75
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 76
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 77
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 78
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 79
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 80
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 81
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 82
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 83
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 84
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 85
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 86
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 87
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 88
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 89
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 90
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 91
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 92
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 93
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 94
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 95
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 96
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 97
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 98
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 99
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;100
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;101
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;102
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;103
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;104
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;105
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;106
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;107
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;108
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;109
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;110
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;111
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;112
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;113
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;114
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;115
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;116
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;117
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;118
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;119
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;120
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;121
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;122
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;123
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;124
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;125
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;126
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;127
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;128
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;129
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;130
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;131
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;132
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;133
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;134
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;135
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;136
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;137
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;138
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;139
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;140
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;141
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;142
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;143
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;144
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;145
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;146
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;147
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;148
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;149
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;150
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;151
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;152
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;153
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;154
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;155
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;156
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;157
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;158
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;159
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;160
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;161
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;162
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;163
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;164
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;165
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;166
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;167
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;168
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;169
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;170
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;171
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;172
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;173
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;174
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;175
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;176
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;177
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;178
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;179
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;180
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;181
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;182
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;183
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;184
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;185
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;186
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;187
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;188
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;189
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;190
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;191
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;192
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;193
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;194
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;195
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;196
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;197
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;198
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;199
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;200
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;201
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;202
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;203
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;204
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;205
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;206
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;207
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;208
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;209
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;210
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;211
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;212
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;213
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;214
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;215
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;216
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;217
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;218
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;219
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;220
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;221
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;222
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;223
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;224
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;225
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;226
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;227
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;228
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;229
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;230
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;231
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;232
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;233
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;234
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;235
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;236
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;237
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;238
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;239
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;240
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;241
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;242
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;243
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;244
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;245
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;246
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;247
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;248
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;249
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;250
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;251
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;252
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;253
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;254
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;255
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;256
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;257
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;258
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;259
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;260
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;261
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;262
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;263
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;264
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;265
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;266
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;267
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;268
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;269
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;270
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;271
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;272
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;273
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;274
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;275
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;276
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;277
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;278
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;279
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;280
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;281
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;282
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;283
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;284
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;285
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;286
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;287
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;288
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;289
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;290
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;291
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;292
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;293
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;294
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;295
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;296
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;297
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;298
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;299
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;300
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;301
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;302
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;303
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;304
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;305
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;306
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;307
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;308
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;309
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;310
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;311
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;312
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;313
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;314
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;315
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;316
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;317
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;318
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;319
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;320
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;321
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;322
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;323
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;324
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;325
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;326
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;327
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;328
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;329
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;330
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;331
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;332
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;333
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;334
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;335
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;336
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;337
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;338
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;339
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;340
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;341
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;342
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;343
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;344
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;345
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;346
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;347
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;348
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;349
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;350
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;351
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;352
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;353
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;354
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;355
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;356
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;357
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;358
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;359
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;360
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;361
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;362
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;363
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;364
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;365
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;366
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;367
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;368
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;369
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;370
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;371
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;372
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;373
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;374
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;375
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;376
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;377
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;378
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;379
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;380
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;381
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;382
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;383
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;384
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;385
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;386
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;387
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;388
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;389
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;390
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;391
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;392
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;393
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;394
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;395
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;396
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;397
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;398
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;399
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;400
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;401
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;402
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;403
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;404
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;405
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;406
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;407
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;408
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;409
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;410
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;411
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;412
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;413
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;applet&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供创建&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;applet&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;所必需的类和&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;applet&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;用来与其&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;applet&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;上下文通信的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;awt&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;包含用于创建用户界面和绘制图形图像的所有类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;awt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;color&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供用于颜色空间的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;awt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;datatransfer&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供在应用程序之间和在应用程序内部传输数据的接口和类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;awt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;dnd&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;Drag&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;和&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Drop&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;是一种直接操作动作&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;在许多图形用户界面系统中都会遇到它&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;它提供了一种机制&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;能够在两个与&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;GUI&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;中显示元素逻辑相关的实体之间传输信息&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;awt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;event&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供处理由&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;AWT&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;组件所激发的各类事件的接口和类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;awt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;font&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供与字体相关的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;awt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;geom&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供用于在与二维几何形状相关的对象上定义和执行操作的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;2D&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;awt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;im&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供输入方法框架所需的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;awt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;im&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;spi&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供启用可以与&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;运行时环境一起使用的输入方法开发的接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;awt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;image&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供创建和修改图像的各种类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;awt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;image&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;renderable&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供用于生成与呈现无关的图像的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;awt&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;print&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;为通用的打印&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;提供类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;beans&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;包含与开发&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;beans&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;有关的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;即基于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JavaBeansTM&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;架构的组件&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;beans&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;beancontext&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供与&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;bean&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;上下文有关的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;io&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;通过数据流&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;序列化和文件系统提供系统输入和输出&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;lang&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供利用&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;编程语言进行程序设计的基础类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;lang&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;annotation&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;为&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;编程语言注释设施提供库支持&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;lang&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;instrument&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供允许&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;编程语言代理检测运行在&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JVM&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;上的程序的服务&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;lang&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;management&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供管理接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;用于监视和管理&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;虚拟机以及&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;虚拟机在其上运行的操作系统&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;lang&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ref&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供了引用对象类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;支持在某种程度上与垃圾回收器之间的交互&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;lang&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;reflect&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;以获得关于类和对象的反射信息&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;math&lt;/span&gt;
-&lt;span class=&#34;nf&#34;&gt;提供用于执行任意精度整数算法&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;BigInteger&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;和任意精度小数算法&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;BigDecimal&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;net&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;为实现网络应用程序提供类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;nio&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;定义作为数据容器的缓冲区&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;并提供其他&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NIO&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包的概述&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;nio&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;channels&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;定义了各种通道&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;这些通道表示到能够执行&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;I&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;O&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;操作的实体&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;如文件和套接字&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;的连接&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;；&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;定义了用于多路复用的&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;非阻塞&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;I&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;O&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;操作的选择器&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;nio&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;channels&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;spi&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;用于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;nio&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;channels&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包的服务提供者类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;nio&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;charset&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;定义用来在字节和&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Unicode&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;字符之间转换的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;charset&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;解码器和编码器&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;nio&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;charset&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;spi&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;nio&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;charset&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包的服务提供者类&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rmi&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RMI&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rmi&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;activation&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;为&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RMI&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;对象激活提供支持&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rmi&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;dgc&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;为&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RMI&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;分布式垃圾回收提供了类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rmi&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;registry&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RMI&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;注册表的一个类和两个接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rmi&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;server&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供支持服务器端&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RMI&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;security&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;为安全框架提供类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;security&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;acl&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;此包中的类和接口已经被&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;security&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包中的类取代&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;security&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;cert&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供用于解析和管理证书&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;证书撤消列表&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CRL&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;和证书路径的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;security&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;interfaces&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供的接口用于生成&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RSA&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Laboratory&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Technical&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Note&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;PKCS&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;中定义的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RSA&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Rivest&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Shamir&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;和&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Adleman&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;AsymmetricCipher&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;算法&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;密钥&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;以及&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NIST&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;FIPS&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;186&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;中定义的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DSA&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;数字签名算法&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;密钥&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;security&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;spec&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供密钥规范和算法参数规范的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sql&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供使用&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JavaTM&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;编程语言访问并处理存储在数据源&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;通常是一个关系数据库&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;中的数据的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;text&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供以与自然语言无关的方式来处理文本&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;日期&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;数字和消息的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;spi&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;text&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包中类的服务提供者类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;包含&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;collection&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;框架&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;遗留的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;collection&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;事件模型&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;日期和时间设施&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;国际化和各种实用工具类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;字符串标记生成器&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;随机数生成器和位数组&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;concurrent&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;在并发编程中很常用的实用工具类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;concurrent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;atomic&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;类的小工具包&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;支持在单个变量上解除锁的线程安全编程&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;concurrent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;locks&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;为锁和等待条件提供一个框架的接口和类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;它不同于内置同步和监视器&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;jar&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供读写&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;JAR&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ARchive&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;文件格式的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;该格式基于具有可选清单文件的标准&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ZIP&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;文件格式&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;logging&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JavaTM&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;平台核心日志工具的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;prefs&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;此包允许应用程序存储并获取用户和系统首选项和配置数据&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;regex&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;用于匹配字符序列与正则表达式指定模式的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;spi&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包中类的服务提供者类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;zip&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供用于读写标准&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ZIP&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;和&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;GZIP&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;文件格式的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;accessibility&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;定义了用户界面组件与提供对这些组件进行访问的辅助技术之间的协定&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;activation&lt;/span&gt;
-
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;activity&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;包含解组期间通过&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ORB&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;机制抛出的与&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Activity&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;服务有关的异常&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;annotation&lt;/span&gt;
-
-
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;annotation&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;processing&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;用来声明注释处理器并允许注释处理器与注释处理工具环境通信的工具&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;crypto&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;为加密操作提供类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;crypto&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;interfaces&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;根据&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RSA&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Laboratories&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&amp;#39;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;PKCS&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;3&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的定义&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;提供&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Diffie&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Hellman&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;密钥接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;crypto&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;spec&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;为密钥规范和算法参数规范提供类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;imageio&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Image&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;I&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;O&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的主要包&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;imageio&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;event&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Image&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;I&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;O&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的一个包&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;用于在读取和写入图像期间处理事件的同步通知&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;imageio&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;metadata&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;用于处理读写元数据的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Image&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;I&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;O&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的包&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;imageio&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;plugins&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bmp&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;包含供内置&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;BMP&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;插件使用的公共类的包&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;imageio&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;plugins&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;jpeg&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;支持内置&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JPEG&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;插件的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;imageio&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;spi&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;包含用于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;reader&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;writer&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;transcoder&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;和流的插件接口以及一个运行时注册表的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Image&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;I&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;O&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;imageio&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;stream&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Image&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;I&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;O&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的一个包&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;用来处理从文件和流中产生的低级别&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;I&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;O&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;jws&lt;/span&gt;
-
-
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;jws&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;soap&lt;/span&gt;
-
-
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;lang&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;model&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;用来为&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;编程语言建立模型的包的类和层次结构&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;lang&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;model&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;element&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;用于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;编程语言的模型元素的接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;lang&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;model&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;type&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;用来为&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;编程语言类型建立模型的接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;lang&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;model&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;用来帮助处理程序元素和类型的实用工具&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;management&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Management&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Extensions&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的核心类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;management&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;loading&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供实现高级动态加载的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;management&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;modelmbean&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供了&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ModelMBean&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;类的定义&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;management&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;monitor&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;monitor&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;类的定义&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;management&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;openmbean&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供开放数据类型和&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Open&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MBean&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;描述符类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;management&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;relation&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Relation&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Service&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的定义&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;management&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;remote&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;对&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JMX&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MBean&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;服务器进行远程访问使用的接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;management&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;remote&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rmi&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;RMI&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;连接器是供&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JMX&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Remote&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;使用的一种连接器&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;后者使用&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RMI&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;将客户端请求传输到远程&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MBean&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;服务器&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;management&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;timer&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供对&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Timer&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MBean&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;计时器&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MBean&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;的定义&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;naming&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;为访问命名服务提供类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;naming&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;directory&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;扩展&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;naming&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包以提供访问目录服务的功能&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;naming&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;event&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;在访问命名和目录服务时提供对事件通知的支持&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;naming&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ldap&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供对&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;LDAPv3&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;扩展操作和控件的支持&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;naming&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;spi&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供一些方法来动态地插入对通过&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;naming&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;和相关包访问命名和目录服务的支持&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;net&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供用于网络应用程序的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;net&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ssl&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供用于安全套接字包的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;print&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;为&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JavaTM&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Print&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Service&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;提供了主要类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;attribute&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;提供了描述&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JavaTM&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Print&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Service&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;属性的类型以及如何分类这些属性的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;attribute&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;standard&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;包&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;attribute&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;standard&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包括特定打印属性的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;event&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;包&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;event&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包含事件类和侦听器接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rmi&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;包含&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RMI&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;IIOP&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的用户&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rmi&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CORBA&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;包含用于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RMI&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;IIOP&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的可移植性&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rmi&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ssl&lt;/span&gt; 
-&lt;span class=&#34;nf&#34;&gt;通过安全套接字层&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;SSL&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;或传输层安全&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;TLS&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;协议提供&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RMIClientSocketFactory&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;和&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RMIServerSocketFactory&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的实现&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;script&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;脚本&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;由定义&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;TM&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Scripting&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Engines&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的接口和类组成&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;并为它们在&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;应用程序中的使用提供框架&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;security&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;auth&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包提供用于进行验证和授权的框架&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;security&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;auth&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;callback&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包提供与应用程序进行交互所必需的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;以便检索信息&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;例如&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;包括用户名和密码的验证数据&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;或显示信息&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;例如&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;错误和警告消息&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;security&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;auth&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;kerberos&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包包含与&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Kerberos&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;网络验证协议相关的实用工具类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;security&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;auth&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;login&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包提供可插入的验证框架&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;security&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;auth&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;spi&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包提供用于实现可插入验证模块的接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;security&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;auth&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;x500&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包包含应该用来在&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Subject&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;中存储&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;X500&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Principal&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;和&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;X500&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Private&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Crendentials&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;security&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;cert&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;为公钥证书提供类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;security&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sasl&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;包含用于支持&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SASL&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sound&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;midi&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供用于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MIDI&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;音乐乐器数字接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;数据的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;I&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;O&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;序列化和合成的接口和类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sound&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;midi&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;spi&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;在提供新的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MIDI&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;设备&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;MIDI&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;文件&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;reader&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;和&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;writer&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;或音库&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;reader&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;时提供服务提供者要实现的接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sound&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sampled&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供用于捕获&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;处理和回放取样的音频数据的接口和类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sound&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sampled&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;spi&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;在提供新音频设备&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;声音文件&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;reader&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;和&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;writer&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;或音频格式转换器时&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;提供将为其创建子类的服务提供者的抽象类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sql&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;为通过&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JavaTM&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;编程语言进行服务器端数据源访问和处理提供&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sql&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rowset&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;JDBC&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RowSet&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;实现的标准接口和基类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sql&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rowset&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;serial&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供实用工具类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;允许&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SQL&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;类型与&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;编程语言数据类型之间的可序列化映射关系&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sql&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rowset&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;spi&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;第三方供应商在其同步提供者的实现中必须使用的标准类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供一组&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;“&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;轻量级&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;”（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;全部是&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;语言&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;组件&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;尽量让这些组件在所有平台上的工作方式都相同&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;border&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供围绕&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Swing&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;组件绘制特殊边框的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;colorchooser&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;包含供&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JColorChooser&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;组件使用的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;event&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;供&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Swing&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;组件触发的事件使用&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;filechooser&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;包含&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JFileChooser&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;组件使用的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;plaf&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供一个接口和许多抽象类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Swing&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;用它们来提供自己的可插入外观功能&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;plaf&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;basic&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供了根据基本外观构建的用户界面对象&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;plaf&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;metal&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供根据&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;外观&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;曾经代称为&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Metal&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;构建的用户界面对象&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;外观是默认外观&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;plaf&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;multi&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供了组合两个或多个外观的用户界面对象&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;plaf&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;synth&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;Synth&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;是一个可更换皮肤&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;skinnable&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的外观&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;在其中可委托所有绘制&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;table&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供用于处理&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;JTable&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;text&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供类&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;HTMLEditorKit&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;和创建&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;HTML&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;文本编辑器的支持类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;html&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供类&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;HTMLEditorKit&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;和创建&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;HTML&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;文本编辑器的支持类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;html&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;parser&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供默认的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;HTML&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;解析器以及支持类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;text&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rtf&lt;/span&gt; 
-&lt;span class=&#34;nf&#34;&gt;提供一个类&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;RTFEditorKit&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;用于创建富文本格式&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Rich&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Text&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Format&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;的文本编辑器&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;tree&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供处理&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;JTree&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;swing&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;undo&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;允许开发人员为应用程序&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;例如文本编辑器&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;中的撤消&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;恢复提供支持&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;tools&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;为能够从程序&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;例如&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;编译器&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;中调用的工具提供接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;transaction&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;包含解组期间通过&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ORB&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;机制抛出的三个异常&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;transaction&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xa&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供定义事务管理器和资源管理器之间的协定的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;它允许事务管理器添加或删除&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JTA&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;事务中的资源对象&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;由资源管理器驱动程序提供&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;根据&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;XML&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;规范定义核心&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;XML&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;常量和功能&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bind&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;为包含解组&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;编组和验证功能的客户端应用程序提供运行时绑定框架&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bind&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;annotation&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;定义将&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;程序元素定制成&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;XML&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;模式映射的注释&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bind&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;annotation&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;adapters&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;XmlAdapter&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;及其规范定义的子类允许任意&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;类与&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JAXB&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;一起使用&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bind&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;attachment&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包由基于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MIME&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的包处理器实现&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;该处理器能够解释并创建基于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;MIME&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的包格式的已优化的二进制数据&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bind&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;helpers&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;仅由&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JAXB&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;提供者用于&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;：&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;提供某些&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bind&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;接口的部分默认实现&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bind&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;有用的客户端实用工具类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;crypto&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;用于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;XML&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;加密的通用类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;crypto&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;dom&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;crypto&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包的特定于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DOM&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;crypto&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;dsig&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;用于生成和验证&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;XML&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;数字签名的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;crypto&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;dsig&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;dom&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;crypto&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;dsig&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包特定于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DOM&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;crypto&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;dsig&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;keyinfo&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;用来解析和处理&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;KeyInfo&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;元素和结构的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;crypto&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;dsig&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;spec&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;XML&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;数字签名的参数类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;datatype&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;XML&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;类型映射关系&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;namespace&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;XML&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;名称空间处理&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;parsers&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供允许处理&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;XML&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;文档的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;soap&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供用于创建和构建&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SOAP&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;消息的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;stream&lt;/span&gt;
-
-
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;stream&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;events&lt;/span&gt;
-
-
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;stream&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;
-
-
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;transform&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包定义了用于处理转换指令&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;以及执行从源到结果的转换的一般&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;transform&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;dom&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包实现特定于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DOM&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的转换&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;transform&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sax&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包实现特定于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SAX2&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的转换&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;transform&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;stax&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供特定于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;StAX&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的转换&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;transform&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;stream&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包实现特定于流和&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;URI&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的转换&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;validation&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包提供了用于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;XML&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;文档验证的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;  
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ws&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包包含核心&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JAX&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;WS&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ws&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;handler&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;该包定义用于消息处理程序的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ws&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;handler&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;soap&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;该包定义用于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SOAP&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;消息处理程序的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ws&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;http&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;该包定义特定于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;HTTP&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;绑定的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ws&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;soap&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;该包定义特定于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SOAP&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;绑定的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ws&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;spi&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;该包定义用于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JAX&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;WS&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SPI&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;javax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xpath&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包提供了用于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;XPath&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;表达式的计算和访问计算环境的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;object&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;model&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;neutral&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ietf&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;jgss&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包提供一个框架&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;该框架允许应用程序开发人员通过利用统一的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;使用一些来自各种基础安全机制&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;如&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Kerberos&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;的安全服务&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;如验证&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;数据完整性和和数据机密性&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CORBA&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;OMG&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;CORBA&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;到&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;JavaTM&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;编程语言的映射&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;包括&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ORB&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;如果已实现该类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;则程序员可以使用此类作为全功能对象请求代理&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Object&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Request&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Broker&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ORB&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CORBA_2_3&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;CORBA_2_3&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包定义对&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tm&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Standard&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Edition&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;6&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;中现有&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;CORBA&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;接口所进行的添加&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CORBA_2_3&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;portable&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供输入和输出值类型的各种方法&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;并包含&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CORBA&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;portable&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包的其他更新&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CORBA&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;DynAnyPackage&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供与&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DynAny&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;接口一起使用的异常&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;InvalidValue&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Invalid&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;、&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;InvalidSeq&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;和&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;TypeMismatch&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CORBA&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ORBPackage&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供由&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ORB&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;resolve_initial_references&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;方法抛出的异常&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;InvalidName&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;以及由&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ORB&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;类中的动态&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Any&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;创建方法抛出的异常&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;InconsistentTypeCode&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CORBA&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;portable&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供可移植性层&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;即可以使一个供应商生成的代码运行在另一个供应商&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ORB&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;上的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ORB&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;集合&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CORBA&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;TypeCodePackage&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供用户定义的异常&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;BadKind&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;和&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Bounds&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;它们将由&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;TypeCode&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;类中的方法抛出&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;  
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CosNaming&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;为&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;IDL&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;提供命名服务&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CosNaming&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;NamingContextExtPackage&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包包含以下在&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CosNaming&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;NamingContextExt&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;中使用的类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;：&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;AddressHelper&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;StringNameHelper&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;URLStringHelper&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;InvalidAddress&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包规范&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;有关&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tm&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Platform&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Standard&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Edition&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;6&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ORB&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;遵守的官方规范的受支持部分的明确列表&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;请参阅&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Official&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Specifications&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;CORBA&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;support&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tm&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SE&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CosNaming&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;NamingContextPackage&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包包含&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CosNaming&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Exception&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;Dynamic&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包包含&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;OMG&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Portable&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Interceptor&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;规范&lt;/span&gt; &lt;span class=&#34;nl&#34;&gt;http:&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//cgi.omg.org/cgi-bin/doc?ptc/2000-08-06 的第 21.9 小节中指定的 Dynamic 模块。
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;DynamicAny&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供一些类和接口使得在运行时能够遍历与&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;any&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;有关联的数据值&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;并提取数据值的基本成分&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;DynamicAny&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;DynAnyFactoryPackage&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包包含&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DynamicAny&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;模块的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DynAnyFactory&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;接口中的类和异常&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;该模块在&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;OMG&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;The&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Common&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Object&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Request&lt;/span&gt; &lt;span class=&#34;nl&#34;&gt;Broker:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Architecture&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;and&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Specification&lt;/span&gt; &lt;span class=&#34;nl&#34;&gt;http:&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//cgi.omg.org/cgi-bin/doc?formal/99-10-07 的第 9.2.2 小节中指定。 
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;DynamicAny&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;DynAnyPackage&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包包含&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DynAny&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;模块的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;DynAnyFactory&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;接口中的类和异常&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;该模块在&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;OMG&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;The&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Common&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Object&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Request&lt;/span&gt; &lt;span class=&#34;nl&#34;&gt;Broker:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Architecture&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;and&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Specification&lt;/span&gt; &lt;span class=&#34;nl&#34;&gt;http:&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//cgi.omg.org/cgi-bin/doc?formal/99-10-07 的第 9.2 小节中指定。
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;IOP&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包包含在&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;OMG&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;文档&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;The&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Common&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Object&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Request&lt;/span&gt; &lt;span class=&#34;nl&#34;&gt;Broker:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Architecture&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;and&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Specification&lt;/span&gt; &lt;span class=&#34;nl&#34;&gt;http:&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//cgi.omg.org/cgi-bin/doc?formal/99-10-07 的 13.6.小节中指定的 IOP 模块。
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;IOP&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CodecFactoryPackage&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包包含&lt;/span&gt; &lt;span class=&#34;nl&#34;&gt;IOP:&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CodeFactory&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;接口中指定的异常&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;（&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;作为&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Portable&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Interceptor&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;规范的一部分&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;）。&lt;/span&gt;  
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;IOP&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CodecPackage&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包根据&lt;/span&gt; &lt;span class=&#34;nl&#34;&gt;IOP:&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Codec&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;IDL&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;接口定义生成&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;Messaging&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包包含&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;OMG&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Messaging&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Interceptor&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;规范&lt;/span&gt; &lt;span class=&#34;nl&#34;&gt;http:&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//cgi.omg.org/cgi-bin/doc?formal/99-10-07 中指定的 Messaging 模块。
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;PortableInterceptor&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供一个注册&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ORB&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;钩子&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;hook&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的机制&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;通过这些钩子&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ORB&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;服务可以截取执行&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ORB&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的正常流&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;PortableInterceptor&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ORBInitInfoPackage&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包包含&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;OMG&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Portable&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Interceptor&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;规范&lt;/span&gt; &lt;span class=&#34;nl&#34;&gt;http:&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;//cgi.omg.org/cgi-bin/doc?ptc/2000-08-06 的第 21.7.2 小节中指定的 PortableInterceptor 模块的 ORBInitInfo 本地接口中的异常和 typedef。 
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;PortableServer&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供一些类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;用来生成跨多个供应商&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ORB&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的可移植应用程序的服务器端&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;PortableServer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;CurrentPackage&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供各种方法实现&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;这些实现能够访问调用方法的对象的身份&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;PortableServer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;POAManagerPackage&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;封装&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;POA&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;关联的处理状态&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;PortableServer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;POAPackage&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;允许程序员构造可在不同&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ORB&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;产品间移植的对象实现&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;PortableServer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;portable&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供一些类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;用来生成跨多个供应商&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;ORB&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的可移植应用程序的服务器端&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;PortableServer&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ServantLocatorPackage&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;提供定位&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;servant&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的类和接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;SendingContext&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;为值类型的编组提供支持&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;omg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;stub&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rmi&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;包含用于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;rmi&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;包中出现的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Remote&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;类型的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RMI&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;IIOP&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Stub&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;w3c&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;dom&lt;/span&gt; 
-&lt;span class=&#34;nf&#34;&gt;为文档对象模型&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;DOM&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;提供接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;该模型是&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Java&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;XML&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Processing&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的组件&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;w3c&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;dom&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bootstrap&lt;/span&gt; 
-
-
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;w3c&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;dom&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;events&lt;/span&gt; 
-
-
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;w3c&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;dom&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ls&lt;/span&gt;
-
-
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sax&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包提供了核心&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SAX&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;API&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ext&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包包含适合的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SAX&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;驱动程序不一定支持的&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SAX2&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;设施的接口&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;。&lt;/span&gt;  
-&lt;span class=&#34;n&#34;&gt;org&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;xml&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;sax&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;helpers&lt;/span&gt; 
-&lt;span class=&#34;n&#34;&gt;此包包含&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;“&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;帮助器&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;”&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;类&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;，&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;其中包括对引导基于&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SAX&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;的应用程序的支持&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;</description>
       

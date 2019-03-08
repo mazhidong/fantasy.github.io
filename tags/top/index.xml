@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Top on Fantasy Blogs</title>
+    <link>https://mazhidong.github.io/tags/top/</link>
+    <description>Recent content in Top on Fantasy Blogs</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 08 Mar 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://mazhidong.github.io/tags/top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>linux top命令VIRT,RES,SHR,DATA的含义</title>
+      <link>https://mazhidong.github.io/post/linux/2019-03-08_-linux-top%E5%91%BD%E4%BB%A4virtresshrdata%E7%9A%84%E5%90%AB%E4%B9%89/</link>
+      <pubDate>Fri, 08 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/linux/2019-03-08_-linux-top%E5%91%BD%E4%BB%A4virtresshrdata%E7%9A%84%E5%90%AB%E4%B9%89/</guid>
+      <description>VIRT：virtual memory usage 虚拟内存 进程“需要的”虚拟内存大小，包括进程使用的库、代码、数据等 假如进程申请100m的内存，但实际只使用了10</description>
+    </item>
+    
+  </channel>
+</rss>

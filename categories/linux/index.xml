@@ -6,10 +6,19 @@
     <description>Recent content in Linux on Fantasy Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 08 Mar 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 04 Sep 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mazhidong.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Linux 访问windows共享文件的几种方式</title>
+      <link>https://mazhidong.github.io/post/linux/2019-09-04_-linux-%E8%AE%BF%E9%97%AEwindows%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/</link>
+      <pubDate>Wed, 04 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/linux/2019-09-04_-linux-%E8%AE%BF%E9%97%AEwindows%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/</guid>
+      <description>samba方式 1 2 3 4 yum install samba-client.x86_64 #安装samba客户端 smbclient //192.168.211.1/test_samba #通过samba打开windows共享目录 smbclient //192.168.1.1/smb_share/ -U smb_user #系统提示输入smb_user_pa</description>
+    </item>
     
     <item>
       <title>linux top命令VIRT,RES,SHR,DATA的含义</title>

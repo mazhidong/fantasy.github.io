@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>标签 - Fantasy Blogs</title>
+  <title>qt5 cannot find -lGL - Fantasy Blogs</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="Fantasy" />
-  <meta name="description" content="fantasy blogs site." />
+  <meta name="description" content="QT5在unbuntu中编译提示错误：qt5 cannot find -lGL 有两种原因，一种是没有安装libGL库，那么就安装： 1.没有安装libGL库 1 sudo apt-get install libgl1-mesa-dev 2." />
+
   <meta name="keywords" content="mzd, fantasy, blogs" />
 
 
@@ -34,8 +35,7 @@
 <meta name="generator" content="Hugo 0.53" />
 
 
-<link rel="canonical" href="https://mazhidong.github.io/tags/" />
-<link href="https://mazhidong.github.io/tags/index.xml" rel="alternate" type="application/rss+xml" title="Fantasy Blogs" />
+<link rel="canonical" href="https://mazhidong.github.io/post/qt/2019-09-30_qt5-cannot-find-lgl/" />
 
 
 
@@ -59,18 +59,26 @@
 <link rel="stylesheet" href="/css/custom.css">
 
 
-<meta property="og:title" content="Tags" />
-<meta property="og:description" content="fantasy blogs site." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://mazhidong.github.io/tags/" />
-<meta property="og:updated_time" content="2018-12-07T00:00:00&#43;00:00"/>
+<meta property="og:title" content="qt5 cannot find -lGL" />
+<meta property="og:description" content="QT5在unbuntu中编译提示错误：qt5 cannot find -lGL 有两种原因，一种是没有安装libGL库，那么就安装： 1.没有安装libGL库 1 sudo apt-get install libgl1-mesa-dev 2." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mazhidong.github.io/post/qt/2019-09-30_qt5-cannot-find-lgl/" /><meta property="article:published_time" content="2019-09-30T00:00:00&#43;00:00"/>
+<meta property="article:modified_time" content="2019-09-30T00:00:00&#43;00:00"/>
 
-<meta itemprop="name" content="Tags">
-<meta itemprop="description" content="fantasy blogs site.">
+<meta itemprop="name" content="qt5 cannot find -lGL">
+<meta itemprop="description" content="QT5在unbuntu中编译提示错误：qt5 cannot find -lGL 有两种原因，一种是没有安装libGL库，那么就安装： 1.没有安装libGL库 1 sudo apt-get install libgl1-mesa-dev 2.">
 
+
+<meta itemprop="datePublished" content="2019-09-30T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2019-09-30T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="128">
+
+
+
+<meta itemprop="keywords" content="qt," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Tags"/>
-<meta name="twitter:description" content="fantasy blogs site."/>
+<meta name="twitter:title" content="qt5 cannot find -lGL"/>
+<meta name="twitter:description" content="QT5在unbuntu中编译提示错误：qt5 cannot find -lGL 有两种原因，一种是没有安装libGL库，那么就安装： 1.没有安装libGL库 1 sudo apt-get install libgl1-mesa-dev 2."/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -236,7 +244,7 @@
 
       </li>
     
-        <li class="menu-item active">
+        <li class="menu-item">
         
           
           
@@ -279,506 +287,201 @@
     <main id="main" class="main bg-llight">
       <div class="content-wrapper">
         <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">qt5 cannot find -lGL</h1>
+      
+      <div class="post-meta">
+        <time datetime="2019-09-30" class="post-time">
+          2019-09-30
+        </time>
+        <div class="post-category">
+            <a href="https://mazhidong.github.io/categories/qt/"> qt </a>
+            
+          </div>
+        <span class="more-meta"> 约 128 字 </span>
+          <span class="more-meta"> 预计阅读 1 分钟 </span>
+
+        
+        
+
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#qt5在unbuntu中编译提示错误-qt5-cannot-find-lgl">QT5在unbuntu中编译提示错误：qt5 cannot find -lGL</a>
+<ul>
+<li><a href="#1-没有安装libgl库">1.没有安装libGL库</a></li>
+<li><a href="#2-但是路径不对-那么就配置一下路径">2.但是路径不对，那么就配置一下路径：</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="qt5在unbuntu中编译提示错误-qt5-cannot-find-lgl">QT5在unbuntu中编译提示错误：qt5 cannot find -lGL</h2>
+
+<ul>
+<li>有两种原因，一种是没有安装libGL库，那么就安装：</li>
+</ul>
+
+<h3 id="1-没有安装libgl库">1.没有安装libGL库</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">    sudo apt-get install libgl1-mesa-dev</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="2-但是路径不对-那么就配置一下路径">2.但是路径不对，那么就配置一下路径：</h3>
+
+<ul>
+<li>命令查看 locate libGL</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ locate libGL
+/usr/lib/i386-linux-gnu/mesa/libGL.so.1
+/usr/lib/i386-linux-gnu/mesa/libGL.so.1.2.0
+/usr/lib/x86_64-linux-gnu/libGLEW.so.1.10
+/usr/lib/x86_64-linux-gnu/libGLEW.so.1.10.0
+/usr/lib/x86_64-linux-gnu/libGLEWmx.so.1.10
+/usr/lib/x86_64-linux-gnu/libGLEWmx.so.1.10.0
+/usr/lib/x86_64-linux-gnu/libGLU.so.1
+/usr/lib/x86_64-linux-gnu/libGLU.so.1.3.1
+/usr/lib/x86_64-linux-gnu/mesa/libGL.so.1
+/usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2.0
+/usr/lib/x86_64-linux-gnu/mesa-egl/libGLESv2.so.2
+/usr/lib/x86_64-linux-gnu/mesa-egl/libGLESv2.so.2.0.0</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">$ sudo ln -s /usr/lib/x86_64-linux-gnu/mesa/libGL.so.1 /usr/lib/libGL.so</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Fantasy</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">2019-09-30</span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://mazhidong.github.io/tags/qt/">qt</a>
           
-  
-  
+        </div>
+
+      
+      <nav class="post-nav">
+        
+        
+          <a class="next" href="/post/linux/2019-09-04_-linux-%E8%AE%BF%E9%97%AEwindows%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/">
+            <span class="next-text nav-default">Linux 访问windows共享文件的几种方式</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            
+            <i class="iconfont">
+              <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M332.091514 74.487481l-75.369571 89.491197c-10.963703 12.998035-10.285251 32.864502 1.499144 44.378743l286.278095 300.375162L266.565125 819.058374c-11.338233 12.190647-11.035334 32.285311 0.638543 44.850487l80.46666 86.564541c11.680017 12.583596 30.356378 12.893658 41.662889 0.716314l377.434212-421.426145c11.332093-12.183484 11.041474-32.266891-0.657986-44.844348l-80.46666-86.564541c-1.772366-1.910513-3.706415-3.533476-5.750981-4.877077L373.270379 71.774697C361.493148 60.273758 343.054193 61.470003 332.091514 74.487481z"></path>
+</svg>
+
+            </i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+
   
   
 
   
   
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <div class="tag-cloud" style="padding: 5px 15px">
-      <div class="tag-cloud-title">
-        共计 43 个标签
-      </div>
-      <div class="tag-cloud-tags">
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/5.1/"
-          style="font-size:1rem">5.1</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/adb/"
-          style="font-size:1.3271564379782972rem">adb</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/android/"
-          style="font-size:2.4799124165177515rem">android</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/aosp/"
-          style="font-size:1.6543128759565946rem">aosp</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/audio/"
-          style="font-size:1rem">audio</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/blog/"
-          style="font-size:1rem">blog</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/bootanimation/"
-          style="font-size:1rem">bootanimation</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/dhcp/"
-          style="font-size:1rem">dhcp</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/docker/"
-          style="font-size:1rem">docker</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/ffmpeg/"
-          style="font-size:1.3271564379782972rem">ffmpeg</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/git/"
-          style="font-size:1rem">git</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/github/"
-          style="font-size:1.3271564379782972rem">github</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/java/"
-          style="font-size:1.6543128759565946rem">java</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/jni/"
-          style="font-size:1.518530686065108rem">jni</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/kernel/"
-          style="font-size:1.3271564379782972rem">kernel</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/linux/"
-          style="font-size:2.1317753257828738rem">linux</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/map/"
-          style="font-size:1rem">map</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/onactivityresult/"
-          style="font-size:1rem">onactivityresult</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/qt/"
-          style="font-size:1rem">qt</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/rk3288/"
-          style="font-size:1rem">rk3288</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/sd/"
-          style="font-size:1rem">sd</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/serialport/"
-          style="font-size:1rem">serialport</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/study/"
-          style="font-size:1.8456871240434054rem">study</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/sysadmin/"
-          style="font-size:1rem">sysadmin</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/top/"
-          style="font-size:1.3271564379782972rem">top</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/uart/"
-          style="font-size:1rem">uart</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/usb%E6%9D%83%E9%99%90/"
-          style="font-size:1rem">usb权限</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/widget/"
-          style="font-size:1rem">widget</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/%E4%B9%A6%E7%B1%8D/"
-          style="font-size:1rem">书籍</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/%E5%8F%8D%E5%B0%84/"
-          style="font-size:1rem">反射</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/"
-          style="font-size:1rem">命令行</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/%E5%AD%A6%E4%B9%A0/"
-          style="font-size:1.8456871240434054rem">学习</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/%E5%AE%89%E5%85%A8/"
-          style="font-size:1rem">安全</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/%E6%8E%A8%E8%8D%90/"
-          style="font-size:1rem">推荐</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/%E6%95%99%E7%A8%8B/"
-          style="font-size:1.7596337247650833rem">教程</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/%E6%B3%A8%E8%A7%A3/"
-          style="font-size:1.3271564379782972rem">注解</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81/"
-          style="font-size:1rem">生成代码</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/%E7%B1%BB/"
-          style="font-size:1rem">类</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/"
-          style="font-size:1rem">系统管理</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/%E7%BB%A7%E6%89%BF/"
-          style="font-size:1rem">继承</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/%E7%BD%91%E7%BB%9C/"
-          style="font-size:1rem">网络</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/%E8%84%9A%E6%9C%AC/"
-          style="font-size:1rem">脚本</a>
-        
-      
-        
-        
-        
-        
-        
-        
-        
-        <a href="https://mazhidong.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"
-          style="font-size:1.3271564379782972rem">设计模式</a>
-        
-      
-      </div>
+
+  
+  
+
+  
+
+  <div class="post bg-white">
+      <div id="comments-gitment"></div>
+      <link rel="stylesheet" href="/lib/gitment/gitment-0.0.3.min.css">
+        <script src="/lib/gitment/gitment-0.0.3.min.js"></script>
+      <script type="text/javascript">
+      const gitment = new Gitment({
+        id: '2019-09-30_qt5 cannot find -lGL.md',
+        title: 'qt5 cannot find -lGL',
+        link: decodeURI(location.href),
+        desc: 'QT5在unbuntu中编译提示错误：qt5 cannot find -lGL 有两种原因，一种是没有安装libGL库，那么就安装： 1.没有安装libGL库 1 sudo apt-get install libgl1-mesa-dev 2.',
+        owner: 'mazhidong',
+        repo: 'comments',
+        oauth: {
+          client_id: 'a7ad9d79ce4e98eabdc8',
+          client_secret: '13ffc9363807f8929fe31ce5a7022fb8676dab45'
+        }
+      })
+      gitment.render('comments-gitment')
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/imsun/gitment">comments powered by gitment.</a></noscript>
     </div>
+
   
   
+    
+
 
 
         </div>

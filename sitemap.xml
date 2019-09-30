@@ -10,6 +10,13 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/post/qt/2019-09-30_qt5-cannot-find-lgl/</loc>
+    <lastmod>2019-09-30T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/post/linux/2019-09-04_-linux-%E8%AE%BF%E9%97%AEwindows%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E5%BC%8F/</loc>
     <lastmod>2019-09-04T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -332,14 +339,14 @@
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/tags/android/</loc>
+    <loc>https://mazhidong.github.io/categories/android/</loc>
     <lastmod>2019-01-18T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/categories/android/</loc>
+    <loc>https://mazhidong.github.io/tags/android/</loc>
     <lastmod>2019-01-18T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
@@ -388,14 +395,14 @@
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/tags/docker/</loc>
+    <loc>https://mazhidong.github.io/categories/docker/</loc>
     <lastmod>2018-06-22T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/categories/docker/</loc>
+    <loc>https://mazhidong.github.io/tags/docker/</loc>
     <lastmod>2018-06-22T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
@@ -416,13 +423,6 @@
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/tags/git/</loc>
-    <lastmod>2017-09-04T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>https://mazhidong.github.io/categories/git/</loc>
     <lastmod>2017-09-04T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -430,8 +430,8 @@
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/tags/github/</loc>
-    <lastmod>2018-03-22T00:00:00+00:00</lastmod>
+    <loc>https://mazhidong.github.io/tags/git/</loc>
+    <lastmod>2017-09-04T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -444,8 +444,8 @@
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/tags/java/</loc>
-    <lastmod>2018-07-25T00:00:00+00:00</lastmod>
+    <loc>https://mazhidong.github.io/tags/github/</loc>
+    <lastmod>2018-03-22T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -458,8 +458,8 @@
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/tags/jni/</loc>
-    <lastmod>2018-10-08T00:00:00+00:00</lastmod>
+    <loc>https://mazhidong.github.io/tags/java/</loc>
+    <lastmod>2018-07-25T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -472,8 +472,8 @@
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/tags/kernel/</loc>
-    <lastmod>2018-11-12T00:00:00+00:00</lastmod>
+    <loc>https://mazhidong.github.io/tags/jni/</loc>
+    <lastmod>2018-10-08T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -486,14 +486,21 @@
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/tags/linux/</loc>
-    <lastmod>2019-09-04T00:00:00+00:00</lastmod>
+    <loc>https://mazhidong.github.io/tags/kernel/</loc>
+    <lastmod>2018-11-12T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://mazhidong.github.io/categories/linux/</loc>
+    <lastmod>2019-09-04T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://mazhidong.github.io/tags/linux/</loc>
     <lastmod>2019-09-04T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
@@ -515,7 +522,21 @@
   
   <url>
     <loc>https://mazhidong.github.io/post/</loc>
-    <lastmod>2019-09-04T00:00:00+00:00</lastmod>
+    <lastmod>2019-09-30T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://mazhidong.github.io/categories/qt/</loc>
+    <lastmod>2019-09-30T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://mazhidong.github.io/tags/qt/</loc>
+    <lastmod>2019-09-30T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -535,14 +556,14 @@
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/tags/serialport/</loc>
+    <loc>https://mazhidong.github.io/categories/serialport/</loc>
     <lastmod>2019-02-25T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://mazhidong.github.io/categories/serialport/</loc>
+    <loc>https://mazhidong.github.io/tags/serialport/</loc>
     <lastmod>2019-02-25T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>

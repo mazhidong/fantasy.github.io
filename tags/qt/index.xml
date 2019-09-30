@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Qt on Fantasy Blogs</title>
+    <link>https://mazhidong.github.io/tags/qt/</link>
+    <description>Recent content in Qt on Fantasy Blogs</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 30 Sep 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://mazhidong.github.io/tags/qt/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>qt5 cannot find -lGL</title>
+      <link>https://mazhidong.github.io/post/qt/2019-09-30_qt5-cannot-find-lgl/</link>
+      <pubDate>Mon, 30 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/qt/2019-09-30_qt5-cannot-find-lgl/</guid>
+      <description>QT5在unbuntu中编译提示错误：qt5 cannot find -lGL 有两种原因，一种是没有安装libGL库，那么就安装： 1.没有安装libGL库 1 sudo apt-get install libgl1-mesa-dev 2.</description>
+    </item>
+    
+  </channel>
+</rss>

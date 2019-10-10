@@ -6,10 +6,19 @@
     <description>Recent content in Linux on Fantasy Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 04 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 10 Oct 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mazhidong.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>2019-10-10_snap_Install</title>
+      <link>https://mazhidong.github.io/post/linux/2019-10-10_snap_install/</link>
+      <pubDate>Thu, 10 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/linux/2019-10-10_snap_install/</guid>
+      <description>前往 https://uappexplorer.com/snaps 搜索需要的 snap 包， 例如 RedisDesktopManager 下载对应架构的 snap 包 下载完成后，在同一目录执行以下命令即可 1 $ sudo snap install xxx.snap --dangerous 追加一种来自 junkoBlog 的方法 由于直接设置 http_proxy 环境变量</description>
+    </item>
     
     <item>
       <title>Linux 访问windows共享文件的几种方式</title>

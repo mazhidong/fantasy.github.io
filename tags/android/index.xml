@@ -6,10 +6,19 @@
     <description>Recent content in Android on Fantasy Blogs</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 18 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 30 Dec 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://mazhidong.github.io/tags/android/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ailed resolution of: Lorg/apache/http/message/BasicNameValuePair</title>
+      <link>https://mazhidong.github.io/post/android/2019-12-30-failed-resolution-of-basicnamevaluepair/</link>
+      <pubDate>Mon, 30 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/android/2019-12-30-failed-resolution-of-basicnamevaluepair/</guid>
+      <description>前言 android9.0坑:Failed resolution of: Lorg/apache/http/message/BasicNameValuePair 问题 1 2 3 4 5 6 7 8 9 java.lang.NoClassDefFoundError: Failed resolution of: Lorg/apache/http/message/BasicNameValuePair; at id.mania.pinja.obtaindata.ObtainUploadPackageDataTask.onSetup(ObtainUploadPackageDataTask.java:53) at id.mania.pinja.network.engine.OkHttpEngine.setupHttpTask(OkHttpEngine.java:182) at id.mania.pinja.network.engine.OkHttpEngine.executeHttpTask(OkHttpEngine.java:352) at id.mania.pinja.network.engine.OkHttpEngine.access$000(OkHttpEngine.java:35) at id.mania.pinja.network.engine.OkHttpEngine$TaskRunnable.run(OkHttpEngine.java:653) at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167) at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641) at java.lang.Thread.run(Thread.java:764) 出现此问题主要是 apache 的 http 库在an</description>
+    </item>
     
     <item>
       <title>Android系统init.rc全解析</title>
@@ -180,15 +189,6 @@
       
       <guid>https://mazhidong.github.io/post/aosp/2018-06-13-%E8%B6%85%E7%BA%A7%E8%AF%A6%E7%BB%86%E7%9A%84android%E7%9B%AE%E5%BD%95%E8%AF%B4%E6%98%8E/</guid>
       <description>Android 2.1 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 |-- Makefile |-- bionic （bionic C库） |-- bootable （启动引导相关代码） |-- build （存放系统编译规则及generic等基础开发包配</description>
-    </item>
-    
-    <item>
-      <title>Android AbstractProcessor和apt环境配置</title>
-      <link>https://mazhidong.github.io/post/android/2018-05-02-android-abstractprocessor%E5%92%8Capt%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</link>
-      <pubDate>Wed, 02 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/android/2018-05-02-android-abstractprocessor%E5%92%8Capt%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</guid>
-      <description>一、AbstractProcessor AbstractProcessor是抽象处理器，开发apt时都必须实现这个类来生成java文件，实现这</description>
     </item>
     
   </channel>

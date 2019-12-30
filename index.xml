@@ -92,6 +92,113 @@
     </item>
     
     <item>
+      <title>java.io.IOException: Cleartext HTTP traffic to xxx not permitted</title>
+      <link>https://mazhidong.github.io/post/android/2019-12-30-java.io.ioexception-cleartext-http-traffic-to-xxx-not-permitted/</link>
+      <pubDate>Mon, 30 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/android/2019-12-30-java.io.ioexception-cleartext-http-traffic-to-xxx-not-permitted/</guid>
+      
+        <description>
+
+&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;android9.0坑:java.io.IOException: Cleartext HTTP traffic to android.bugly.qq.com not permitted&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;io&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;IOException&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Cleartext&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;HTTP&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;traffic&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;to&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;android&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bugly&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;qq&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;com&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;not&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;permitted&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;com&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;android&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;okhttp&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;HttpHandler$CleartextURLFilter&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;checkURLPermitted&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;HttpHandler&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;115&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;com&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;android&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;okhttp&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;internal&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;huc&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;HttpURLConnectionImpl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;execute&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;HttpURLConnectionImpl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;458&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;com&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;android&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;okhttp&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;internal&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;huc&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;HttpURLConnectionImpl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;connect&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;HttpURLConnectionImpl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;127&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;com&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;android&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;okhttp&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;internal&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;huc&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;HttpURLConnectionImpl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;getOutputStream&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;HttpURLConnectionImpl&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;258&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;com&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;tencent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bugly&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;proguard&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ai&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nl&#34;&gt;BUGLY:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;266&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;com&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;tencent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bugly&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;proguard&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ai&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nl&#34;&gt;BUGLY:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;115&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;com&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;tencent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bugly&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;proguard&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;al&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;run&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nl&#34;&gt;BUGLY:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;355&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;com&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;tencent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;bugly&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;proguard&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ak$2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;run&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nl&#34;&gt;BUGLY:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;757&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;concurrent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;Executors$RunnableAdapter&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;call&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Executors&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;458&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;concurrent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;FutureTask&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;run&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;FutureTask&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;266&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;concurrent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ScheduledThreadPoolExecutor$ScheduledFutureTask&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;run&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ScheduledThreadPoolExecutor&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;301&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;concurrent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;processTask&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;1187&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;concurrent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;runWorker&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;1152&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;util&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;concurrent&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;ThreadPoolExecutor$Worker&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;run&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;ThreadPoolExecutor&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;641&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;at&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;lang&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;Thread&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;run&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Thread&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;java&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;784&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;原因分析&#34;&gt;原因分析&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Google针对 Android 系统(Android P) 的应用程序，将要求默认使用加密连接（TLS），目的是为了保证用户数据和设备的安全，因此在Android P系统中使用HttpUrlConnection进行http请求会出现上述问题。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;解决办法&#34;&gt;解决办法&lt;/h2&gt;
+
+&lt;h3 id=&#34;方法1&#34;&gt;方法1：&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;将app.gradle中将targetSdkVersion降到28以下&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;方法2&#34;&gt;方法2：&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;将http请求改为https请求，这种方案显然不太现实，一般项目的测试环境都是http请求。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;方法3-推荐&#34;&gt;方法3(推荐)：&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;修改AndroidManifest.xml文件&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;1: 在res的xml文件中添加network_security_config.xml&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;2:文件内容在network-security-config标签中配置如下：&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span class=&#34;cp&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;span class=&#34;nt&#34;&gt;&amp;lt;network-security-config&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&#34;nt&#34;&gt;&amp;lt;base-config&lt;/span&gt; &lt;span class=&#34;na&#34;&gt;cleartextTrafficPermitted=&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt; &lt;span class=&#34;nt&#34;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&#34;nt&#34;&gt;&amp;lt;/network-security-config&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;3:在AndroidManifest.xml文件的applicaiton标签中配置networkSecurityConfig引用xml文件&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;总结&#34;&gt;总结&lt;/h2&gt;
+</description>
+      
+    </item>
+    
+    <item>
       <title>2019-10-10_snap_Install</title>
       <link>https://mazhidong.github.io/post/linux/2019-10-10_snap_install/</link>
       <pubDate>Thu, 10 Oct 2019 00:00:00 +0000</pubDate>
@@ -4806,476 +4913,6 @@ artifacts.add(&amp;#34;default&amp;#34;, file(&amp;#39;musiclibrary_20170622.aar
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;p&gt;懒汉式单例一般都会再加个双重校验的判断，避免每次调用get()都加锁，影响性能，Android源码中Singleton.java工具类并没有做双重校验（看了下googlesource中的Singleton.java，也是6年前提交的代码了），所以我们在将Singleton.java拷贝出来使用的时候可以加个双重校验优化下。Singleton.java封装了create，get模版，及get中的校验逻辑，从而SingletonDemo中的实现代码就可以更加的简单：1.create()一个单例对象，2.在需要的时候get()。&lt;/p&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title>exchange-extsd-and-sdcard</title>
-      <link>https://mazhidong.github.io/post/aosp/2018-08-15-exchange-extsd-and-sdcard/</link>
-      <pubDate>Wed, 15 Aug 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/aosp/2018-08-15-exchange-extsd-and-sdcard/</guid>
-      
-        <description>
-
-&lt;h2 id=&#34;系统环境&#34;&gt;系统环境&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Android 4.4.2&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;交换内外SD卡挂载路径&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;patch&#34;&gt;patch&lt;/h2&gt;
-
-&lt;h3 id=&#34;mediascannerreceiver&#34;&gt;MediaScannerReceiver&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;39
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;40
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;41
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;42
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;43
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;44
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;45
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;46
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;47
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;48
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;49
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;50
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;51
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;52
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;From cd5ff810f5940c91d265b7c298fb141a045c94bf Mon Sep 17 00:00:00 2001
-From: fantasy &amp;lt;591888356@qq.com&amp;gt;
-Date: Wed, 15 Aug 2018 10:19:41 +0800
-Subject: [PATCH 1/2] exchange extsd and sdcard
-
----
- .../com/android/providers/media/MediaScannerReceiver.java    | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/providers/MediaProvider/src/com/android/providers/media/MediaScannerReceiver.java b/providers/MediaProvider/src/com/android/providers/media/MediaScannerReceiver.java
-index 7936782..65eff6d 100755
---- a/providers/MediaProvider/src/com/android/providers/media/MediaScannerReceiver.java
-+++ b/providers/MediaProvider/src/com/android/providers/media/MediaScannerReceiver.java
-@@ -117,7 +117,7 @@ public class MediaScannerReceiver extends BroadcastReceiver {
- 					for(int i = 0; i &amp;lt; list.length; i++)
- 					{
- 					    Log.d(TAG, &amp;#34;i &amp;#34; + i + &amp;#34;list[i] &amp;#34;+ list[i]);
--						if(list[i].contains(&amp;#34;extsd&amp;#34;)){
-+						if(list[i].contains(&amp;#34;sdcard&amp;#34;)){
- 							//Log.d(TAG, &amp;#34;extsd i &amp;#34; + i + &amp;#34;list[i] &amp;#34;+ list[i]);
- 							mExtsdList.add(list[i]);
- 						}else if(list[i].contains(&amp;#34;usb&amp;#34;)){
-@@ -144,8 +144,8 @@ public class MediaScannerReceiver extends BroadcastReceiver {
- 					mHandler.sendMessage(msg);
-                             
-                 }else if (Intent.ACTION_MEDIA_SCANNER_SCAN_FILE.equals(action) &amp;amp;&amp;amp;
--                        path != null &amp;amp;&amp;amp; (path.startsWith(externalStoragePath + &amp;#34;/&amp;#34;) || path.startsWith(&amp;#34;/mnt/extsd&amp;#34;) || path.startsWith(&amp;#34;/mnt/usbhost&amp;#34;)
--                        || path.startsWith(&amp;#34;/storage/extsd&amp;#34;) || path.startsWith(&amp;#34;/storage/usbhost&amp;#34;))) {
-+                        path != null &amp;amp;&amp;amp; (path.startsWith(externalStoragePath + &amp;#34;/&amp;#34;) || path.startsWith(&amp;#34;/mnt/sdcard&amp;#34;) || path.startsWith(&amp;#34;/mnt/usbhost&amp;#34;)
-+                        || path.startsWith(&amp;#34;/storage/sdcard&amp;#34;) || path.startsWith(&amp;#34;/storage/usbhost&amp;#34;))) {
-                     scanFile(context, path);
- 
- 					Message msg = new Message();
-@@ -228,13 +228,13 @@ public class MediaScannerReceiver extends BroadcastReceiver {
-                 case EVENT_ACTION_MEDIA_UNMOUNTED:
-                     Log.d(TAG, &amp;#34;EVENT_ACTION_MEDIA_UNMOUNTED&amp;#34;);
- 					
--					if (mPath.contains(&amp;#34;extsd&amp;#34;)){
-+					if (mPath.contains(&amp;#34;sdcard&amp;#34;)){
- 						for(String extsd:mExtsdList)
- 						{
- 							if(Environment.MEDIA_MOUNTED.equals(mStorageManager.getVolumeState(extsd))){
--								Log.d(TAG, &amp;#34;mount /mnt/extsd&amp;#34;);
-+								Log.d(TAG, &amp;#34;mount /mnt/sdcard&amp;#34;);
- 					        }else {
--								Log.d(TAG, &amp;#34;unmount /mnt/extsd&amp;#34;);
-+								Log.d(TAG, &amp;#34;unmount /mnt/sdcard&amp;#34;);
- 								deleteMediaFile(mContext, mPath);
- 								// notify on media Uris as well as the files Uri
- 				                mContext.getContentResolver().notifyChange(
--- 
-2.7.4&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;device&#34;&gt;device&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;39
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;40
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;41
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;42
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;43
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;44
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;45
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;46
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;47
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;48
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;49
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;50
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;51
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;52
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;53
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;54
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;55
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;56
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;57
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;58
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;59
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;60
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;61
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;62
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;63
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;64
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;65
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;66
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;67
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;68
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;69
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;70
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;71
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;72
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;73
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;74
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;75
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;76
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;77
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;78
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;79
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;80
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;81
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;82
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;83
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;84
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;85
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;86
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;87
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;88
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;89
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;90
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;91
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;92
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;93
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;94
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;From edfbded9fcf81a0ca70b27c3563647d0542d5bfb Mon Sep 17 00:00:00 2001
-From: fantasy &amp;lt;591888356@qq.com&amp;gt;
-Date: Wed, 15 Aug 2018 10:14:24 +0800
-Subject: [PATCH] exchange extsd and sdcard
-
----
- softwinner/astar-evb30/fstab.sun8i                                | 8 ++++----
- softwinner/astar-evb30/init.sun8i.rc                              | 2 +-
- .../overlay/frameworks/base/core/res/res/xml/storage_list.xml     | 4 ++--
- softwinner/astar-evb30/recovery.fstab                             | 4 ++--
- .../FileExplore/src/com/softwinner/explore/DevicePath.java        | 2 +-
- 5 files changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/softwinner/astar-evb30/fstab.sun8i b/softwinner/astar-evb30/fstab.sun8i
-index f5b7b00..d540618 100755
---- a/softwinner/astar-evb30/fstab.sun8i
-+++ b/softwinner/astar-evb30/fstab.sun8i
-@@ -6,10 +6,10 @@
- /dev/block/by-name/system	/system             ext4      ro                                            	wait
- /dev/block/by-name/cache	/cache              ext4      noatime,nosuid,nodev,nomblk_io_submit,barrier=1	wait,check
- /dev/block/by-name/data         /data               ext4      noatime,nosuid,nodev,nomblk_io_submit,barrier=1,noauto_da_alloc    wait,check,encryptable=/dev/block/by-name/metadata
--/devices/virtual/block/nandk            auto    vfat      defaults                                                           wait,check,noemulatedsd,voldmanaged=sdcard:auto
--/devices/platform/sunxi-mmc.2/mmc_host  auto    vfat      defaults                                                           wait,check,noemulatedsd,voldmanaged=sdcard:auto
--/devices/platform/sunxi-mmc.0/mmc_host  auto    vfat      defaults                                                           wait,check,voldmanaged=extsd:auto
--/devices/platform/sunxi-mmc.1/mmc_host  auto    vfat      defaults                                                           wait,check,voldmanaged=extsd:auto
-+/devices/virtual/block/nandk            auto    vfat      defaults                                                           wait,check,noemulatedsd,voldmanaged=extsd:auto
-+/devices/platform/sunxi-mmc.2/mmc_host  auto    vfat      defaults                                                           wait,check,noemulatedsd,voldmanaged=extsd:auto
-+/devices/platform/sunxi-mmc.0/mmc_host  auto    vfat      defaults                                                           wait,check,voldmanaged=sdcard:auto
-+/devices/platform/sunxi-mmc.1/mmc_host  auto    vfat      defaults                                                           wait,check,voldmanaged=sdcard:auto
- /devices/platform/sunxi-ehci.1          auto    vfat      defaults                                                           wait,check,voldmanaged=usbhost1:auto
- /devices/platform/sunxi_hcd_host0       auto    vfat      defaults                                                           wait,check,voldmanaged=usbhost1:auto
- /devices/platform/sunxi-ohci.1          auto    vfat      defaults                                                           wait,check,voldmanaged=usbhost1:auto
-diff --git a/softwinner/astar-evb30/init.sun8i.rc b/softwinner/astar-evb30/init.sun8i.rc
-index c4d8381..7ef20b9 100755
---- a/softwinner/astar-evb30/init.sun8i.rc
-+++ b/softwinner/astar-evb30/init.sun8i.rc
-@@ -2,7 +2,7 @@ import init.sun8i.usb.rc
- 
- on init
- 
--	export EXTERNAL_STORAGE /mnt/sdcard
-+	export EXTERNAL_STORAGE /mnt/extsd
- 	mkdir /mnt/sdcard 0700 system system
- 	symlink /mnt/sdcard /sdcard
- 	symlink /mnt/sdcard /storage/sdcard0
-diff --git a/softwinner/astar-evb30/overlay/frameworks/base/core/res/res/xml/storage_list.xml b/softwinner/astar-evb30/overlay/frameworks/base/core/res/res/xml/storage_list.xml
-index 51f02aa..d41cdf4 100755
---- a/softwinner/astar-evb30/overlay/frameworks/base/core/res/res/xml/storage_list.xml
-+++ b/softwinner/astar-evb30/overlay/frameworks/base/core/res/res/xml/storage_list.xml
-@@ -33,7 +33,7 @@
- --&amp;gt;
- 
- &amp;lt;StorageList xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&amp;gt;
--    &amp;lt;storage android:mountPoint=&amp;#34;/mnt/sdcard&amp;#34;
-+    &amp;lt;storage android:mountPoint=&amp;#34;/mnt/extsd&amp;#34;
-              android:storageDescription=&amp;#34;@string/storage_internal&amp;#34;
-              android:primary=&amp;#34;true&amp;#34;
-              android:removable=&amp;#34;false&amp;#34;
-@@ -41,7 +41,7 @@
-              android:mtpReserve=&amp;#34;100&amp;#34; 
-              android:allowMassStorage=&amp;#34;true&amp;#34;
-              android:maxFileSize=&amp;#34;0&amp;#34;/&amp;gt;
--	&amp;lt;storage android:mountPoint=&amp;#34;/mnt/extsd&amp;#34;
-+	&amp;lt;storage android:mountPoint=&amp;#34;/mnt/sdcard&amp;#34;
-              android:storageDescription=&amp;#34;@string/storage_sd_card&amp;#34;
-              android:primary=&amp;#34;false&amp;#34;
-              android:removable=&amp;#34;true&amp;#34;
-diff --git a/softwinner/astar-evb30/recovery.fstab b/softwinner/astar-evb30/recovery.fstab
-index 3c1cea5..e6ed9e7 100755
---- a/softwinner/astar-evb30/recovery.fstab
-+++ b/softwinner/astar-evb30/recovery.fstab
-@@ -11,5 +11,5 @@
- /dev/block/by-name/misc               /misc           emmc    defaults                                                        defaults
- /dev/block/by-name/recovery           /recovery       emmc    defaults                                                        defaults
- /dev/block/by-name/cache              /cache          ext4    defaults                                                        defaults
--/dev/block/by-name/UDISK              /sdcard         vfat    defaults                                                        defaults
--/dev/block/mmcblk0                    /extsd          vfat    defaults                                                        defaults
-+/dev/block/by-name/UDISK              /extsd         vfat    defaults                                                        defaults
-+/dev/block/mmcblk0                    /sdcard          vfat    defaults                                                        defaults
-diff --git a/softwinner/polaris-common/prebuild/packages/FileExplore/src/com/softwinner/explore/DevicePath.java b/softwinner/polaris-common/prebuild/packages/FileExplore/src/com/softwinner/explore/DevicePath.java
-index 9b1beab..0a12892 100755
---- a/softwinner/polaris-common/prebuild/packages/FileExplore/src/com/softwinner/explore/DevicePath.java
-+++ b/softwinner/polaris-common/prebuild/packages/FileExplore/src/com/softwinner/explore/DevicePath.java
-@@ -40,7 +40,7 @@ public class DevicePath{
- 			totalDevicesList.add(list[i]);
- 			if(list[i].equals(flash)){
- 				flashList.add(list[i]);
--			}else if(list[i].contains(&amp;#34;extsd&amp;#34;)){
-+			}else if(list[i].contains(&amp;#34;sdcard&amp;#34;)){
- 				sdcardList.add(list[i]);
- 			}else if(list[i].contains(&amp;#34;usb&amp;#34;)){
- 				usbList.add(list[i]);
--- 
-2.7.4&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;systemui&#34;&gt;systemui&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;From 3ccd2d98bac65094e3b77f6c993a65c9ead7a862 Mon Sep 17 00:00:00 2001
-From: fantasy &amp;lt;591888356@qq.com&amp;gt;
-Date: Wed, 15 Aug 2018 10:08:43 +0800
-Subject: [PATCH] exchange extsd and sdcard
-
----
- .../SystemUI/src/com/android/systemui/usb/StorageNotification.java      | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/base/packages/SystemUI/src/com/android/systemui/usb/StorageNotification.java b/base/packages/SystemUI/src/com/android/systemui/usb/StorageNotification.java
-index 80aa21d..fc5f994 100755
---- a/base/packages/SystemUI/src/com/android/systemui/usb/StorageNotification.java
-+++ b/base/packages/SystemUI/src/com/android/systemui/usb/StorageNotification.java
-@@ -212,7 +212,7 @@ public class StorageNotification extends SystemUI {
- 							setMediaStorageNotification(R.string.usb_mounted_title,
- 									R.string.usb_mounted_message,
- 									com.android.internal.R.drawable.stat_notify_sdcard_prepare, true, false, null);
--						} else if (path.contains(&amp;#34;extsd&amp;#34;)) {
-+						} else if (path.contains(&amp;#34;sdcard&amp;#34;)) {
- 							setMediaStorageNotification(R.string.sd_mounted_title,
- 									R.string.sd_mounted_message,
- 									com.android.internal.R.drawable.stat_notify_sdcard_prepare, true, false, null);
--- 
-2.7.4&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;vold&#34;&gt;vold&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
-&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
-&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;From 27c92d90ae001b3471d642ae90be34ae47b987fe Mon Sep 17 00:00:00 2001
-From: fantasy &amp;lt;591888356@qq.com&amp;gt;
-Date: Wed, 15 Aug 2018 10:12:36 +0800
-Subject: [PATCH] exchange extsd and sdcard
-
----
- vold/DirectVolume.cpp | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/vold/DirectVolume.cpp b/vold/DirectVolume.cpp
-index 8bdcdbf..9a9843d 100755
---- a/vold/DirectVolume.cpp
-+++ b/vold/DirectVolume.cpp
-@@ -241,9 +241,9 @@ int DirectVolume::handleBlockEvent(NetlinkEvent *evt) {
-                 char nodepath[255];
-                 mPartsChangeFlag = 0;
-                 if (major == 179 || major == 259) {
--                    if (!strncmp(getLabel(), &amp;#34;sdcard&amp;#34;, strlen(&amp;#34;sdcard&amp;#34;)) &amp;amp;&amp;amp; !strncmp(dp, &amp;#34;/devices/platform/sunxi-mmc.&amp;#34;, strlen(&amp;#34;/devices/platform/sunxi-mmc.&amp;#34;))) {
-+                    if (!strncmp(getLabel(), &amp;#34;extsd&amp;#34;, strlen(&amp;#34;extsd&amp;#34;)) &amp;amp;&amp;amp; !strncmp(dp, &amp;#34;/devices/platform/sunxi-mmc.&amp;#34;, strlen(&amp;#34;/devices/platform/sunxi-mmc.&amp;#34;))) {
-                         mPartsChangeFlag = 1;
--                    } else if (!strncmp(getLabel(), &amp;#34;extsd&amp;#34;, strlen(&amp;#34;extsd&amp;#34;)) &amp;amp;&amp;amp; !strncmp(dp, &amp;#34;/devices/platform/sunxi-mmc.2&amp;#34;, strlen(&amp;#34;/devices/platform/sunxi-mmc.2&amp;#34;))) {
-+                    } else if (!strncmp(getLabel(), &amp;#34;sdcard&amp;#34;, strlen(&amp;#34;sdcard&amp;#34;)) &amp;amp;&amp;amp; !strncmp(dp, &amp;#34;/devices/platform/sunxi-mmc.2&amp;#34;, strlen(&amp;#34;/devices/platform/sunxi-mmc.2&amp;#34;))) {
-                         mPartsChangeFlag = 2;
-                         mOemPartMajor = major;
-                         mOemPartMinor = minor;
-@@ -478,7 +478,7 @@ void DirectVolume::handlePartitionRemoved(const char *devpath, NetlinkEvent *evt
-             SLOGE(&amp;#34;Failed to cleanup ASEC - unmount will probably fail!&amp;#34;);
-         }
- 
--        if (!strstr(getLabel(),&amp;#34;usb&amp;#34;) &amp;amp;&amp;amp; !strstr(getLabel(),&amp;#34;extsd&amp;#34;)) {
-+        if (!strstr(getLabel(),&amp;#34;usb&amp;#34;) &amp;amp;&amp;amp; !strstr(getLabel(),&amp;#34;sdcard&amp;#34;)) {
-         snprintf(msg, sizeof(msg), &amp;#34;Volume %s %s bad removal (%d:%d)&amp;#34;,
-                  getLabel(), getFuseMountpoint(), major, minor);
-         mVm-&amp;gt;getBroadcaster()-&amp;gt;sendBroadcast(ResponseCode::VolumeBadRemoval,
--- 
-2.7.4&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h2 id=&#34;修改外置sd卡挂载路径&#34;&gt;修改外置SD卡挂载路径&lt;/h2&gt;
-
-&lt;p&gt;可以新建一个软链接,链接到旧路径 (未证实)&lt;/p&gt;
 </description>
       
     </item>

@@ -17,6 +17,13 @@
   </url>
   
   <url>
+    <loc>https://mazhidong.github.io/post/android/2019-12-30-java.io.ioexception-cleartext-http-traffic-to-xxx-not-permitted/</loc>
+    <lastmod>2019-12-30T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://mazhidong.github.io/post/linux/2019-10-10_snap_install/</loc>
     <lastmod>2019-10-10T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -460,6 +467,13 @@
   <url>
     <loc>https://mazhidong.github.io/categories/github/</loc>
     <lastmod>2018-03-22T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://mazhidong.github.io/tags/http/</loc>
+    <lastmod>2019-12-30T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>

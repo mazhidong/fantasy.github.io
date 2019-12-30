@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Http on Fantasy Blogs</title>
+    <link>https://mazhidong.github.io/tags/http/</link>
+    <description>Recent content in Http on Fantasy Blogs</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 30 Dec 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://mazhidong.github.io/tags/http/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>java.io.IOException: Cleartext HTTP traffic to xxx not permitted</title>
+      <link>https://mazhidong.github.io/post/android/2019-12-30-java.io.ioexception-cleartext-http-traffic-to-xxx-not-permitted/</link>
+      <pubDate>Mon, 30 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/android/2019-12-30-java.io.ioexception-cleartext-http-traffic-to-xxx-not-permitted/</guid>
+      <description>前言 android9.0坑:java.io.IOException: Cleartext HTTP traffic to android.bugly.qq.com not permitted 问题 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 java.io.IOException: Cleartext HTTP traffic to android.bugly.qq.com not permitted at com.android.okhttp.HttpHandler$CleartextURLFilter.checkURLPermitted(HttpHandler.java:115) at</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -21,6 +21,15 @@
     </item>
     
     <item>
+      <title>java.io.IOException: Cleartext HTTP traffic to xxx not permitted</title>
+      <link>https://mazhidong.github.io/post/android/2019-12-30-java.io.ioexception-cleartext-http-traffic-to-xxx-not-permitted/</link>
+      <pubDate>Mon, 30 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mazhidong.github.io/post/android/2019-12-30-java.io.ioexception-cleartext-http-traffic-to-xxx-not-permitted/</guid>
+      <description>前言 android9.0坑:java.io.IOException: Cleartext HTTP traffic to android.bugly.qq.com not permitted 问题 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 java.io.IOException: Cleartext HTTP traffic to android.bugly.qq.com not permitted at com.android.okhttp.HttpHandler$CleartextURLFilter.checkURLPermitted(HttpHandler.java:115) at</description>
+    </item>
+    
+    <item>
       <title>Android系统init.rc全解析</title>
       <link>https://mazhidong.github.io/post/aosp/2019-01-18_android%E7%B3%BB%E7%BB%9Finit.rc%E5%85%A8%E8%A7%A3%E6%9E%90/</link>
       <pubDate>Fri, 18 Jan 2019 00:00:00 +0000</pubDate>
@@ -180,15 +189,6 @@
       
       <guid>https://mazhidong.github.io/post/aosp/2018-04-26-android-usb-bug/</guid>
       <description>出现平台 RK3288 系统版本 Android 5.1 问题描述 两个USB不能同时工作.一个USB设备在工作的时候,再载入另外一个USB设备,前一个USB设备不能正常工作. 解</description>
-    </item>
-    
-    <item>
-      <title>ESH45 Android：无法访问 sdcard 目录</title>
-      <link>https://mazhidong.github.io/post/aosp/2018-04-26-android-4.4-esh45-bug/</link>
-      <pubDate>Sun, 22 Apr 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://mazhidong.github.io/post/aosp/2018-04-26-android-4.4-esh45-bug/</guid>
-      <description>现象: 内部存储没有见到sdcard目录,shell进入sdcard目录发现没有文件,正常情况下应该存在 Download,Music,Movi</description>
     </item>
     
   </channel>
